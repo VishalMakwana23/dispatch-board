@@ -1,11 +1,25 @@
-import React from 'react';
 import { Box, Typography, TextField, InputAdornment, IconButton } from '@mui/material';
+import React, { useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import FilterDrawer from '../FilterDrawer';
 import RouteCard from '../RouteCard';
 import { routes } from '../../mock/routes';
 
 const RoutesPanel = () => {
+  const [filterAnchorEl, setFilterAnchorEl] = useState(null);
+  const filterOpen = Boolean(filterAnchorEl);
+
+  const handleApplyFilters = (filters) => {
+    console.log("APPLY:", filters);
+    // Add logic to filter routes here if needed
+  };
+
+  const handleSaveFilters = (filters) => {
+    console.log("SAVE:", filters);
+    // Add logic to save filters here
+  };
+
   return (
     <Box
       sx={{
@@ -32,7 +46,7 @@ const RoutesPanel = () => {
              <Typography variant="h6" sx={{ fontWeight: 700 }}>Routes</Typography>
              <Typography variant="caption" sx={{ color: 'text.secondary', bgcolor: '#e0e0e0', px: 0.8, py: 0.2, borderRadius: 1 }}>123</Typography>
           </Box>
-          <IconButton size="small">
+          <IconButton size="small" onClick={(e) => setFilterAnchorEl(e.currentTarget)}>
             <FilterListIcon />
           </IconButton>
         </Box>
@@ -57,7 +71,14 @@ const RoutesPanel = () => {
         {routes.map((route) => (
           <RouteCard key={route.id} route={route} />
         ))}
-      </Box>
+        <FilterDrawer
+        open={filterOpen}
+        anchorEl={filterAnchorEl}
+        onClose={() => setFilterAnchorEl(null)}
+        onApplyFilters={handleApplyFilters}
+        onSaveFilters={handleSaveFilters}
+      />
+    </Box>
     </Box>
   );
 };
