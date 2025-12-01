@@ -54,7 +54,9 @@ const createCustomIcon = (point) => {
   });
 };
 
-const MapView = () => {
+import MapRouteLayer from '../MapRouteLayer';
+
+const MapView = ({ selectedRoute }) => {
   const center = [31.1201, -97.7423]; // Centered on mock points
 
   return (
@@ -69,7 +71,7 @@ const MapView = () => {
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         />
-        {mapPoints.map((point) => (
+        {!selectedRoute && mapPoints.map((point) => (
           <Marker 
             key={point.id} 
             position={[point.lat, point.lng]} 
@@ -80,6 +82,7 @@ const MapView = () => {
             </Popup>
           </Marker>
         ))}
+        <MapRouteLayer route={selectedRoute} />
       </MapContainer>
 
       {/* Floating Controls Top Right */}

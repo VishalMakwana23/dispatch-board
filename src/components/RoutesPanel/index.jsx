@@ -6,7 +6,7 @@ import FilterDrawer from '../FilterDrawer';
 import RouteCard from '../RouteCard';
 import { routes } from '../../mock/routes';
 
-const RoutesPanel = () => {
+const RoutesPanel = ({ onRouteSelect, selectedRouteId }) => {
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
   const filterOpen = Boolean(filterAnchorEl);
 
@@ -69,7 +69,12 @@ const RoutesPanel = () => {
 
       <Box sx={{ flexGrow: 1, overflowY: 'auto', px: 2, pb: 10 }}> {/* pb for footer space */}
         {routes.map((route) => (
-          <RouteCard key={route.id} route={route} />
+          <RouteCard 
+            key={route.id} 
+            route={route} 
+            selected={selectedRouteId === route.id}
+            onClick={() => onRouteSelect && onRouteSelect(route)}
+          />
         ))}
         <FilterDrawer
         open={filterOpen}

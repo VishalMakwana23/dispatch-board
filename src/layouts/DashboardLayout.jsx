@@ -4,13 +4,21 @@ import Sidebar from '../components/Sidebar';
 import RoutesPanel from '../components/RoutesPanel';
 import Topbar from '../components/Topbar';
 import StatsFooter from '../components/StatsFooter';
+import { routes } from '../mock/routes';
 
-const DashboardLayout = ({ children }) => {
+import RouteDetailsDrawer from '../components/RouteDetailsDrawer';
+
+const DashboardLayout = ({ children, selectedRoute, onRouteSelect }) => {
   return (
     <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
       <Sidebar />
       <Topbar />
-      <RoutesPanel />
+      <RoutesPanel onRouteSelect={onRouteSelect} selectedRouteId={selectedRoute?.id} />
+      <RouteDetailsDrawer 
+        route={selectedRoute} 
+        open={Boolean(selectedRoute)} 
+        onClose={() => onRouteSelect(null)} 
+      />
       
       <Box
         component="main"
@@ -24,7 +32,7 @@ const DashboardLayout = ({ children }) => {
         }}
       >
         {children}
-        <StatsFooter />
+        <StatsFooter routes={routes} />
       </Box>
     </Box>
   );

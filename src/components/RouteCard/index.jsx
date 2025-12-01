@@ -7,12 +7,22 @@ import MapIcon from '@mui/icons-material/Map';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
-const RouteCard = ({ route }) => {
+const RouteCard = ({ route, onClick, selected }) => {
   const isRisk = route.riskOfDelay;
   const isCoded = route.statusCoded;
 
   return (
-    <Card sx={{ mb: 2, position: 'relative', overflow: 'visible' }}>
+    <Card 
+      sx={{ 
+        mb: 2, 
+        position: 'relative', 
+        overflow: 'visible', 
+        cursor: 'pointer',
+        border: selected ? '2px solid #FF5722' : '1px solid transparent', // Orange border when selected
+        boxShadow: selected ? '0 0 0 1px #FF5722' : undefined // Extra sharpness
+      }} 
+      onClick={onClick}
+    >
       {/* Left colored border indicator */}
       <Box
         sx={{
