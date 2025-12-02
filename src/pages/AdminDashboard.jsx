@@ -30,7 +30,7 @@ const AdminDashboard = () => {
       case 'routes':
         return <RoutesView activeView={activeView} setActiveView={setActiveView} />;
       case 'drivers':
-        return <DriversView />;
+        return <DriversView activeView={activeView} setActiveView={setActiveView} />;
       case 'orders':
         return <UnassignedOrdersView />;
       default:
