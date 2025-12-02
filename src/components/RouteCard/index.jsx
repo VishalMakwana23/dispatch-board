@@ -5,9 +5,10 @@ import WarningIcon from '@mui/icons-material/Warning';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import MapIcon from '@mui/icons-material/Map';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
-const RouteCard = ({ route, onClick, selected }) => {
+const RouteCard = ({ route, onClick, selected, isAdmin = false }) => {
   const isRisk = route.riskOfDelay;
   const isCoded = route.statusCoded;
 
@@ -121,14 +122,32 @@ const RouteCard = ({ route, onClick, selected }) => {
             </Typography>
           </Box>
           
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <IconButton size="small" sx={{ bgcolor: '#E0F2F1', color: '#00695C', borderRadius: 1 }}>
-              <MapIcon fontSize="small" />
-            </IconButton>
-            <IconButton size="small" sx={{ bgcolor: '#E0F2F1', color: '#00695C', borderRadius: 1 }}>
-              <AssignmentIcon fontSize="small" />
-            </IconButton>
-          </Box>
+          {isAdmin ? (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+               {/* McKesson Logo Placeholder */}
+               <Typography sx={{ color: '#007AC2', fontWeight: 900, fontSize: '12px', letterSpacing: '0.5px' }}>
+                  McKESSON
+               </Typography>
+  
+               <Box sx={{ display: 'flex', gap: 1 }}>
+                  <IconButton size="small" sx={{ bgcolor: '#E0F2F1', color: '#00695C', borderRadius: 1 }}>
+                  <MapIcon fontSize="small" />
+                  </IconButton>
+                  <IconButton size="small" sx={{ bgcolor: '#E0F2F1', color: '#00695C', borderRadius: 1 }}>
+                  <ChatBubbleOutlineIcon fontSize="small" />
+                  </IconButton>
+              </Box>
+            </Box>
+          ) : (
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <IconButton size="small" sx={{ bgcolor: '#E0F2F1', color: '#00695C', borderRadius: 1 }}>
+                <MapIcon fontSize="small" />
+              </IconButton>
+              <IconButton size="small" sx={{ bgcolor: '#E0F2F1', color: '#00695C', borderRadius: 1 }}>
+                <AssignmentIcon fontSize="small" />
+              </IconButton>
+            </Box>
+          )}
         </Box>
       </CardContent>
     </Card>

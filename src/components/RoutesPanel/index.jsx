@@ -2,13 +2,36 @@ import { Box, Typography, TextField, InputAdornment, IconButton } from '@mui/mat
 import React, { useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import { Menu, MenuItem, Radio } from '@mui/material';
+import AltRouteIcon from '@mui/icons-material/AltRoute';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import HistoryIcon from '@mui/icons-material/History';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import FilterDrawer from '../FilterDrawer';
 import RouteCard from '../RouteCard';
 import { routes } from '../../mock/routes';
 
-const RoutesPanel = ({ onRouteSelect, openRouteIds = [] }) => {
+const RoutesPanel = ({ onRouteSelect, openRouteIds = [], isAdmin = false, activeView = 'routes', setActiveView }) => {
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
+  const [viewAnchorEl, setViewAnchorEl] = useState(null);
   const filterOpen = Boolean(filterAnchorEl);
+  const viewOpen = Boolean(viewAnchorEl);
+
+  const handleViewClick = (event) => {
+    setViewAnchorEl(event.currentTarget);
+  };
+
+  const handleViewClose = () => {
+    setViewAnchorEl(null);
+  };
+
+  const handleViewSelect = (view) => {
+    if (setActiveView) {
+        setActiveView(view);
+    }
+    handleViewClose();
+  };
 
   const handleApplyFilters = (filters) => {
     console.log("APPLY:", filters);
@@ -43,8 +66,87 @@ const RoutesPanel = ({ onRouteSelect, openRouteIds = [] }) => {
       <Box sx={{ p: 2, pb: 1 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-             <Typography variant="h6" sx={{ fontWeight: 700 }}>Routes</Typography>
-             <Typography variant="caption" sx={{ color: 'text.secondary', bgcolor: '#e0e0e0', px: 0.8, py: 0.2, borderRadius: 1 }}>123</Typography>
+             {isAdmin ? (
+                <>
+                    <Box 
+                        onClick={handleViewClick}
+                        sx={{ 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            gap: 1, 
+                            cursor: 'pointer',
+                            '&:hover': { opacity: 0.8 }
+                        }}
+                    >
+                        <AltRouteIcon fontSize="small" />
+                        <Typography variant="h6" sx={{ fontWeight: 700 }}>Routes</Typography>
+                        {viewOpen ? <KeyboardArrowUpIcon fontSize="small" /> : <KeyboardArrowDownIcon fontSize="small" />}
+                    </Box>
+                    <Menu
+                        anchorEl={viewAnchorEl}
+                        open={viewOpen}
+                        onClose={handleViewClose}
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+                        PaperProps={{
+                            sx: {
+                                mt: 1,
+                                backgroundColor: 'white',
+                                color: '#333',
+                                boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.15)',
+                                borderRadius: '12px',
+                                minWidth: '240px',
+                                padding: '8px',
+                                '& .MuiMenuItem-root': {
+                                    fontFamily: 'Montserrat, sans-serif',
+                                    fontSize: '14px',
+                                    padding: '10px 16px',
+                                    borderRadius: '8px',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    mb: 0.5,
+                                    '&:hover': { backgroundColor: '#f5f5f5' },
+                                },
+                            },
+                        }}
+                    >
+                        <Box sx={{ px: 2, py: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                <AltRouteIcon fontSize="small" sx={{ color: '#333' }} />
+                                <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#333', fontSize: '15px' }}>Routes</Typography>
+                            </Box>
+                            <KeyboardArrowUpIcon fontSize="small" sx={{ color: '#333' }} />
+                        </Box>
+
+                        <MenuItem onClick={() => handleViewSelect('routes')}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                <AltRouteIcon fontSize="small" sx={{ color: '#333' }} />
+                                <Typography sx={{ fontWeight: 600, fontSize: '14px' }}>Routes</Typography>
+                            </Box>
+                            <Radio checked={activeView === 'routes'} size="small" sx={{ padding: 0, color: '#ccc', '&.Mui-checked': { color: '#000' } }} />
+                        </MenuItem>
+                        <MenuItem onClick={() => handleViewSelect('drivers')}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                <PersonOutlineIcon fontSize="small" sx={{ color: '#333' }} />
+                                <Typography sx={{ fontWeight: 500, fontSize: '14px' }}>Drivers</Typography>
+                            </Box>
+                            <Radio checked={activeView === 'drivers'} size="small" sx={{ padding: 0, color: '#ccc', '&.Mui-checked': { color: '#000' } }} />
+                        </MenuItem>
+                        <MenuItem onClick={() => handleViewSelect('orders')}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                <HistoryIcon fontSize="small" sx={{ color: '#333' }} />
+                                <Typography sx={{ fontWeight: 500, fontSize: '14px' }}>Unassigned orders</Typography>
+                            </Box>
+                            <Radio checked={activeView === 'orders'} size="small" sx={{ padding: 0, color: '#ccc', '&.Mui-checked': { color: '#000' } }} />
+                        </MenuItem>
+                    </Menu>
+                </>
+             ) : (
+                <>
+                    <Typography variant="h6" sx={{ fontWeight: 700 }}>Routes</Typography>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', bgcolor: '#e0e0e0', px: 0.8, py: 0.2, borderRadius: 1 }}>123</Typography>
+                </>
+             )}
           </Box>
           <IconButton size="small" onClick={(e) => setFilterAnchorEl(e.currentTarget)}>
             <FilterListIcon />
@@ -74,6 +176,7 @@ const RoutesPanel = ({ onRouteSelect, openRouteIds = [] }) => {
             route={route} 
             selected={openRouteIds.includes(route.id)}
             onClick={() => onRouteSelect && onRouteSelect(route)}
+            isAdmin={isAdmin}
           />
         ))}
         <FilterDrawer

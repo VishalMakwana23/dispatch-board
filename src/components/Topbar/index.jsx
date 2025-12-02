@@ -1,12 +1,32 @@
-import React from 'react';
-import { Box, Typography, IconButton, Button, Avatar } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Typography, IconButton, Button, Avatar, Menu, MenuItem } from '@mui/material';
 import LanguageIcon from '@mui/icons-material/Language';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import { useNavigate } from 'react-router-dom';
 
 const Topbar = () => {
+  const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    handleMenuClose();
+    localStorage.removeItem('rememberedEmail'); // Optional: clear remember me if desired, or just session
+    // In a real app, you'd clear the auth token here
+    navigate('/login');
+  };
+
   return (
     <Box
       sx={{
@@ -55,13 +75,31 @@ const Topbar = () => {
           Support
         </Button>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 2 }}>
+        <Box 
+          sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 2, cursor: 'pointer' }}
+          onClick={handleMenuOpen}
+        >
           <Avatar sx={{ bgcolor: '#FF7043', width: 32, height: 32 }}>J</Avatar>
           <Box>
              <Typography variant="subtitle2" sx={{ lineHeight: 1.2 }}>Hi John!</Typography>
              <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1 }}>jasonsmith@mck.com</Typography>
           </Box>
         </Box>
+        <Menu
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleMenuClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+        >
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        </Menu>
       </Box>
       
       {/* Date Picker & Toggles (Floating on Map usually, but let's put them in Topbar or a sub-bar if they are global) 

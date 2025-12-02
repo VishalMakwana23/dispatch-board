@@ -7,6 +7,7 @@ import StatsFooter from '../components/StatsFooter';
 import { routes } from '../mock/routes';
 
 import RightPanelContainer from '../components/RightPanelContainer';
+import ChainOfDelayContainer from '../components/ChainOfDelay';
 
 const DashboardLayout = ({ children, panels, onRouteSelect, onTogglePanel, onClosePanel }) => {
   return (
@@ -37,6 +38,7 @@ const DashboardLayout = ({ children, panels, onRouteSelect, onTogglePanel, onClo
         {children}
         <StatsFooter routes={routes} />
       </Box>
+      <ChainOfDelayContainer />
     </Box>
   );
 };
