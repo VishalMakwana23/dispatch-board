@@ -6,7 +6,7 @@ import FilterDrawer from '../FilterDrawer';
 import RouteCard from '../RouteCard';
 import { routes } from '../../mock/routes';
 
-const RoutesPanel = ({ onRouteSelect, selectedRouteId }) => {
+const RoutesPanel = ({ onRouteSelect, openRouteIds = [] }) => {
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
   const filterOpen = Boolean(filterAnchorEl);
 
@@ -72,7 +72,7 @@ const RoutesPanel = ({ onRouteSelect, selectedRouteId }) => {
           <RouteCard 
             key={route.id} 
             route={route} 
-            selected={selectedRouteId === route.id}
+            selected={openRouteIds.includes(route.id)}
             onClick={() => onRouteSelect && onRouteSelect(route)}
           />
         ))}

@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
+import useRoutePanels from '../hooks/useRoutePanels';
 import DashboardLayout from '../layouts/DashboardLayout';
 import MapView from '../components/MapView';
 
 const Dashboard = () => {
-  const [selectedRoute, setSelectedRoute] = useState(null);
+  const { panels, openPanel, closePanel, togglePanelExpand } = useRoutePanels();
 
   return (
-    <DashboardLayout selectedRoute={selectedRoute} onRouteSelect={setSelectedRoute}>
-      <MapView selectedRoute={selectedRoute} />
+    <DashboardLayout 
+      panels={panels} 
+      onRouteSelect={openPanel}
+      onTogglePanel={togglePanelExpand}
+      onClosePanel={closePanel}
+    >
+      <MapView panels={panels} />
     </DashboardLayout>
   );
 };

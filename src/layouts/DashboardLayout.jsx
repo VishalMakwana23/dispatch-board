@@ -6,18 +6,21 @@ import Topbar from '../components/Topbar';
 import StatsFooter from '../components/StatsFooter';
 import { routes } from '../mock/routes';
 
-import RouteDetailsDrawer from '../components/RouteDetailsDrawer';
+import RightPanelContainer from '../components/RightPanelContainer';
 
-const DashboardLayout = ({ children, selectedRoute, onRouteSelect }) => {
+const DashboardLayout = ({ children, panels, onRouteSelect, onTogglePanel, onClosePanel }) => {
   return (
     <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
       <Sidebar />
       <Topbar />
-      <RoutesPanel onRouteSelect={onRouteSelect} selectedRouteId={selectedRoute?.id} />
-      <RouteDetailsDrawer 
-        route={selectedRoute} 
-        open={Boolean(selectedRoute)} 
-        onClose={() => onRouteSelect(null)} 
+      <RoutesPanel 
+        onRouteSelect={onRouteSelect} 
+        openRouteIds={panels?.map(p => p.routeId) || []} 
+      />
+      <RightPanelContainer 
+        panels={panels} 
+        onToggle={onTogglePanel} 
+        onClose={onClosePanel} 
       />
       
       <Box

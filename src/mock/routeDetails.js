@@ -78,7 +78,7 @@ export const routeDetailsMock = {
         parcels: "15 Items",
         status: "customer_unavailable",
         badges: ["Customer Unavailable"],
-        color: "yellow", // Risk/Warning
+        color: "yellow", 
         lat: 31.1650, lng: -97.7000
       },
       {
@@ -91,9 +91,7 @@ export const routeDetailsMock = {
         parcels: "15 Items",
         status: "risk_of_delay",
         badges: ["Risk of Delay"],
-        color: "red", // Or orange/yellow depending on exact requirement. Screenshot shows red badge for Risk of Delay on list, but map might be different. User said "Yellow -> risk". Let's use Yellow for map, Red for badge if needed. But user said "Yellow -> risk" for map.
-        // Let's stick to the user's map colors: Green, Yellow, Red, Grey, Orange.
-        // "Risk of Delay" usually implies Yellow.
+        color: "red", 
         lat: 31.1700, lng: -97.6950
       },
       {
@@ -105,7 +103,7 @@ export const routeDetailsMock = {
         orders: "2 Orders",
         parcels: "15 Items",
         status: "upcoming",
-        color: "grey", // Upcoming
+        color: "grey", 
         lat: 31.1750, lng: -97.6900
       },
        {
@@ -118,8 +116,107 @@ export const routeDetailsMock = {
         parcels: "15 Items",
         status: "last_location",
         badges: ["Risk of Delay"],
-        color: "orange", // Last/Final location
+        color: "orange", 
         lat: 31.1800, lng: -97.6850
+      }
+    ]
+  },
+  "890283847r784833": {
+    id: "890283847r784833",
+    coordinates: [
+      { lat: 31.1300, lng: -97.7500 }, 
+      { lat: 31.1350, lng: -97.7450 },
+      { lat: 31.1400, lng: -97.7400 },
+      { lat: 31.1450, lng: -97.7350 },
+      { lat: 31.1500, lng: -97.7300 },
+    ],
+    stops: [
+      {
+        id: 1,
+        type: "Warehouse",
+        name: "Warehouse",
+        address: "456 Side St, City CD X1Y2Z",
+        time: "09:00 AM PDT 2025/11/18",
+        timeWindow: "Pln: 10:00 AM PDT 2025/11/18",
+        orders: "5 Orders",
+        parcels: "50 Parcels",
+        status: "loaded",
+        color: "green",
+        isWarehouse: true,
+        lat: 31.1300, lng: -97.7500
+      },
+      {
+        id: 2,
+        name: "Alice Smith",
+        address: "789 Elm St, City CD X1Y2Z",
+        time: "10:30 AM PDT 2025/11/18",
+        timeWindow: "Pln: 11:00 AM PDT 2025/11/18",
+        orders: "1 Order",
+        parcels: "5 Items",
+        status: "completed",
+        color: "green",
+        lat: 31.1400, lng: -97.7400
+      },
+      {
+        id: 3,
+        name: "Bob Jones",
+        address: "101 Oak St, City CD X1Y2Z",
+        time: "11:30 AM PDT 2025/11/18",
+        timeWindow: "Pln: 12:00 PM PDT 2025/11/18",
+        orders: "2 Orders",
+        parcels: "10 Items",
+        status: "last_location",
+        color: "orange",
+        lat: 31.1500, lng: -97.7300
+      }
+    ]
+  },
+  "QO3W19103336544": {
+    id: "QO3W19103336544",
+    coordinates: [
+      { lat: 31.1100, lng: -97.7200 }, 
+      { lat: 31.1150, lng: -97.7150 },
+      { lat: 31.1200, lng: -97.7100 },
+      { lat: 31.1250, lng: -97.7050 },
+    ],
+    stops: [
+      {
+        id: 1,
+        type: "Warehouse",
+        name: "Warehouse",
+        address: "789 Pine St, City EF A1B2C",
+        time: "08:00 AM PDT 2025/11/18",
+        timeWindow: "Pln: 09:00 AM PDT 2025/11/18",
+        orders: "8 Orders",
+        parcels: "80 Parcels",
+        status: "loaded",
+        color: "green",
+        isWarehouse: true,
+        lat: 31.1100, lng: -97.7200
+      },
+      {
+        id: 2,
+        name: "Charlie Brown",
+        address: "202 Maple St, City EF A1B2C",
+        time: "09:30 AM PDT 2025/11/18",
+        timeWindow: "Pln: 10:00 AM PDT 2025/11/18",
+        orders: "3 Orders",
+        parcels: "20 Items",
+        status: "completed",
+        color: "green",
+        lat: 31.1200, lng: -97.7100
+      },
+      {
+        id: 3,
+        name: "David White",
+        address: "303 Birch St, City EF A1B2C",
+        time: "10:30 AM PDT 2025/11/18",
+        timeWindow: "Pln: 11:00 AM PDT 2025/11/18",
+        orders: "1 Order",
+        parcels: "5 Items",
+        status: "last_location",
+        color: "orange",
+        lat: 31.1250, lng: -97.7050
       }
     ]
   }

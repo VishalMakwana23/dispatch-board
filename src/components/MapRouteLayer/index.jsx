@@ -76,7 +76,7 @@ const MapRouteLayer = ({ route }) => {
     <>
       <Polyline
         positions={polylinePositions}
-        pathOptions={{ color: '#0A3B32', weight: 4, opacity: 0.9 }}
+        pathOptions={{ color: route.color || '#0A3B32', weight: 4, opacity: 0.9 }}
       />
       {details.stops.map((stop) => (
         <Marker

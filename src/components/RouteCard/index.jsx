@@ -11,6 +11,9 @@ const RouteCard = ({ route, onClick, selected }) => {
   const isRisk = route.riskOfDelay;
   const isCoded = route.statusCoded;
 
+  // Determine border color based on route color or status
+  const borderColor = route.color || (isCoded ? '#D32F2F' : isRisk ? '#ED6C02' : '#2E7D32');
+
   return (
     <Card 
       sx={{ 
@@ -18,8 +21,8 @@ const RouteCard = ({ route, onClick, selected }) => {
         position: 'relative', 
         overflow: 'visible', 
         cursor: 'pointer',
-        border: selected ? '2px solid #FF5722' : '1px solid transparent', // Orange border when selected
-        boxShadow: selected ? '0 0 0 1px #FF5722' : undefined // Extra sharpness
+        border: selected ? `2px solid ${borderColor}` : '1px solid transparent', // Dynamic border color
+        boxShadow: selected ? `0 0 0 1px ${borderColor}` : undefined 
       }} 
       onClick={onClick}
     >

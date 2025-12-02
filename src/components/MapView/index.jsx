@@ -56,7 +56,7 @@ const createCustomIcon = (point) => {
 
 import MapRouteLayer from '../MapRouteLayer';
 
-const MapView = ({ selectedRoute }) => {
+const MapView = ({ panels }) => {
   const center = [31.1201, -97.7423]; // Centered on mock points
 
   return (
@@ -71,7 +71,7 @@ const MapView = ({ selectedRoute }) => {
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         />
-        {!selectedRoute && mapPoints.map((point) => (
+        {(!panels || panels.length === 0) && mapPoints.map((point) => (
           <Marker 
             key={point.id} 
             position={[point.lat, point.lng]} 
@@ -82,7 +82,9 @@ const MapView = ({ selectedRoute }) => {
             </Popup>
           </Marker>
         ))}
-        <MapRouteLayer route={selectedRoute} />
+        {panels && panels.map(panel => (
+          <MapRouteLayer key={panel.routeId} route={panel.data} />
+        ))}
       </MapContainer>
 
       {/* Floating Controls Top Right */}

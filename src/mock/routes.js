@@ -12,6 +12,7 @@ export const routes = [
     missingPod: true,
     riskOfDelay: false,
     statusCoded: false,
+    color: "#E67200", // Orange
   },
   {
     id: "890283847r784833",
@@ -26,6 +27,7 @@ export const routes = [
     missingPod: true,
     riskOfDelay: true,
     statusCoded: false,
+    color: "#2196F3", // Blue
   },
   {
     id: "QO3W19103336544",
@@ -40,6 +42,7 @@ export const routes = [
     missingPod: true,
     riskOfDelay: false,
     statusCoded: true,
+    color: "#107C41", // Green
   },
   {
     id: "QOAIRFF677886544",
@@ -54,6 +57,7 @@ export const routes = [
     missingPod: true,
     riskOfDelay: false,
     statusCoded: true,
+    color: "#9C27B0", // Purple
   },
   {
     id: "123735KKFM12DKKEKKE",
@@ -68,6 +72,7 @@ export const routes = [
     missingPod: true,
     riskOfDelay: false,
     statusCoded: true,
+    color: "#607D8B", // Blue Grey
   },
   {
     id: "998877665544332211",
@@ -82,5 +87,6 @@ export const routes = [
     missingPod: false,
     riskOfDelay: false,
     statusCoded: false,
+    color: "#795548", // Brown
   },
 ];
