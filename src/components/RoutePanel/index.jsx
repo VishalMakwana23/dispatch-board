@@ -31,7 +31,7 @@ const RoutePanel = ({ route, expanded, onToggle, onClose }) => {
     <Paper
       elevation={3}
       sx={{
-        width: '430px', // Fixed width
+        width: '300px', // Further reduced width
         height: expanded ? 'calc(100vh - 100px)' : '60px', // Reduced collapsed height
         backgroundColor: 'white',
         borderRadius: '12px',

@@ -34,20 +34,20 @@ const RouteStopItem = ({ stop, isLast, isFirst }) => {
      // Last Location: Orange filled, Person icon
      IconComponent = PersonIcon;
   } else {
-    // Others (Risk, Missing POD, etc): Filled (Red/Yellow), Truck icon
-    IconComponent = LocalShippingIcon;
+    // Others (Risk, Missing POD, etc): Filled (Red/Yellow), No Icon (just dot) as per "no any icons" request
+    IconComponent = null;
   }
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '80px' }}>
+    <Box sx={{ display: 'flex', minHeight: '60px' }}> {/* Reduced minHeight */}
       {/* Timeline Column */}
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mr: 2, minWidth: '24px' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mr: 1.5, minWidth: '24px' }}> {/* Reduced margin */}
         
         {/* The Dot/Icon */}
         <Box
           sx={{
-            width: '24px',
-            height: '24px',
+            width: '20px', // Smaller dot
+            height: '20px',
             borderRadius: '50%',
             backgroundColor: isFilled ? color : 'white',
             border: `2px solid ${color}`,
@@ -59,9 +59,9 @@ const RouteStopItem = ({ stop, isLast, isFirst }) => {
           }}
         >
             {stop.isWarehouse ? (
-                <Typography variant="caption" sx={{ fontSize: '8px', fontWeight: 'bold' }}>Load</Typography>
+                <Typography variant="caption" sx={{ fontSize: '7px', fontWeight: 'bold' }}>Load</Typography>
             ) : (
-                IconComponent && <IconComponent sx={{ fontSize: iconSize }} />
+                IconComponent && <IconComponent sx={{ fontSize: '12px' }} /> // Smaller icon
             )}
         </Box>
 
@@ -72,16 +72,16 @@ const RouteStopItem = ({ stop, isLast, isFirst }) => {
               width: '2px',
               flexGrow: 1,
               bgcolor: '#E0E0E0',
-              my: 0.5,
+              my: 0.25, // Reduced margin
             }}
           />
         )}
       </Box>
 
       {/* Content Column */}
-      <Box sx={{ pb: 3, flexGrow: 1 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '14px' }}>
+      <Box sx={{ pb: 2, flexGrow: 1 }}> {/* Reduced padding */}
+        <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}> {/* Changed to flex-start and added gap */}
+            <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: '13px', lineHeight: 1.2 }}>
             {stop.name}
             </Typography>
             {stop.badges && stop.badges.map((badge, index) => (
@@ -90,34 +90,34 @@ const RouteStopItem = ({ stop, isLast, isFirst }) => {
                     label={badge} 
                     size="small" 
                     sx={{ 
-                        height: '20px', 
-                        fontSize: '10px', 
+                        height: '16px', // Smaller chip
+                        fontSize: '9px', 
                         bgcolor: '#FFEBEE', 
                         color: '#D32F2F',
-                        ml: 1
+                        // ml: 0.5 // Removed ml, using gap
                     }} 
                 />
             ))}
         </Box>
         
-        <Typography variant="body2" sx={{ fontSize: '12px', color: 'text.secondary', mt: 0.5 }}>
+        <Typography variant="body2" sx={{ fontSize: '11px', color: 'text.secondary', mt: 0.25, lineHeight: 1.2 }}>
           {stop.address}
         </Typography>
 
-        <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
-            <Typography variant="caption" sx={{ fontSize: '11px', color: 'text.secondary' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.25, mt: 0.5 }}>
+            <Typography variant="caption" sx={{ fontSize: '10px', color: 'text.secondary' }}>
                 {stop.time}
             </Typography>
-             <Typography variant="caption" sx={{ fontSize: '11px', color: 'text.secondary' }}>
+             <Typography variant="caption" sx={{ fontSize: '10px', color: 'text.secondary' }}>
                 {stop.timeWindow}
             </Typography>
         </Box>
 
-        <Box sx={{ display: 'flex', gap: 2, mt: 0.5 }}>
-            <Typography variant="caption" sx={{ fontSize: '11px', color: 'text.secondary', display: 'flex', alignItems: 'center', gap: 0.5 }}>
+        <Box sx={{ display: 'flex', gap: 1.5, mt: 0.25 }}>
+            <Typography variant="caption" sx={{ fontSize: '10px', color: 'text.secondary', display: 'flex', alignItems: 'center', gap: 0.25 }}>
                📄 {stop.orders}
             </Typography>
-            <Typography variant="caption" sx={{ fontSize: '11px', color: 'text.secondary', display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <Typography variant="caption" sx={{ fontSize: '10px', color: 'text.secondary', display: 'flex', alignItems: 'center', gap: 0.25 }}>
                📦 {stop.parcels}
             </Typography>
         </Box>
