@@ -12,26 +12,11 @@ import FilterDrawer from '../FilterDrawer';
 import RouteCard from '../RouteCard';
 import { routes } from '../../mock/routes';
 
+import ViewSwitcher from '../ViewSwitcher';
+
 const RoutesPanel = ({ onRouteSelect, openRouteIds = [], isAdmin = false, activeView = 'routes', setActiveView }) => {
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
-  const [viewAnchorEl, setViewAnchorEl] = useState(null);
   const filterOpen = Boolean(filterAnchorEl);
-  const viewOpen = Boolean(viewAnchorEl);
-
-  const handleViewClick = (event) => {
-    setViewAnchorEl(event.currentTarget);
-  };
-
-  const handleViewClose = () => {
-    setViewAnchorEl(null);
-  };
-
-  const handleViewSelect = (view) => {
-    if (setActiveView) {
-        setActiveView(view);
-    }
-    handleViewClose();
-  };
 
   const handleApplyFilters = (filters) => {
     console.log("APPLY:", filters);
@@ -68,78 +53,7 @@ const RoutesPanel = ({ onRouteSelect, openRouteIds = [], isAdmin = false, active
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
              {isAdmin ? (
                 <>
-                    <Box 
-                        onClick={handleViewClick}
-                        sx={{ 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            gap: 1, 
-                            cursor: 'pointer',
-                            '&:hover': { opacity: 0.8 }
-                        }}
-                    >
-                        <AltRouteIcon fontSize="small" />
-                        <Typography variant="h6" sx={{ fontWeight: 700 }}>Routes</Typography>
-                        {viewOpen ? <KeyboardArrowUpIcon fontSize="small" /> : <KeyboardArrowDownIcon fontSize="small" />}
-                    </Box>
-                    <Menu
-                        anchorEl={viewAnchorEl}
-                        open={viewOpen}
-                        onClose={handleViewClose}
-                        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-                        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-                        PaperProps={{
-                            sx: {
-                                mt: 1,
-                                backgroundColor: 'white',
-                                color: '#333',
-                                boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.15)',
-                                borderRadius: '12px',
-                                minWidth: '240px',
-                                padding: '8px',
-                                '& .MuiMenuItem-root': {
-                                    fontFamily: 'Montserrat, sans-serif',
-                                    fontSize: '14px',
-                                    padding: '10px 16px',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    mb: 0.5,
-                                    '&:hover': { backgroundColor: '#f5f5f5' },
-                                },
-                            },
-                        }}
-                    >
-                        <Box sx={{ px: 2, py: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                                <AltRouteIcon fontSize="small" sx={{ color: '#333' }} />
-                                <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#333', fontSize: '15px' }}>Routes</Typography>
-                            </Box>
-                            <KeyboardArrowUpIcon fontSize="small" sx={{ color: '#333' }} />
-                        </Box>
-
-                        <MenuItem onClick={() => handleViewSelect('routes')}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                                <AltRouteIcon fontSize="small" sx={{ color: '#333' }} />
-                                <Typography sx={{ fontWeight: 600, fontSize: '14px' }}>Routes</Typography>
-                            </Box>
-                            <Radio checked={activeView === 'routes'} size="small" sx={{ padding: 0, color: '#ccc', '&.Mui-checked': { color: '#000' } }} />
-                        </MenuItem>
-                        <MenuItem onClick={() => handleViewSelect('drivers')}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                                <PersonOutlineIcon fontSize="small" sx={{ color: '#333' }} />
-                                <Typography sx={{ fontWeight: 500, fontSize: '14px' }}>Drivers</Typography>
-                            </Box>
-                            <Radio checked={activeView === 'drivers'} size="small" sx={{ padding: 0, color: '#ccc', '&.Mui-checked': { color: '#000' } }} />
-                        </MenuItem>
-                        <MenuItem onClick={() => handleViewSelect('orders')}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                                <HistoryIcon fontSize="small" sx={{ color: '#333' }} />
-                                <Typography sx={{ fontWeight: 500, fontSize: '14px' }}>Unassigned orders</Typography>
-                            </Box>
-                            <Radio checked={activeView === 'orders'} size="small" sx={{ padding: 0, color: '#ccc', '&.Mui-checked': { color: '#000' } }} />
-                        </MenuItem>
-                    </Menu>
+                    <ViewSwitcher activeView={activeView} setActiveView={setActiveView} />
                 </>
              ) : (
                 <>
