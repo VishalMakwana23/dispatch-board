@@ -7,6 +7,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { useNavigate } from 'react-router-dom';
 
+import ziingLogo from '../../assets/ziingLogo.png';
+
 const Topbar = () => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -46,9 +48,7 @@ const Topbar = () => {
     >
       {/* Logo */}
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Typography variant="h5" sx={{ fontWeight: 700, color: '#1C6E63' }}>
-          ziing.ai
-        </Typography>
+        <img src={ziingLogo} alt="ziing.ai" style={{ height: '32px' }} />
       </Box>
 
       {/* Right Actions */}
