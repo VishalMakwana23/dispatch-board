@@ -1,17 +1,16 @@
 import React from 'react';
 import { Paper, Box, Typography, Button, IconButton, Fade } from '@mui/material';
-import { Warning, Close } from '@mui/icons-material';
+import { Warning, Close, KeyboardArrowDown } from '@mui/icons-material';
 
 const ChainOfDelayAlert = ({
   bigAlertVisible,
-  miniAlertVisible,
+  buttonVisible,
   onCloseBigAlert,
   onOpenModal,
-  onCloseMiniAlert,
   onReview,
   route
 }) => {
-  if (!bigAlertVisible && !miniAlertVisible) return null;
+  if (!bigAlertVisible && !buttonVisible) return null;
 
   return (
     <>
@@ -113,47 +112,35 @@ const ChainOfDelayAlert = ({
         </Paper>
       </Fade>
 
-      {/* Mini Alert */}
-      <Fade in={miniAlertVisible && !bigAlertVisible} mountOnEnter unmountOnExit>
-        <Paper
-          elevation={3}
+      {/* Button Alert (Dropdown Style) */}
+      <Fade in={buttonVisible} mountOnEnter unmountOnExit>
+        <Button
+          variant="contained"
           onClick={onOpenModal}
+          endIcon={<KeyboardArrowDown sx={{ color: '#B91C1C' }} />}
+          startIcon={<Warning sx={{ color: '#B91C1C' }} />}
           sx={{
             position: 'absolute',
-            top: 90,
-            left: 'calc(50% + 205px)',
-            transform: 'translateX(-50%)',
+            top: 80,
+            left: 430, // Adjust as needed based on sidebar width
             zIndex: 1200,
-            borderRadius: '12px',
+            backgroundColor: '#FFF5F5',
+            color: '#991B1B',
+            border: '1px solid #FECACA',
+            borderRadius: '8px',
+            textTransform: 'none',
+            fontWeight: 600,
+            boxShadow: '0px 2px 8px rgba(0,0,0,0.1)',
             px: 2,
             py: 1,
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1.5,
-            backgroundColor: '#FFF5F5',
-            border: '1px solid #FECACA',
-            cursor: 'pointer',
-            transition: 'transform 0.2s',
             '&:hover': {
-              transform: 'translateX(-50%) scale(1.02)',
+              backgroundColor: '#FEE2E2',
+              boxShadow: '0px 4px 12px rgba(0,0,0,0.15)',
             },
           }}
         >
-          <Warning sx={{ color: '#B91C1C', fontSize: '1.2rem' }} />
-          <Typography variant="subtitle2" sx={{ fontWeight: 600, color: '#991B1B' }}>
-            Chain of Delay
-          </Typography>
-          <IconButton
-            size="small"
-            onClick={(e) => {
-              e.stopPropagation();
-              onCloseMiniAlert();
-            }}
-            sx={{ ml: 1, p: 0.5, color: '#991B1B' }}
-          >
-            <Close fontSize="small" sx={{ fontSize: '1rem' }} />
-          </IconButton>
-        </Paper>
+          Chain of Delay
+        </Button>
       </Fade>
     </>
   );

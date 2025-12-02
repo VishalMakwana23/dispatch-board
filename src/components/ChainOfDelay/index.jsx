@@ -27,7 +27,8 @@ const STATUS_CODES = [
 const ChainOfDelayContainer = () => {
   // State Management
   const [bigAlertVisible, setBigAlertVisible] = useState(true);
-  const [miniAlertVisible, setMiniAlertVisible] = useState(false);
+  const [buttonVisible, setButtonVisible] = useState(false);
+  
   const [actionModalOpen, setActionModalOpen] = useState(false);
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -39,11 +40,7 @@ const ChainOfDelayContainer = () => {
   // Handlers
   const handleCloseBigAlert = () => {
     setBigAlertVisible(false);
-    setMiniAlertVisible(true);
-  };
-
-  const handleCloseMiniAlert = () => {
-    setMiniAlertVisible(false);
+    setButtonVisible(true);
   };
 
   const handleOpenModal = () => {
@@ -67,7 +64,7 @@ const ChainOfDelayContainer = () => {
     });
     setActionModalOpen(false);
     setBigAlertVisible(false);
-    setMiniAlertVisible(false);
+    setButtonVisible(false);
     
     // Show Toast
     setToastMessage("Routes updated successfully!");
@@ -83,7 +80,7 @@ const ChainOfDelayContainer = () => {
     console.log("Sending Notifications to:", recipients);
     setActionModalOpen(false);
     setBigAlertVisible(false);
-    setMiniAlertVisible(false);
+    setButtonVisible(false);
 
     setToastMessage("Notifications sent successfully!");
     setToastOpen(true);
@@ -93,7 +90,7 @@ const ChainOfDelayContainer = () => {
     console.log("Sending Customer Message:", { message, channel });
     setActionModalOpen(false);
     setBigAlertVisible(false);
-    setMiniAlertVisible(false);
+    setButtonVisible(false);
 
     setToastMessage("Routes updated and message was sent successfully!");
     setToastOpen(true);
@@ -103,10 +100,9 @@ const ChainOfDelayContainer = () => {
     <>
       <ChainOfDelayAlert
         bigAlertVisible={bigAlertVisible}
-        miniAlertVisible={miniAlertVisible}
+        buttonVisible={buttonVisible}
         onCloseBigAlert={handleCloseBigAlert}
         onOpenModal={handleOpenModal}
-        onCloseMiniAlert={handleCloseMiniAlert}
         onReview={handleReview}
         route={MOCK_MAIN_ROUTE}
       />
