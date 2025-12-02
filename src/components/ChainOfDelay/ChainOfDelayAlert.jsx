@@ -21,85 +21,94 @@ const ChainOfDelayAlert = ({
           elevation={3}
           sx={{
             position: 'absolute',
-            top: 20,
-            left: '50%',
+            top: 90, // Below Topbar (64px) + spacing
+            left: 'calc(50% + 205px)', // Center on map (Sidebar + RoutesPanel = 410px)
             transform: 'translateX(-50%)',
             zIndex: 1300,
-            width: '90%',
-            maxWidth: '1000px',
+            width: 'auto',
+            minWidth: '600px',
+            maxWidth: '90%',
             borderRadius: '12px',
-            p: 2,
+            p: '16px 24px',
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            backgroundColor: '#FFF0F0', // Light red background for alert
-            border: '1px solid #F8D7DA',
-            boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
+            alignItems: 'flex-start',
+            gap: 2,
+            backgroundColor: '#FFF5F5', // Light red background
+            border: '1px solid #FECACA',
+            boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.08)',
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Box
-              sx={{
-                width: 40,
-                height: 40,
-                borderRadius: '50%',
-                backgroundColor: '#FFE5E5',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Warning sx={{ color: '#D24A43' }} />
-            </Box>
-            <Box>
-              <Typography variant="h6" sx={{ fontWeight: 700, color: '#D24A43', fontSize: '1rem' }}>
-                Chain of Delay
-              </Typography>
-              <Typography variant="body2" sx={{ color: '#333', fontSize: '0.9rem' }}>
-                Mid-Mile Route <strong>{route?.id || 'MMKLIW2930439484'}</strong> is running <span style={{ color: '#D24A43', fontWeight: 600 }}>{route?.delayMinutes || 30} minutes late</span>. <strong>10 final-mile routes</strong> are affected. Please review and act.
-              </Typography>
-            </Box>
+          {/* Close Button - Absolute Top Right */}
+          <IconButton 
+            onClick={onCloseBigAlert} 
+            size="small" 
+            sx={{ 
+              position: 'absolute', 
+              top: 8, 
+              right: 8, 
+              color: '#991B1B' 
+            }}
+          >
+            <Close fontSize="small" />
+          </IconButton>
+
+          {/* Icon */}
+          <Box
+            sx={{
+              flexShrink: 0,
+              mt: 0.5
+            }}
+          >
+             <Warning sx={{ color: '#B91C1C', fontSize: '2rem' }} />
           </Box>
 
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Button
-              variant="outlined"
-              onClick={onReview}
-              sx={{
-                borderColor: '#D24A43',
-                color: '#D24A43',
-                borderRadius: '8px',
-                textTransform: 'none',
-                fontWeight: 600,
-                '&:hover': {
-                  borderColor: '#B03E38',
-                  backgroundColor: '#FFF5F5',
-                },
-              }}
-            >
-              Review
-            </Button>
-            <Button
-              variant="contained"
-              onClick={onOpenModal}
-              sx={{
-                backgroundColor: '#D24A43',
-                color: '#fff',
-                borderRadius: '8px',
-                textTransform: 'none',
-                fontWeight: 600,
-                boxShadow: 'none',
-                '&:hover': {
-                  backgroundColor: '#B03E38',
+          {/* Content */}
+          <Box sx={{ flexGrow: 1 }}>
+            <Typography variant="h6" sx={{ fontWeight: 700, color: '#991B1B', fontSize: '1rem', mb: 0.5 }}>
+              Chain of Delay
+            </Typography>
+            <Typography variant="body2" sx={{ color: '#450a0a', fontSize: '0.9rem', lineHeight: 1.5, mb: 2 }}>
+              Mid-Mile Route <strong>{route?.id || 'MMKLIW2930439484'}</strong> is running <span style={{ color: '#B91C1C', fontWeight: 700 }}>{route?.delayMinutes || 30} minutes late</span>. <strong>10 final-mile routes</strong> are affected. Please review and act.
+            </Typography>
+
+            {/* Buttons */}
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 1.5 }}>
+              <Button
+                onClick={onReview}
+                sx={{
+                  backgroundColor: '#FEE2E2',
+                  color: '#991B1B',
+                  borderRadius: '8px',
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  px: 3,
+                  '&:hover': {
+                    backgroundColor: '#FECACA',
+                  },
+                }}
+              >
+                Review
+              </Button>
+              <Button
+                variant="contained"
+                onClick={onOpenModal}
+                sx={{
+                  backgroundColor: '#B91C1C',
+                  color: '#fff',
+                  borderRadius: '8px',
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  px: 3,
                   boxShadow: 'none',
-                },
-              }}
-            >
-              Action
-            </Button>
-            <IconButton onClick={onCloseBigAlert} size="small" sx={{ ml: 1 }}>
-              <Close fontSize="small" />
-            </IconButton>
+                  '&:hover': {
+                    backgroundColor: '#991B1B',
+                    boxShadow: 'none',
+                  },
+                }}
+              >
+                Action
+              </Button>
+            </Box>
           </Box>
         </Paper>
       </Fade>
@@ -111,8 +120,8 @@ const ChainOfDelayAlert = ({
           onClick={onOpenModal}
           sx={{
             position: 'absolute',
-            top: 20,
-            left: '50%',
+            top: 90,
+            left: 'calc(50% + 205px)',
             transform: 'translateX(-50%)',
             zIndex: 1200,
             borderRadius: '12px',
@@ -121,8 +130,8 @@ const ChainOfDelayAlert = ({
             display: 'flex',
             alignItems: 'center',
             gap: 1.5,
-            backgroundColor: '#FFF0F0',
-            border: '1px solid #F8D7DA',
+            backgroundColor: '#FFF5F5',
+            border: '1px solid #FECACA',
             cursor: 'pointer',
             transition: 'transform 0.2s',
             '&:hover': {
@@ -130,8 +139,8 @@ const ChainOfDelayAlert = ({
             },
           }}
         >
-          <Warning sx={{ color: '#D24A43', fontSize: '1.2rem' }} />
-          <Typography variant="subtitle2" sx={{ fontWeight: 600, color: '#D24A43' }}>
+          <Warning sx={{ color: '#B91C1C', fontSize: '1.2rem' }} />
+          <Typography variant="subtitle2" sx={{ fontWeight: 600, color: '#991B1B' }}>
             Chain of Delay
           </Typography>
           <IconButton
@@ -140,7 +149,7 @@ const ChainOfDelayAlert = ({
               e.stopPropagation();
               onCloseMiniAlert();
             }}
-            sx={{ ml: 1, p: 0.5 }}
+            sx={{ ml: 1, p: 0.5, color: '#991B1B' }}
           >
             <Close fontSize="small" sx={{ fontSize: '1rem' }} />
           </IconButton>
