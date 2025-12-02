@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Box, Typography, IconButton, TextField, InputAdornment, Menu, MenuItem, Radio } from '@mui/material';
+import { Box, Typography, IconButton, TextField, InputAdornment, Menu, MenuItem, Radio, Badge } from '@mui/material';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import SearchIcon from '@mui/icons-material/Search';
@@ -16,6 +16,7 @@ import OrderMapLayer from '../../components/UnassignedOrders/OrderMapLayer';
 import RoutePreviewLayer from '../../components/UnassignedOrders/RoutePreviewLayer';
 import SuccessToast from '../../components/UnassignedOrders/SuccessToast';
 import ViewSwitcher from '../../components/ViewSwitcher';
+import FilterPopup from '../../components/RoutesPanel/FilterPopup';
 
 // --- MOCK DATA ---
 const INITIAL_UNASSIGNED_ORDERS = [
@@ -141,6 +142,15 @@ const UnassignedOrdersView = ({ activeView = 'orders', setActiveView }) => {
   const [confirmingRoute, setConfirmingRoute] = useState(null); // The route object being confirmed
   const [toast, setToast] = useState(null); // { message: string, routeId: string }
 
+  // Filter State
+  const [filterAnchorEl, setFilterAnchorEl] = useState(null);
+  const filterOpen = Boolean(filterAnchorEl);
+  const [activeFilters, setActiveFilters] = useState({
+    markets: [],
+    clients: []
+  });
+  const [searchQuery, setSearchQuery] = useState('');
+
   const currentRecommendations = useMemo(() => {
     if (!selectedOrder) return [];
     return generateRecommendations(selectedOrder.id);
@@ -193,6 +203,61 @@ const UnassignedOrdersView = ({ activeView = 'orders', setActiveView }) => {
     setConfirmingRoute(null);
   };
 
+  // Filter Handlers
+  const handleFilterClick = (event) => {
+    setFilterAnchorEl(event.currentTarget);
+  };
+
+  const handleFilterClose = () => {
+    setFilterAnchorEl(null);
+  };
+
+  const handleApplyFilters = (filters) => {
+    setActiveFilters(filters);
+  };
+
+  // Filtering Logic
+  const filteredOrders = useMemo(() => {
+    return orders.filter(order => {
+        // Search Filter
+        if (searchQuery) {
+            const query = searchQuery.toLowerCase();
+            if (!order.id.toLowerCase().includes(query) && 
+                !order.vendor.toLowerCase().includes(query)) {
+                return false;
+            }
+        }
+
+        // Market Filter (Check if pickup or delivery address contains selected market)
+        if (activeFilters.markets.length > 0) {
+            const pickupAddress = order.pickup.address.toLowerCase();
+            const deliveryAddress = order.delivery.address.toLowerCase();
+            const matchesMarket = activeFilters.markets.some(market => 
+                pickupAddress.includes(market.toLowerCase()) || 
+                deliveryAddress.includes(market.toLowerCase())
+            );
+            // Note: Mock data has "City, AB". If user selects "Calgary", it won't match "City".
+            // However, for demonstration, if user selects "Calgary", we might not find matches in mock data unless we update mock data or assume "City" maps to something.
+            // Let's assume strict string matching for now as per requirement.
+            if (!matchesMarket) {
+                // If no match found, check if address contains "City" and market is "Calgary" (just for testing if needed, but better to stick to strict logic)
+                return false;
+            }
+        }
+
+        // Client Filter
+        if (activeFilters.clients.length > 0) {
+            if (!activeFilters.clients.includes(order.vendor)) {
+                return false;
+            }
+        }
+
+        return true;
+    });
+  }, [orders, searchQuery, activeFilters]);
+
+  const activeFilterCount = activeFilters.markets.length + activeFilters.clients.length;
+
   return (
     <Box sx={{ height: 'calc(100vh - 64px)', overflow: 'hidden', bgcolor: '#F4F5F7', position: 'relative' }}>
       
@@ -216,8 +281,10 @@ const UnassignedOrdersView = ({ activeView = 'orders', setActiveView }) => {
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                 <ViewSwitcher activeView={activeView} setActiveView={setActiveView} />
 
-                <IconButton size="small">
-                    <FilterListIcon fontSize="small" />
+                <IconButton size="small" onClick={handleFilterClick}>
+                    <Badge badgeContent={activeFilterCount} color="error" variant="dot" invisible={activeFilterCount === 0}>
+                        <FilterListIcon fontSize="small" />
+                    </Badge>
                 </IconButton>
             </Box>
 
@@ -226,6 +293,8 @@ const UnassignedOrdersView = ({ activeView = 'orders', setActiveView }) => {
             placeholder="Search..."
             variant="outlined"
             size="small"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -236,13 +305,13 @@ const UnassignedOrdersView = ({ activeView = 'orders', setActiveView }) => {
             }}
           />
           <Typography variant="caption" color="textSecondary" sx={{ mt: 1, display: 'block', fontFamily: 'Montserrat' }}>
-            {orders.length} Total unassigned orders
+            {filteredOrders.length} Total unassigned orders
           </Typography>
         </Box>
 
         {/* List */}
         <Box sx={{ flexGrow: 1, overflowY: 'auto', p: 2, bgcolor: '#F8F9FA' }}>
-          {orders.map(order => (
+          {filteredOrders.map(order => (
             <OrderCard
               key={order.id}
               order={order}
@@ -250,9 +319,9 @@ const UnassignedOrdersView = ({ activeView = 'orders', setActiveView }) => {
               onClick={handleOrderClick}
             />
           ))}
-          {orders.length === 0 && (
+          {filteredOrders.length === 0 && (
             <Typography variant="body2" color="textSecondary" align="center" sx={{ mt: 4 }}>
-              No unassigned orders.
+              No unassigned orders found.
             </Typography>
           )}
         </Box>
@@ -277,7 +346,7 @@ const UnassignedOrdersView = ({ activeView = 'orders', setActiveView }) => {
           
           {/* Base Layer: Order Markers */}
           <OrderMapLayer 
-            orders={orders} 
+            orders={filteredOrders} 
             selectedOrder={selectedOrder} 
           />
 
@@ -318,6 +387,16 @@ const UnassignedOrdersView = ({ activeView = 'orders', setActiveView }) => {
           />
         )}
       </Box>
+
+      {/* Filter Popup */}
+      <FilterPopup 
+        open={filterOpen}
+        anchorEl={filterAnchorEl}
+        onClose={handleFilterClose}
+        onApply={handleApplyFilters}
+        initialFilters={activeFilters}
+        type="orders"
+      />
     </Box>
   );
 };

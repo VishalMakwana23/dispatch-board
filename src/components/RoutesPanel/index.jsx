@@ -8,7 +8,7 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import HistoryIcon from '@mui/icons-material/History';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import FilterDrawer from '../FilterDrawer';
+import FilterPopup from './FilterPopup';
 import RouteCard from '../RouteCard';
 import { routes } from '../../mock/routes';
 
@@ -93,12 +93,12 @@ const RoutesPanel = ({ onRouteSelect, openRouteIds = [], isAdmin = false, active
             isAdmin={isAdmin}
           />
         ))}
-        <FilterDrawer
+        <FilterPopup
         open={filterOpen}
         anchorEl={filterAnchorEl}
         onClose={() => setFilterAnchorEl(null)}
-        onApplyFilters={handleApplyFilters}
-        onSaveFilters={handleSaveFilters}
+        onApply={handleApplyFilters}
+        type="routes"
       />
     </Box>
     </Box>

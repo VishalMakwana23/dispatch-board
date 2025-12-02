@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Box, Typography, TextField, InputAdornment, IconButton, Menu, MenuItem, Radio } from '@mui/material';
+import React, { useState, useMemo } from 'react';
+import { Box, Typography, TextField, InputAdornment, IconButton, Menu, MenuItem, Radio, Badge } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
@@ -9,10 +9,21 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import DriverCard from './DriverCard';
 import { mockDrivers } from '../../data/mockDrivers';
+import FilterPopup from '../RoutesPanel/FilterPopup'; // Assuming relative path is correct based on file structure
 
 const DriversPanel = ({ onDriverSelect, selectedDriverId, activeView, setActiveView }) => {
   const [viewAnchorEl, setViewAnchorEl] = useState(null);
   const viewOpen = Boolean(viewAnchorEl);
+
+  // Filter State
+  const [filterAnchorEl, setFilterAnchorEl] = useState(null);
+  const filterOpen = Boolean(filterAnchorEl);
+  const [activeFilters, setActiveFilters] = useState({
+    markets: [],
+    providers: [],
+    status: []
+  });
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleViewClick = (event) => {
     setViewAnchorEl(event.currentTarget);
@@ -28,6 +39,60 @@ const DriversPanel = ({ onDriverSelect, selectedDriverId, activeView, setActiveV
     }
     handleViewClose();
   };
+
+  // Filter Handlers
+  const handleFilterClick = (event) => {
+    setFilterAnchorEl(event.currentTarget);
+  };
+
+  const handleFilterClose = () => {
+    setFilterAnchorEl(null);
+  };
+
+  const handleApplyFilters = (filters) => {
+    setActiveFilters(filters);
+  };
+
+  // Filtering Logic
+  const filteredDrivers = useMemo(() => {
+    return mockDrivers.filter(driver => {
+        // Search Filter
+        if (searchQuery) {
+            const query = searchQuery.toLowerCase();
+            if (!driver.name.toLowerCase().includes(query) && 
+                !driver.id.toLowerCase().includes(query)) {
+                return false;
+            }
+        }
+
+        // Market Filter (Mock data has "City" in company string like "Leo Green Logistic · Edmonton")
+        if (activeFilters.markets.length > 0) {
+            const driverMarket = driver.company.split('·')[1]?.trim();
+            if (!driverMarket || !activeFilters.markets.includes(driverMarket)) {
+                return false;
+            }
+        }
+
+        // Provider Filter (Mock data has "Provider" in company string like "Leo Green Logistic · Edmonton")
+        if (activeFilters.providers.length > 0) {
+            const driverProvider = driver.company.split('·')[0]?.trim();
+            if (!driverProvider || !activeFilters.providers.includes(driverProvider)) {
+                return false;
+            }
+        }
+
+        // Status Filter
+        if (activeFilters.status.length > 0) {
+            if (!activeFilters.status.includes(driver.status)) {
+                return false;
+            }
+        }
+
+        return true;
+    });
+  }, [searchQuery, activeFilters]);
+
+  const activeFilterCount = activeFilters.markets.length + activeFilters.providers.length + activeFilters.status.length;
 
   return (
     <Box
@@ -62,8 +127,10 @@ const DriversPanel = ({ onDriverSelect, selectedDriverId, activeView, setActiveV
             {viewOpen ? <KeyboardArrowUpIcon fontSize="small" /> : <KeyboardArrowDownIcon fontSize="small" />}
           </Box>
           
-          <IconButton size="small">
-            <FilterListIcon />
+          <IconButton size="small" onClick={handleFilterClick}>
+            <Badge badgeContent={activeFilterCount} color="error" variant="dot" invisible={activeFilterCount === 0}>
+                <FilterListIcon />
+            </Badge>
           </IconButton>
         </Box>
 
@@ -132,6 +199,8 @@ const DriversPanel = ({ onDriverSelect, selectedDriverId, activeView, setActiveV
           placeholder="Search..."
           variant="outlined"
           size="small"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -143,12 +212,12 @@ const DriversPanel = ({ onDriverSelect, selectedDriverId, activeView, setActiveV
         />
         
         <Typography variant="caption" sx={{ color: '#888', mb: 1, display: 'block' }}>
-            {mockDrivers.length} Total Drivers
+            {filteredDrivers.length} Total Drivers
         </Typography>
       </Box>
 
       <Box sx={{ flexGrow: 1, overflowY: 'auto', px: 2, pb: 2 }}>
-        {mockDrivers.map((driver) => (
+        {filteredDrivers.map((driver) => (
           <DriverCard 
             key={driver.id} 
             driver={driver} 
@@ -156,7 +225,21 @@ const DriversPanel = ({ onDriverSelect, selectedDriverId, activeView, setActiveV
             onClick={() => onDriverSelect(driver)}
           />
         ))}
+        {filteredDrivers.length === 0 && (
+            <Typography variant="body2" sx={{ textAlign: 'center', mt: 4, color: '#888' }}>
+                No drivers found matching filters.
+            </Typography>
+        )}
       </Box>
+
+      {/* Filter Popup */}
+      <FilterPopup 
+        open={filterOpen}
+        anchorEl={filterAnchorEl}
+        onClose={handleFilterClose}
+        onApply={handleApplyFilters}
+        initialFilters={activeFilters}
+      />
     </Box>
   );
 };
