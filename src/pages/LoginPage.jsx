@@ -15,6 +15,8 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../services/authService';
+import ziingLogo from '../assets/ziingLogo.png';
+import loginBackground from '../assets/loginBackground.png';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -85,40 +87,50 @@ const LoginPage = () => {
     <Box
       sx={{
         minHeight: '100vh',
-        backgroundColor: '#EAF1EC',
+        backgroundColor: '#ffffff',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
         overflow: 'hidden',
+        fontFamily: 'Montserrat, sans-serif',
       }}
     >
       <Card
         sx={{
-          width: '410px',
-          padding: '40px',
-          borderRadius: '16px',
+          width: '400px',
+          padding: '40px 32px',
+          borderRadius: '8px',
           backgroundColor: '#FCEFE5',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
           display: 'flex',
           flexDirection: 'column',
-          gap: 2,
+          gap: 2.5,
           zIndex: 2,
+          position: 'relative',
+          top: '-20px', // Slight offset upwards as per design
         }}
       >
         <Box sx={{ textAlign: 'center', mb: 1 }}>
-          <Typography variant="h6" sx={{ fontWeight: 700, color: '#0B3B32', mb: 1 }}>
-             ⚡ ziing.ai
-          </Typography>
-          <Typography variant="h5" sx={{ fontWeight: 600, color: '#000000' }}>
+          <Box 
+            component="img" 
+            src={ziingLogo} 
+            alt="ziing.ai" 
+            sx={{ 
+              height: '28px', 
+              mb: 2.5,
+              objectFit: 'contain'
+            }} 
+          />
+          <Typography variant="h5" sx={{ fontWeight: 700, color: '#000000', fontSize: '22px', fontFamily: 'Montserrat, sans-serif' }}>
             Login
           </Typography>
         </Box>
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-          <Typography variant="body2" sx={{ fontWeight: 600, color: '#333' }}>
-            Email *
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.8 }}>
+          <Typography variant="body2" sx={{ fontWeight: 500, color: '#333', fontSize: '13px', fontFamily: 'Montserrat, sans-serif' }}>
+            Email <span style={{ color: '#D32F2F' }}>*</span>
           </Typography>
           <TextField
             fullWidth
@@ -130,20 +142,38 @@ const LoginPage = () => {
             sx={{
               '& .MuiOutlinedInput-root': {
                 backgroundColor: '#FFFFFF',
-                borderRadius: '8px',
-                fontStyle: email ? 'normal' : 'italic',
+                borderRadius: '4px',
+                height: '44px',
+                '& fieldset': {
+                  borderColor: '#E0E0E0',
+                  borderWidth: '1px',
+                },
+                '&:hover fieldset': {
+                  borderColor: '#B0B0B0',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#0B3B32',
+                },
+              },
+              '& input': {
+                padding: '10px 14px',
+                fontSize: '13px',
+                fontFamily: 'Montserrat, sans-serif',
+                height: '44px',
+                boxSizing: 'border-box',
               },
               '& input::placeholder': {
                 fontStyle: 'italic',
                 color: '#A0A0A0',
+                opacity: 1,
               },
             }}
           />
         </Box>
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-          <Typography variant="body2" sx={{ fontWeight: 600, color: '#333' }}>
-            Password *
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.8 }}>
+          <Typography variant="body2" sx={{ fontWeight: 500, color: '#333', fontSize: '13px', fontFamily: 'Montserrat, sans-serif' }}>
+            Password <span style={{ color: '#D32F2F' }}>*</span>
           </Typography>
           <TextField
             fullWidth
@@ -161,7 +191,7 @@ const LoginPage = () => {
                     edge="end"
                     size="small"
                   >
-                    {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                    {showPassword ? <VisibilityOff sx={{ fontSize: 18, color: '#666' }} /> : <Visibility sx={{ fontSize: 18, color: '#666' }} />}
                   </IconButton>
                 </InputAdornment>
               ),
@@ -169,23 +199,41 @@ const LoginPage = () => {
             sx={{
               '& .MuiOutlinedInput-root': {
                 backgroundColor: '#FFFFFF',
-                borderRadius: '8px',
-                fontStyle: password ? 'normal' : 'italic',
+                borderRadius: '4px',
+                height: '44px',
+                '& fieldset': {
+                  borderColor: '#E0E0E0',
+                  borderWidth: '1px',
+                },
+                '&:hover fieldset': {
+                  borderColor: '#B0B0B0',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#0B3B32',
+                },
+              },
+              '& input': {
+                padding: '10px 14px',
+                fontSize: '13px',
+                fontFamily: 'Montserrat, sans-serif',
+                height: '44px',
+                boxSizing: 'border-box',
               },
               '& input::placeholder': {
                 fontStyle: 'italic',
                 color: '#A0A0A0',
+                opacity: 1,
               },
             }}
           />
           {error && (
-            <FormHelperText error sx={{ mt: 0.5, fontSize: '12px' }}>
+            <FormHelperText error sx={{ mt: 0.5, fontSize: '11px', fontFamily: 'Montserrat, sans-serif' }}>
               {error}
             </FormHelperText>
           )}
         </Box>
 
-        <Link href="#" underline="always" sx={{ color: '#333', fontSize: '12px', fontWeight: 600, alignSelf: 'flex-start' }}>
+        <Link href="#" underline="always" sx={{ color: '#333', fontSize: '12px', fontWeight: 600, alignSelf: 'flex-start', textDecorationColor: '#333', fontFamily: 'Montserrat, sans-serif' }}>
           Forgot Password?
         </Link>
 
@@ -196,14 +244,19 @@ const LoginPage = () => {
               onChange={(e) => setRemember(e.target.checked)}
               sx={{
                 color: '#333',
+                padding: '4px',
                 '&.Mui-checked': {
-                  color: '#0B3B32',
+                  color: '#333',
                 },
+                '& .MuiSvgIcon-root': {
+                    fontSize: 20,
+                    borderRadius: '2px'
+                }
               }}
             />
           }
-          label={<Typography sx={{ fontSize: '14px', fontWeight: 500 }}>Remember me</Typography>}
-          sx={{ mt: -1 }}
+          label={<Typography sx={{ fontSize: '13px', fontWeight: 500, color: '#333', fontFamily: 'Montserrat, sans-serif' }}>Remember me</Typography>}
+          sx={{ mt: -1.5, ml: -0.5 }}
         />
 
         <Button
@@ -212,54 +265,68 @@ const LoginPage = () => {
           disabled={!isFormValid}
           onClick={handleLogin}
           sx={{
-            height: '46px',
-            borderRadius: '32px',
-            backgroundColor: '#0B3B32',
-            color: '#FFFFFF',
+            height: '48px',
+            borderRadius: '24px',
+            backgroundColor: '#EAEAEA', 
+            color: '#A0A0A0',
             textTransform: 'none',
-            fontSize: '16px',
-            fontWeight: 600,
+            fontSize: '14px',
+            fontWeight: 500,
+            fontFamily: 'Montserrat, sans-serif',
+            boxShadow: 'none',
             '&:hover': {
-              backgroundColor: '#082e27',
+              backgroundColor: '#d0d0d0',
+              boxShadow: 'none',
             },
             '&.Mui-disabled': {
-              backgroundColor: '#E3E3E3',
+              backgroundColor: '#EAEAEA',
               color: '#A0A0A0',
             },
+            ...(isFormValid && {
+                backgroundColor: '#0B3B32', 
+                color: '#FFFFFF',
+                '&:hover': {
+                    backgroundColor: '#082e27',
+                }
+            }),
             mt: 1,
           }}
         >
-          {isFormValid ? 'Log In' : 'Login'}
+          Login
         </Button>
 
-        <Box sx={{ textAlign: 'center', mt: 1 }}>
-          <Typography variant="body2" sx={{ fontSize: '12px' }}>
+        <Box sx={{ textAlign: 'center', mt: 0 }}>
+          <Typography variant="body2" sx={{ fontSize: '12px', color: '#333', fontFamily: 'Montserrat, sans-serif' }}>
             Don't have an account?{' '}
-            <Link href="#" underline="always" sx={{ color: '#333', fontWeight: 700 }}>
+            <Link href="#" underline="always" sx={{ color: '#333', fontWeight: 700, textDecorationColor: '#333', fontFamily: 'Montserrat, sans-serif' }}>
               Sign Up
             </Link>
           </Typography>
         </Box>
 
-        <Box sx={{ textAlign: 'center', mt: 3 }}>
-          <Typography variant="caption" sx={{ fontSize: '10px', color: '#666', lineHeight: 1.2, display: 'block' }}>
+        <Box sx={{ textAlign: 'center', mt: 2 }}>
+          <Typography variant="caption" sx={{ fontSize: '9px', color: '#333', lineHeight: 1.4, display: 'block', maxWidth: '280px', mx: 'auto', fontFamily: 'Montserrat, sans-serif' }}>
             By accessing and using this platform/website, you agree to be bound by the{' '}
-            <Link href="#" sx={{ color: '#000', fontWeight: 700, textDecoration: 'underline' }}>Terms of Use</Link>
+            <Link href="#" sx={{ color: '#000', fontWeight: 700, textDecoration: 'underline', fontFamily: 'Montserrat, sans-serif' }}>Terms of Use</Link>
             {' '}and{' '}
-            <Link href="#" sx={{ color: '#000', fontWeight: 700, textDecoration: 'underline' }}>Privacy Notice</Link>
+            <Link href="#" sx={{ color: '#000', fontWeight: 700, textDecoration: 'underline', fontFamily: 'Montserrat, sans-serif' }}>Privacy Notice</Link>
           </Typography>
         </Box>
       </Card>
 
-      {/* Placeholder for bottom illustration */}
       <Box
+        component="img"
+        src={loginBackground}
+        alt="Cityscape"
         sx={{
           position: 'absolute',
           bottom: 0,
           left: 0,
-          right: 0,
-          height: '150px', // Adjust height as needed
-          backgroundImage: 'linear-gradient(to top, #d0e0d8 0%, transparent 100%)', // Simple gradient placeholder
+          width: '100%',
+          height: 'auto',
+          maxHeight: '45vh',
+          objectFit: 'cover',
+          objectPosition: 'bottom',
           zIndex: 1,
           pointerEvents: 'none',
         }}
