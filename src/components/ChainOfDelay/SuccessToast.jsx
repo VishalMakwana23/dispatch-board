@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
-import { Paper, Box, Typography, IconButton, Slide, Fade } from '@mui/material';
-import { CheckCircle, Close } from '@mui/icons-material';
+import { Paper, Box, Typography, IconButton, Slide } from '@mui/material';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import CloseIcon from '@mui/icons-material/Close';
 
-const SuccessToast = ({ open, onClose, message, subMessage }) => {
+const SuccessToast = ({ open, onClose, message }) => {
+  // Auto-hide after 5 seconds
   useEffect(() => {
     if (open) {
       const timer = setTimeout(() => {
@@ -12,42 +14,52 @@ const SuccessToast = ({ open, onClose, message, subMessage }) => {
     }
   }, [open, onClose]);
 
+  const getCurrentTime = () => {
+    const now = new Date();
+    // Format: Today 10:30PM
+    let hours = now.getHours();
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; 
+    return `Today ${hours}:${minutes}${ampm}`;
+  };
+
   return (
     <Slide direction="up" in={open} mountOnEnter unmountOnExit>
       <Paper
         elevation={6}
         sx={{
           position: 'fixed',
-          bottom: 24,
-          left: 24, // "Slide in from bottom-left"
-          zIndex: 2000,
-          backgroundColor: '#0B3B32', // Dark green
-          color: '#FFFFFF',
+          bottom: '100px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          bgcolor: '#1B3E38', // Dark Green
+          color: '#fff',
           borderRadius: '12px',
           p: 2,
           display: 'flex',
           alignItems: 'flex-start',
           gap: 2,
-          minWidth: '300px',
-          maxWidth: '400px',
-          boxShadow: '0px 8px 24px rgba(0, 0, 0, 0.15)',
+          minWidth: '450px',
+          zIndex: 2000, // High z-index to sit on top of map
+          boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+          fontFamily: 'Montserrat',
         }}
       >
-        <CheckCircle sx={{ color: '#4CAF50', mt: 0.5 }} /> {/* Lighter green for icon */}
-        <Box sx={{ flex: 1 }}>
-          <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#FFFFFF' }}>
-            {message || "Success!"}
+        <CheckCircleOutlineIcon sx={{ color: '#4CAF50', mt: 0.5 }} /> {/* Green check */}
+        
+        <Box sx={{ flexGrow: 1 }}>
+          <Typography variant="body1" sx={{ fontWeight: 500, fontSize: '14px', lineHeight: 1.4 }}>
+            {message}
           </Typography>
-          <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.8)', display: 'block', mt: 0.5 }}>
-            {subMessage || "Today 10:30PM"}
+          <Typography variant="caption" sx={{ display: 'block', mt: 0.5, opacity: 0.7, fontSize: '11px' }}>
+            {getCurrentTime()}
           </Typography>
         </Box>
-        <IconButton
-          size="small"
-          onClick={onClose}
-          sx={{ color: 'rgba(255, 255, 255, 0.6)', p: 0.5, '&:hover': { color: '#FFF' } }}
-        >
-          <Close fontSize="small" />
+
+        <IconButton size="small" onClick={onClose} sx={{ color: 'rgba(255,255,255,0.7)', p: 0 }}>
+          <CloseIcon fontSize="small" />
         </IconButton>
       </Paper>
     </Slide>

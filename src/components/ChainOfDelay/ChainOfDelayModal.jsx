@@ -14,6 +14,7 @@ import { Close, ChevronRight, Warning } from '@mui/icons-material';
 import { format } from 'date-fns';
 import AffectedRouteCard from './AffectedRouteCard';
 import ChainDelayNotificationPanel from './ChainDelayNotificationPanel';
+import ziingLogo from '../../assets/ziing.svg';
 
 const ChainOfDelayModal = ({
   open,
@@ -38,15 +39,27 @@ const ChainOfDelayModal = ({
   
   // Notification State
   const [selectedRecipients, setSelectedRecipients] = useState({});
-  const [selectedChannel, setSelectedChannel] = useState('email');
-  const [customerMessage, setCustomerMessage] = useState(
-    "Hi John,\nwe are experiencing delays due to severe weather conditions in SouthWest Calgary.\nAll the deliveries are moved forward to Nov 25, 2025."
-  );
+  const [expandedRecipient, setExpandedRecipient] = useState('customers');
+  
+  const [recipientChannels, setRecipientChannels] = useState({
+    customers: 'email',
+    managers: 'email',
+    drivers: 'email',
+    providers: 'email'
+  });
+
+  const [recipientMessages, setRecipientMessages] = useState({
+    customers: "Hi John,\nwe are experiencing delays due to severe weather conditions in SouthWest Calgary.\nAll the deliveries are moved forward to Nov 25, 2025.",
+    managers: "",
+    drivers: "",
+    providers: ""
+  });
 
   useEffect(() => {
     if (open) {
       setStep('main');
       setSelectedRecipients({});
+      setExpandedRecipient('customers');
     }
   }, [open]);
 
@@ -80,11 +93,22 @@ const ChainOfDelayModal = ({
     if (step === 'main') {
       onConfirm();
     } else if (step === 'notifications') {
+      // Gather data for all selected recipients
+      const notificationData = {};
+      Object.keys(selectedRecipients).forEach(recipientId => {
+        notificationData[recipientId] = {
+          channel: recipientChannels[recipientId],
+          message: recipientMessages[recipientId]
+        };
+      });
+      
+      // If specific handlers exist for types, use them (legacy support or specific logic)
       if (selectedRecipients['customers']) {
-        onConfirmCustomerMessage(customerMessage, selectedChannel);
-      } else {
-        onConfirmSendNotifications(selectedRecipients);
-      }
+        onConfirmCustomerMessage(recipientMessages['customers'], recipientChannels['customers']);
+      } 
+      
+      // Always call the generic handler with all data
+      onConfirmSendNotifications(notificationData);
     }
   };
 
@@ -104,22 +128,30 @@ const ChainOfDelayModal = ({
       }}
     >
       <Box sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
-        {/* Header */}
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Warning sx={{ color: '#D24A43' }} />
-            <Typography variant="h6" sx={{ fontWeight: 700, color: '#D24A43' }}>
-              Chain of Delay
-            </Typography>
-          </Box>
-          <IconButton onClick={onClose}>
-            <Close />
-          </IconButton>
-        </Box>
+        {/* Close Button (Absolute) */}
+        <IconButton 
+          onClick={onClose} 
+          sx={{ 
+            position: 'absolute', 
+            right: 24, 
+            top: 24,
+            color: '#999'
+          }}
+        >
+          <Close />
+        </IconButton>
 
-        <Grid container spacing={4} sx={{ flex: 1, overflow: 'hidden' }}>
+        <Grid container spacing={4} sx={{ flex: 1, overflow: 'hidden', mb: 2, mt: 4 }}>
           {/* Left Panel: Route Info & Affected Routes */}
-          <Grid item xs={12} md={5} sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+          <Grid item xs={12} md={4} sx={{ height: '100%' }}>
+            <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', borderRight: '1px solid #E0E0E0', pr: 4 }}>
+              {/* Chain of Delay Header */}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
+                <Warning sx={{ color: '#D24A43' }} />
+                <Typography variant="h6" sx={{ fontWeight: 700, color: '#D24A43', fontSize: '1.1rem' }}>
+                  Chain of Delay
+                </Typography>
+              </Box>
             <Paper
               elevation={0}
               sx={{
@@ -172,13 +204,14 @@ const ChainOfDelayModal = ({
                 />
               ))}
             </Box>
+          </Box>
           </Grid>
 
           {/* Middle Panel: ZAI Suggestions */}
           <Grid item xs={12} md={3}>
             <Box sx={{ height: '100%', borderRight: '1px solid #EEE', pr: 4 }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
-                <span style={{ color: '#F26A2E' }}>⚡</span> ZAI Suggestions
+              <Typography variant="h6" sx={{ fontWeight: 700, mb: 3, display: 'flex', alignItems: 'center', gap: 1, fontSize: '1.1rem', color: '#666' }}>
+                <img src={ziingLogo} alt="ZAI" style={{ width: '24px', height: '24px' }} /> ZAI Suggestions
               </Typography>
 
               <Button
@@ -229,7 +262,7 @@ const ChainOfDelayModal = ({
           </Grid>
 
           {/* Right Panel: Dynamic Content */}
-          <Grid item xs={12} md={4} sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <Grid item xs={12} md={5} sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
             
             <Box sx={{ flex: 1, overflowY: 'auto', pr: 1 }}>
               {/* STEP: MAIN (Status Selection with Inline Comments) */}
@@ -243,13 +276,14 @@ const ChainOfDelayModal = ({
                         elevation={0}
                         onClick={() => setSelectedStatusCode(code)}
                         sx={{
-                          p: 1.5,
-                          mb: 1.5,
-                          borderRadius: '10px',
+                          p: 2,
+                          mb: 2,
+                          borderRadius: '12px',
                           border: isSelected ? '1px solid #F26A2E' : '1px solid #E0E0E0',
                           backgroundColor: '#FFFFFF',
                           cursor: 'pointer',
                           transition: 'all 0.2s',
+                          boxShadow: isSelected ? '0px 4px 20px rgba(0, 0, 0, 0.05)' : 'none',
                         }}
                       >
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -315,61 +349,63 @@ const ChainOfDelayModal = ({
                 <ChainDelayNotificationPanel
                   selectedRecipients={selectedRecipients}
                   onToggleRecipient={handleToggleRecipient}
-                  selectedChannel={selectedChannel}
-                  onChannelChange={setSelectedChannel}
-                  message={customerMessage}
-                  onMessageChange={setCustomerMessage}
+                  expandedRecipient={expandedRecipient}
+                  onExpandRecipient={setExpandedRecipient}
+                  recipientChannels={recipientChannels}
+                  onChannelChange={(id, channel) => setRecipientChannels(prev => ({ ...prev, [id]: channel }))}
+                  recipientMessages={recipientMessages}
+                  onMessageChange={(id, message) => setRecipientMessages(prev => ({ ...prev, [id]: message }))}
                 />
               )}
             </Box>
 
-            {/* Static Footer Buttons */}
-            <Box sx={{ display: 'flex', gap: 2, mt: 2, pt: 2, borderTop: '1px solid #F5F5F5', justifyContent: 'flex-end' }}>
-              <Button
-                variant="outlined"
-                onClick={onClose}
-                sx={{
-                  borderColor: '#333',
-                  color: '#333',
-                  borderRadius: '25px',
-                  px: 4,
-                  py: 1,
-                  fontWeight: 600,
-                  textTransform: 'none',
-                  '&:hover': {
-                    borderColor: '#000',
-                    backgroundColor: 'rgba(0,0,0,0.04)'
-                  }
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="contained"
-                onClick={handleConfirmAction}
-                disabled={
-                  (step === 'main' && !selectedStatusCode) ||
-                  (step === 'notifications' && Object.keys(selectedRecipients).length === 0)
-                }
-                sx={{
-                  backgroundColor: '#1C4E46',
-                  color: '#fff',
-                  borderRadius: '25px',
-                  px: 4,
-                  py: 1,
-                  fontWeight: 600,
-                  textTransform: 'none',
-                  boxShadow: 'none',
-                  '&:hover': { backgroundColor: '#143D36', boxShadow: 'none' },
-                  '&.Mui-disabled': { backgroundColor: '#E0E0E0', color: '#999' }
-                }}
-              >
-                Confirm
-              </Button>
-            </Box>
-
           </Grid>
         </Grid>
+
+        {/* Fixed Footer Buttons */}
+        <Box sx={{ display: 'flex', gap: 2, pt: 2, borderTop: '1px solid #F5F5F5', justifyContent: 'flex-end' }}>
+          <Button
+            variant="outlined"
+            onClick={onClose}
+            sx={{
+              borderColor: '#333',
+              color: '#333',
+              borderRadius: '25px',
+              px: 4,
+              py: 1,
+              fontWeight: 600,
+              textTransform: 'none',
+              '&:hover': {
+                borderColor: '#000',
+                backgroundColor: 'rgba(0,0,0,0.04)'
+              }
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleConfirmAction}
+            disabled={
+              (step === 'main' && !selectedStatusCode) ||
+              (step === 'notifications' && Object.keys(selectedRecipients).length === 0)
+            }
+            sx={{
+              backgroundColor: '#1C4E46',
+              color: '#fff',
+              borderRadius: '25px',
+              px: 4,
+              py: 1,
+              fontWeight: 600,
+              textTransform: 'none',
+              boxShadow: 'none',
+              '&:hover': { backgroundColor: '#143D36', boxShadow: 'none' },
+              '&.Mui-disabled': { backgroundColor: '#E0E0E0', color: '#999' }
+            }}
+          >
+            Confirm
+          </Button>
+        </Box>
       </Box>
     </Dialog>
   );

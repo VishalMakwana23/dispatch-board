@@ -12,9 +12,11 @@ const RECIPIENT_GROUPS = [
 const ChainDelayNotificationPanel = ({
   selectedRecipients,
   onToggleRecipient,
-  selectedChannel,
+  expandedRecipient,
+  onExpandRecipient,
+  recipientChannels,
   onChannelChange,
-  message,
+  recipientMessages,
   onMessageChange
 }) => {
   
@@ -24,10 +26,10 @@ const ChainDelayNotificationPanel = ({
       <Box sx={{ flex: 1, overflowY: 'auto', pr: 1, pt: 1 }}>
         {RECIPIENT_GROUPS.map((group) => {
           const isSelected = !!selectedRecipients[group.id];
-          const isCustomers = group.id === 'customers';
+          const isExpanded = expandedRecipient === group.id;
 
-          // Expanded Customers Card
-          if (isCustomers && isSelected) {
+          // Expanded Card (Accordion Open)
+          if (isExpanded) {
             return (
               <Paper
                 key={group.id}
@@ -38,14 +40,21 @@ const ChainDelayNotificationPanel = ({
                   border: '1px solid #F26A2E',
                   backgroundColor: '#FFFFFF',
                   borderRadius: '12px',
-                  position: 'relative'
+                  position: 'relative',
+                  transition: 'all 0.3s ease'
                 }}
               >
                 {/* Header Row */}
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Box 
+                  sx={{ display: 'flex', alignItems: 'center', mb: 2, cursor: 'pointer' }}
+                  onClick={() => onExpandRecipient(group.id)}
+                >
                   <Checkbox
-                    checked={true}
-                    onChange={() => onToggleRecipient(group.id)}
+                    checked={isSelected}
+                    onChange={(e) => {
+                      e.stopPropagation();
+                      onToggleRecipient(group.id);
+                    }}
                     sx={{
                       color: '#F26A2E',
                       p: 0,
@@ -67,28 +76,28 @@ const ChainDelayNotificationPanel = ({
                   <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
                     <Chip 
                         label="Email" 
-                        onClick={() => onChannelChange('email')}
+                        onClick={() => onChannelChange(group.id, 'email')}
                         sx={{ 
-                            bgcolor: selectedChannel === 'email' ? '#0B3B32' : '#F5F5F5', 
-                            color: selectedChannel === 'email' ? '#FFF' : '#666',
+                            bgcolor: recipientChannels[group.id] === 'email' ? '#0B3B32' : '#F5F5F5', 
+                            color: recipientChannels[group.id] === 'email' ? '#FFF' : '#666',
                             fontWeight: 600,
                             borderRadius: '4px',
                             height: '24px',
                             fontSize: '0.7rem',
-                            '&:hover': { bgcolor: selectedChannel === 'email' ? '#082D26' : '#E0E0E0' }
+                            '&:hover': { bgcolor: recipientChannels[group.id] === 'email' ? '#082D26' : '#E0E0E0' }
                         }} 
                     />
                     <Chip 
                         label="SMS" 
-                        onClick={() => onChannelChange('sms')}
+                        onClick={() => onChannelChange(group.id, 'sms')}
                         sx={{ 
-                            bgcolor: selectedChannel === 'sms' ? '#0B3B32' : '#F5F5F5', 
-                            color: selectedChannel === 'sms' ? '#FFF' : '#666',
+                            bgcolor: recipientChannels[group.id] === 'sms' ? '#0B3B32' : '#F5F5F5', 
+                            color: recipientChannels[group.id] === 'sms' ? '#FFF' : '#666',
                             fontWeight: 600,
                             borderRadius: '4px',
                             height: '24px',
                             fontSize: '0.7rem',
-                            '&:hover': { bgcolor: selectedChannel === 'sms' ? '#082D26' : '#E0E0E0' }
+                            '&:hover': { bgcolor: recipientChannels[group.id] === 'sms' ? '#082D26' : '#E0E0E0' }
                         }} 
                     />
                   </Box>
@@ -97,9 +106,9 @@ const ChainDelayNotificationPanel = ({
                     <InputBase
                       multiline
                       fullWidth
-                      value={message}
+                      value={recipientMessages[group.id] || ''}
                       onChange={(e) => {
-                          if (e.target.value.length <= 255) onMessageChange(e.target.value);
+                          if (e.target.value.length <= 255) onMessageChange(group.id, e.target.value);
                       }}
                       sx={{
                         bgcolor: '#FAFAFA',
@@ -125,6 +134,7 @@ const ChainDelayNotificationPanel = ({
             <Paper
               key={group.id}
               elevation={0}
+              onClick={() => onExpandRecipient(group.id)}
               sx={{
                 p: 1.5,
                 mb: 1.5,
@@ -134,6 +144,7 @@ const ChainDelayNotificationPanel = ({
                 display: 'flex',
                 alignItems: 'center',
                 transition: 'all 0.2s',
+                cursor: 'pointer',
                 '&:hover': {
                   borderColor: '#CCC'
                 }
@@ -141,7 +152,10 @@ const ChainDelayNotificationPanel = ({
             >
               <Checkbox
                 checked={isSelected}
-                onChange={() => onToggleRecipient(group.id)}
+                onChange={(e) => {
+                  e.stopPropagation();
+                  onToggleRecipient(group.id);
+                }}
                 sx={{
                   color: '#C4C4C4',
                   p: 0,
