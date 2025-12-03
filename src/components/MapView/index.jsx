@@ -88,19 +88,59 @@ const MapView = ({ panels }) => {
       </MapContainer>
 
       {/* Floating Controls Top Right */}
-      <Box sx={{ position: 'absolute', top: 20, right: 20, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 1, alignItems: 'flex-end' }}>
-        <Paper sx={{ display: 'flex', alignItems: 'center', p: 1, borderRadius: 2, bgcolor: '#1B3E38', color: 'white', cursor: 'pointer' }}>
-           <CalendarTodayIcon fontSize="small" sx={{ mr: 1 }} />
-           <Typography variant="body2" sx={{ fontWeight: 600 }}>Nov 18, 2025</Typography>
-           <Typography variant="caption" sx={{ display: 'block', ml: 1, color: '#aaa' }}>12:00 AM - 11:59 PM</Typography>
+      <Box sx={{ position: 'absolute', top: 20, right: 20, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 1.5, alignItems: 'flex-end' }}>
+        {/* Date/Time Control */}
+        <Paper 
+          elevation={3}
+          sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            p: 1.5, 
+            borderRadius: 2, 
+            bgcolor: '#1B3E38', 
+            color: 'white', 
+            cursor: 'pointer',
+            minWidth: 180
+          }}
+        >
+           <CalendarTodayIcon sx={{ mr: 1.5, fontSize: 24 }} />
+           <Box>
+             <Typography variant="body1" sx={{ fontWeight: 600, lineHeight: 1.2 }}>Nov 18, 2025</Typography>
+             <Typography variant="caption" sx={{ display: 'block', color: 'rgba(255,255,255,0.7)', lineHeight: 1.2 }}>12 AM - 11:59 PM</Typography>
+           </Box>
         </Paper>
 
-        <Paper sx={{ width: 120, borderRadius: 2, overflow: 'hidden' }}>
-           <Box sx={{ p: 1, textAlign: 'center', cursor: 'pointer', '&:hover': { bgcolor: '#f5f5f5' } }}>
-             <Typography variant="body2" fontWeight="600">Market</Typography>
+        {/* Market Button */}
+        <Paper 
+          elevation={3}
+          sx={{ 
+            width: 140, 
+            borderRadius: 2, 
+            overflow: 'hidden', 
+            bgcolor: 'white',
+            transition: 'all 0.2s',
+            '&:hover': { transform: 'translateY(-2px)', boxShadow: 4 }
+          }}
+        >
+           <Box sx={{ p: 1.5, textAlign: 'center', cursor: 'pointer', '&:hover': { bgcolor: '#f5f5f5' } }}>
+             <Typography variant="body1" fontWeight="600" color="#1B3E38">Market</Typography>
            </Box>
-           <Box sx={{ p: 1, textAlign: 'center', cursor: 'pointer', borderTop: '1px solid #eee', '&:hover': { bgcolor: '#f5f5f5' } }}>
-             <Typography variant="body2" fontWeight="600">Traffic</Typography>
+        </Paper>
+
+        {/* Traffic Button */}
+        <Paper 
+          elevation={3}
+          sx={{ 
+            width: 140, 
+            borderRadius: 2, 
+            overflow: 'hidden', 
+            bgcolor: 'white',
+            transition: 'all 0.2s',
+            '&:hover': { transform: 'translateY(-2px)', boxShadow: 4 }
+          }}
+        >
+           <Box sx={{ p: 1.5, textAlign: 'center', cursor: 'pointer', '&:hover': { bgcolor: '#f5f5f5' } }}>
+             <Typography variant="body1" fontWeight="600" color="#1B3E38">Traffic</Typography>
            </Box>
         </Paper>
       </Box>
