@@ -18,94 +18,7 @@ import SuccessToast from '../../components/UnassignedOrders/SuccessToast';
 import ViewSwitcher from '../../components/ViewSwitcher';
 import FilterPopup from '../../components/RoutesPanel/FilterPopup';
 
-// --- MOCK DATA ---
-const INITIAL_UNASSIGNED_ORDERS = [
-  {
-    id: "1234556677",
-    items: 6,
-    weight: "16 lbs",
-    dimensions: "12 * 13 * 14",
-    pickup: {
-      address: "12123 Main St. City, AB, CA, Q1W2E3",
-      lat: 31.13234,
-      lng: -97.76455
-    },
-    delivery: {
-      address: "12123 Main St. City, AB, CA, Q1W2E3",
-      lat: 31.10123,
-      lng: -97.72112
-    },
-    vendor: "MCKESSON"
-  },
-  {
-    id: "3445567742",
-    items: 3,
-    weight: "12 lbs",
-    dimensions: "12 * 13 * 14",
-    pickup: {
-      address: "12123 Main St. City, AB, CA, Q1W2E3",
-      lat: 31.14500,
-      lng: -97.75000
-    },
-    delivery: {
-      address: "12123 Main St. City, AB, CA, Q1W2E3",
-      lat: 31.11500,
-      lng: -97.71000
-    },
-    vendor: "MCKESSON"
-  },
-  {
-    id: "938845KRKLKT",
-    items: 3,
-    weight: "12 lbs",
-    dimensions: "12 * 13 * 14",
-    pickup: {
-      address: "12123 Main St. City, AB, CA, Q1W2E3",
-      lat: 31.12000,
-      lng: -97.78000
-    },
-    delivery: {
-      address: "12123 Main St. City, AB, CA, Q1W2E3",
-      lat: 31.09000,
-      lng: -97.74000
-    },
-    vendor: "MCKESSON"
-  },
-  {
-    id: "KDLDLIE81983",
-    items: 3,
-    weight: "12 lbs",
-    dimensions: "12 * 13 * 14",
-    pickup: {
-      address: "12123 Main St. City, AB, CA, Q1W2E3",
-      lat: 31.15000,
-      lng: -97.77000
-    },
-    delivery: {
-      address: "12123 Main St. City, AB, CA, Q1W2E3",
-      lat: 31.13000,
-      lng: -97.73000
-    },
-    vendor: "MCKESSON"
-  },
-  {
-    id: "JDKKDE8928734",
-    items: 3,
-    weight: "12 lbs",
-    dimensions: "12 * 13 * 14",
-    pickup: {
-      address: "12123 Main St. City, AB, CA, Q1W2E3",
-      lat: 31.11000,
-      lng: -97.75000
-    },
-    delivery: {
-      address: "12123 Main St. City, AB, CA, Q1W2E3",
-      lat: 31.08000,
-      lng: -97.70000
-    },
-    vendor: "MCKESSON"
-  }
-];
+import { MOCK_UNASSIGNED_ORDERS, MOCK_CLUSTERS } from '../../data/mockUnassignedOrders';
 
 const generateRecommendations = (orderId) => {
   const suffix = orderId.slice(-4);
@@ -131,10 +44,8 @@ const generateRecommendations = (orderId) => {
   ];
 };
 
-
-
 const UnassignedOrdersView = ({ activeView = 'orders', setActiveView }) => {
-  const [orders, setOrders] = useState(INITIAL_UNASSIGNED_ORDERS);
+  const [orders, setOrders] = useState(MOCK_UNASSIGNED_ORDERS);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [recommendationOpen, setRecommendationOpen] = useState(false);
   
@@ -347,6 +258,7 @@ const UnassignedOrdersView = ({ activeView = 'orders', setActiveView }) => {
           {/* Base Layer: Order Markers */}
           <OrderMapLayer 
             orders={filteredOrders} 
+            clusters={MOCK_CLUSTERS}
             selectedOrder={selectedOrder} 
           />
 

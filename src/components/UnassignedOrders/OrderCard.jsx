@@ -31,18 +31,26 @@ const OrderCard = ({ order, isSelected, onClick }) => {
         <Typography variant="subtitle1" sx={{ fontWeight: 700, fontFamily: 'Montserrat', fontSize: '15px', color: '#333' }}>
           {order.id}
         </Typography>
-        <Typography
-          variant="caption"
-          sx={{
-            fontWeight: 700,
-            color: '#007BFF', 
-            fontFamily: 'Montserrat',
-            textTransform: 'uppercase',
-            fontSize: '11px'
-          }}
-        >
-          {order.vendor}
-        </Typography>
+        {order.vendor === 'MCKESSON' && (
+            <img src="/src/assets/mck.png" alt="McKesson" style={{ height: '14px', objectFit: 'contain' }} />
+        )}
+        {order.vendor === 'STAPLES' && (
+            <img src="/src/assets/staples.png" alt="Staples" style={{ height: '22px', objectFit: 'contain' }} />
+        )}
+        {!['MCKESSON', 'STAPLES'].includes(order.vendor) && (
+            <Typography
+            variant="caption"
+            sx={{
+                fontWeight: 700,
+                color: '#007BFF', 
+                fontFamily: 'Montserrat',
+                textTransform: 'uppercase',
+                fontSize: '11px'
+            }}
+            >
+            {order.vendor}
+            </Typography>
+        )}
       </Box>
 
       {/* Stats Row */}
@@ -53,7 +61,7 @@ const OrderCard = ({ order, isSelected, onClick }) => {
         </Box>
         <Box>
           <Typography variant="caption" color="textSecondary" sx={{ display: 'block', fontSize: '10px', fontFamily: 'Montserrat' }}>Qty</Typography>
-          <Typography variant="body2" sx={{ fontWeight: 600, fontSize: '13px', fontFamily: 'Montserrat' }}>{order.items}</Typography> 
+          <Typography variant="body2" sx={{ fontWeight: 600, fontSize: '13px', fontFamily: 'Montserrat' }}>{order.qty || order.items}</Typography> 
         </Box>
         <Box>
           <Typography variant="caption" color="textSecondary" sx={{ display: 'block', fontSize: '10px', fontFamily: 'Montserrat' }}>Weight</Typography>
@@ -67,10 +75,8 @@ const OrderCard = ({ order, isSelected, onClick }) => {
 
       {/* Pickup Address */}
       <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1, mb: 1 }}>
-        <Box sx={{ 
-            width: 16, height: 16, borderRadius: '50%', border: '1px solid #333', display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 0.5, flexShrink: 0
-        }}>
-            <Box sx={{ width: 6, height: 6, bgcolor: '#333', borderRadius: '50%' }} />
+        <Box sx={{ mt: 0.5, flexShrink: 0 }}>
+            <img src="/src/assets/pickup.svg" alt="Pickup" style={{ width: '16px', height: '16px' }} />
         </Box>
         <Box>
           <Typography variant="caption" color="textSecondary" sx={{ fontSize: '10px', display: 'block', fontFamily: 'Montserrat' }}>Pickup Address</Typography>
@@ -82,10 +88,8 @@ const OrderCard = ({ order, isSelected, onClick }) => {
 
       {/* Delivery Address */}
       <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
-        <Box sx={{ 
-            width: 16, height: 16, borderRadius: '4px', border: '1px solid #333', display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 0.5, flexShrink: 0
-        }}>
-            <Box sx={{ width: 6, height: 6, bgcolor: '#333', borderRadius: '1px' }} />
+        <Box sx={{ mt: 0.5, flexShrink: 0 }}>
+            <img src="/src/assets/delivery.svg" alt="Delivery" style={{ width: '16px', height: '16px' }} />
         </Box>
         <Box sx={{ flexGrow: 1 }}>
           <Typography variant="caption" color="textSecondary" sx={{ fontSize: '10px', display: 'block', fontFamily: 'Montserrat' }}>Delivery Address</Typography>
