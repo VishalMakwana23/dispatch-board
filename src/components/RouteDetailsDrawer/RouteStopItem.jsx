@@ -1,8 +1,9 @@
 import React from 'react';
 import { Box, Typography, Chip } from '@mui/material';
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import CheckIcon from '@mui/icons-material/Check';
 import PersonIcon from '@mui/icons-material/Person';
+import truckIcon from '../../assets/truck.svg';
+import nameIcon from '../../assets/name.svg';
 
 const STATUS_COLORS = {
   green: '#107C41',
@@ -12,30 +13,30 @@ const STATUS_COLORS = {
   grey: '#AAAAAA',
 };
 
-const RouteStopItem = ({ stop, isLast, isFirst }) => {
+const RouteStopItem = ({ stop, isLast, isFirst, routeColor }) => {
   const color = STATUS_COLORS[stop.color] || STATUS_COLORS.grey;
   
   // Determine Icon and Fill
-  let IconComponent = null;
+  let IconElement = null;
   let isFilled = true;
-  let iconSize = '14px';
 
   if (stop.isWarehouse) {
     // Warehouse: Green filled, "Load" text
-    IconComponent = null; // Text instead
+    IconElement = <Typography variant="caption" sx={{ fontSize: '7px', fontWeight: 'bold' }}>Load</Typography>;
   } else if (stop.status === 'completed') {
-    // Completed: Green filled, Check icon
-    IconComponent = CheckIcon;
-  } else if (stop.status === 'upcoming') {
-    // Upcoming: Outline, Truck icon
+    // Completed: Green filled, name icon
+    IconElement = <img src={nameIcon} alt="Completed" style={{ width: '12px', height: '12px', filter: 'brightness(0) invert(1)' }} />;
+  } else if (stop.status === 'upcoming' || stop.status === 'pending') {
+    // Upcoming/Pending: Outline, Truck icon
     isFilled = false;
-    IconComponent = LocalShippingIcon;
+    // Force icon to be black (or colored if we could) so it shows on white background
+    IconElement = <img src={truckIcon} alt="Truck" style={{ width: '12px', height: '12px', filter: 'brightness(0)' }} />; 
   } else if (stop.status === 'last_location') {
      // Last Location: Orange filled, Person icon
-     IconComponent = PersonIcon;
+     IconElement = <PersonIcon sx={{ fontSize: '12px' }} />;
   } else {
-    // Others (Risk, Missing POD, etc): Filled (Red/Yellow), No Icon (just dot) as per "no any icons" request
-    IconComponent = null;
+    // Others: Truck icon default (filled)
+    IconElement = <img src={truckIcon} alt="Truck" style={{ width: '12px', height: '12px', filter: 'brightness(0) invert(1)' }} />;
   }
 
   return (
@@ -46,8 +47,8 @@ const RouteStopItem = ({ stop, isLast, isFirst }) => {
         {/* The Dot/Icon */}
         <Box
           sx={{
-            width: '20px', // Smaller dot
-            height: '20px',
+            width: '24px', // Slightly larger to fit icon better
+            height: '24px',
             borderRadius: '50%',
             backgroundColor: isFilled ? color : 'white',
             border: `2px solid ${color}`,
@@ -58,11 +59,7 @@ const RouteStopItem = ({ stop, isLast, isFirst }) => {
             color: isFilled ? 'white' : color,
           }}
         >
-            {stop.isWarehouse ? (
-                <Typography variant="caption" sx={{ fontSize: '7px', fontWeight: 'bold' }}>Load</Typography>
-            ) : (
-                IconComponent && <IconComponent sx={{ fontSize: '12px' }} /> // Smaller icon
-            )}
+            {IconElement}
         </Box>
 
         {/* Vertical Line */}
@@ -71,7 +68,8 @@ const RouteStopItem = ({ stop, isLast, isFirst }) => {
             sx={{
               width: '2px',
               flexGrow: 1,
-              bgcolor: '#E0E0E0',
+              // Use routeColor for consistent line color for all completed/passed stops
+              bgcolor: ['completed', 'missing_pod', 'customer_unavailable', 'loaded'].includes(stop.status) ? (routeColor || STATUS_COLORS.green) : '#E0E0E0',
               my: 0.25, // Reduced margin
             }}
           />

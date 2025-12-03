@@ -4,15 +4,16 @@ import CloseIcon from '@mui/icons-material/Close';
 import CircleIcon from '@mui/icons-material/Circle';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import RouteStopItem from './RouteStopItem';
-import { routeDetailsMock } from '../../mock/routeDetails';
-
 const RouteDetailsDrawer = ({ route, open, onClose }) => {
-  // Use mock details if available, otherwise fallback or empty
-  // For the purpose of this task, we default to the first mock entry if the ID matches, 
-  // or just use the first one as a generic fallback for any route to show the UI.
-  const details = route ? (routeDetailsMock[route.id] || routeDetailsMock["123445677886544"]) : null;
+  if (!route) return null;
 
-  if (!details) return null;
+  // Map stops to ensure isWarehouse is present
+  const stops = route.stops ? route.stops.map(stop => ({
+    ...stop,
+    isWarehouse: stop.type === 'warehouse'
+  })) : [];
+
+  const details = { ...route, stops };
 
   return (
     <Slide direction="right" in={open} mountOnEnter unmountOnExit>
@@ -38,7 +39,7 @@ const RouteDetailsDrawer = ({ route, open, onClose }) => {
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-                    <CircleIcon sx={{ color: '#D24238', fontSize: 12 }} />
+                    <CircleIcon sx={{ color: route.color || '#D24238', fontSize: 12 }} />
                     <Typography variant="h6" sx={{ fontWeight: 600, fontSize: '18px' }}>
                         {details.id}
                     </Typography>
@@ -71,6 +72,7 @@ const RouteDetailsDrawer = ({ route, open, onClose }) => {
             <RouteStopItem
               key={stop.id}
               stop={stop}
+              routeColor={route.color}
               isFirst={index === 0}
               isLast={index === details.stops.length - 1}
             />

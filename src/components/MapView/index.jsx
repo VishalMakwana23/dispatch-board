@@ -33,7 +33,7 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 // Component to handle map view transitions
-const MapController = ({ marketMode, selectedMarket }) => {
+const MapController = ({ marketMode, selectedMarket, selectedRoutes }) => {
   const map = useMap();
 
   useEffect(() => {
@@ -46,6 +46,22 @@ const MapController = ({ marketMode, selectedMarket }) => {
           duration: 1.5 // Smooth transition
         });
       }
+    } else if (selectedRoutes && selectedRoutes.length > 0) {
+      // Fit bounds to all selected routes
+      const allPoints = [];
+      selectedRoutes.forEach(route => {
+        if (route.stops) {
+          route.stops.forEach(stop => allPoints.push([stop.lat, stop.lng]));
+        }
+      });
+
+      if (allPoints.length > 0) {
+        const bounds = L.latLngBounds(allPoints);
+        map.flyToBounds(bounds, {
+          padding: [50, 50],
+          duration: 1.5
+        });
+      }
     } else {
       // Reset to default view (approximate center of all points)
       // For now, hardcoded to the initial center or we could calculate bounds of mapPoints
@@ -53,12 +69,12 @@ const MapController = ({ marketMode, selectedMarket }) => {
         duration: 1.5
       });
     }
-  }, [marketMode, selectedMarket, map]);
+  }, [marketMode, selectedMarket, selectedRoutes, map]);
 
   return null;
 };
 
-const MapView = ({ panels }) => {
+const MapView = ({ panels, selectedRoutes }) => {
   const [marketMode, setMarketMode] = useState(false);
   
   // Dynamically calculate market data based on mapPoints
@@ -98,28 +114,15 @@ const MapView = ({ panels }) => {
         style={{ height: '100%', width: '100%', background: '#f0f0f0' }} 
         zoomControl={false}
       >
-        <MapController marketMode={marketMode} selectedMarket={selectedMarket} />
+        <MapController marketMode={marketMode} selectedMarket={selectedMarket} selectedRoutes={selectedRoutes} />
         
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         />
         
-        {/* Render Default Markers only if NOT in market mode (or faded out) */}
-        {/* Actually, the requirement says "fade-out non-market markers". 
-            We can achieve this by controlling opacity or conditionally rendering.
-            For "faded behind", we might need to render them with low opacity.
-            Let's try rendering them but maybe with a class or style if marketMode is on.
-            However, "Default markers (hidden in market mode)" was also mentioned in architecture.
-            "faded behind the overlay" suggests they are still there.
-            Let's render them but maybe the overlay covers them? 
-            The overlay has fillOpacity 0.35. If markers are UNDER the overlay, they will look faded.
-            But Leaflet renders markers on top of polygons usually (z-index).
-            Let's just hide them for now as per "Default markers (hidden in market mode)" in architecture section,
-            but "fade-out non-market markers" in functional requirements.
-            I will hide them for clarity as per the architecture list.
-        */}
-        {!marketMode && (!panels || panels.length === 0) && (
+        {/* Render Default Markers only if NOT in market mode AND no routes selected */}
+        {!marketMode && (!selectedRoutes || selectedRoutes.length === 0) && (
           <DefaultMarkers points={mapPoints} />
         )}
 
@@ -131,6 +134,12 @@ const MapView = ({ panels }) => {
           </>
         )}
 
+        {/* Render Selected Routes */}
+        {selectedRoutes && selectedRoutes.map(route => (
+          <MapRouteLayer key={route.id} route={route} />
+        ))}
+        
+        {/* Legacy panels support if needed, but we are moving to selectedRoutes */}
         {panels && panels.map(panel => (
           <MapRouteLayer key={panel.routeId} route={panel.data} />
         ))}

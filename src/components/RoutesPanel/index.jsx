@@ -1,64 +1,51 @@
-import { Box, Typography, TextField, InputAdornment, IconButton } from '@mui/material';
 import React, { useState } from 'react';
+import { Box, Typography, TextField, InputAdornment, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { Menu, MenuItem, Radio } from '@mui/material';
-import AltRouteIcon from '@mui/icons-material/AltRoute';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
-import HistoryIcon from '@mui/icons-material/History';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import FilterPopup from './FilterPopup';
 import RouteCard from '../RouteCard';
-import { routes } from '../../mock/routes';
-
+import { killeenData } from '../../mock/killeenData';
+import FilterPopup from './FilterPopup';
 import ViewSwitcher from '../ViewSwitcher';
 
 const RoutesPanel = ({ onRouteSelect, openRouteIds = [], isAdmin = false, activeView = 'routes', setActiveView }) => {
+  const [searchTerm, setSearchTerm] = useState('');
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
   const filterOpen = Boolean(filterAnchorEl);
+
+  const filteredRoutes = killeenData.routes.filter(route => 
+    route.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    route.driver.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const handleApplyFilters = (filters) => {
     console.log("APPLY:", filters);
     // Add logic to filter routes here if needed
   };
 
-  const handleSaveFilters = (filters) => {
-    console.log("SAVE:", filters);
-    // Add logic to save filters here
-  };
-
   return (
     <Box
       sx={{
         width: '350px',
-        height: '100vh',
+        height: 'calc(100vh - 64px)',
         backgroundColor: '#F6F7F8',
         display: 'flex',
         flexDirection: 'column',
         borderRight: '1px solid #e0e0e0',
         position: 'fixed',
         left: '60px', // Width of Sidebar
-        top: 0,
+        top: '64px',
         zIndex: 1100,
-        pt: 2, // Topbar height compensation if needed, but Topbar is likely above or overlay. 
-               // Assuming Topbar is at the top, we might need marginTop. 
-               // Let's assume Topbar is ~64px.
-        mt: '64px',
-        height: 'calc(100vh - 64px)',
       }}
     >
-      <Box sx={{ p: 2, pb: 1 }}>
+      <Box sx={{ p: 2, pb: 1, bgcolor: 'white', borderBottom: '1px solid #e0e0e0' }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
              {isAdmin ? (
-                <>
-                    <ViewSwitcher activeView={activeView} setActiveView={setActiveView} />
-                </>
+                <ViewSwitcher activeView={activeView} setActiveView={setActiveView} />
              ) : (
                 <>
                     <Typography variant="h6" sx={{ fontWeight: 700 }}>Routes</Typography>
-                    <Typography variant="caption" sx={{ color: 'text.secondary', bgcolor: '#e0e0e0', px: 0.8, py: 0.2, borderRadius: 1 }}>123</Typography>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', bgcolor: '#e0e0e0', px: 0.8, py: 0.2, borderRadius: 1 }}>{filteredRoutes.length}</Typography>
                 </>
              )}
           </Box>
@@ -72,6 +59,8 @@ const RoutesPanel = ({ onRouteSelect, openRouteIds = [], isAdmin = false, active
           placeholder="Search..."
           variant="outlined"
           size="small"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -79,12 +68,12 @@ const RoutesPanel = ({ onRouteSelect, openRouteIds = [], isAdmin = false, active
               </InputAdornment>
             ),
           }}
-          sx={{ mb: 2, bgcolor: 'white' }}
+          sx={{ mb: 0 }}
         />
       </Box>
 
-      <Box sx={{ flexGrow: 1, overflowY: 'auto', px: 2, pb: 10 }}> {/* pb for footer space */}
-        {routes.map((route) => (
+      <Box sx={{ flexGrow: 1, overflowY: 'auto', p: 2, pb: 10, display: 'flex', flexDirection: 'column', gap: 2 }}>
+        {filteredRoutes.map((route) => (
           <RouteCard 
             key={route.id} 
             route={route} 
@@ -93,14 +82,15 @@ const RoutesPanel = ({ onRouteSelect, openRouteIds = [], isAdmin = false, active
             isAdmin={isAdmin}
           />
         ))}
-        <FilterPopup
+      </Box>
+
+      <FilterPopup
         open={filterOpen}
         anchorEl={filterAnchorEl}
         onClose={() => setFilterAnchorEl(null)}
         onApply={handleApplyFilters}
         type="routes"
       />
-    </Box>
     </Box>
   );
 };

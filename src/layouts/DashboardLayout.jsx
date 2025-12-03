@@ -4,7 +4,7 @@ import Sidebar from '../components/Sidebar';
 import RoutesPanel from '../components/RoutesPanel';
 import Topbar from '../components/Topbar';
 import StatsFooter from '../components/StatsFooter';
-import { routes } from '../mock/routes';
+import { killeenData } from '../mock/killeenData';
 
 import RightPanelContainer from '../components/RightPanelContainer';
 import ChainOfDelayContainer from '../components/ChainOfDelay';
@@ -36,7 +36,7 @@ const DashboardLayout = ({ children, panels, onRouteSelect, onTogglePanel, onClo
         }}
       >
         {children}
-        <StatsFooter routes={routes} />
+        <StatsFooter routes={killeenData.routes} />
       </Box>
       <ChainOfDelayContainer />
     </Box>

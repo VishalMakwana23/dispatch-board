@@ -13,7 +13,7 @@ const Dashboard = () => {
       onTogglePanel={togglePanelExpand}
       onClosePanel={closePanel}
     >
-      <MapView panels={panels} />
+      <MapView panels={panels} selectedRoutes={panels.map(p => p.data)} />
     </DashboardLayout>
   );
 };

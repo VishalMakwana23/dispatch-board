@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Polyline, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import { routeDetailsMock } from '../../mock/routeDetails';
+
 
 const STATUS_COLORS = {
   green: '#107C41',
@@ -58,19 +58,21 @@ const createStopIcon = (stop) => {
 const MapRouteLayer = ({ route }) => {
   const map = useMap();
   
-  // Get details from mock
-  const details = route ? (routeDetailsMock[route.id] || routeDetailsMock["123445677886544"]) : null;
+  // Use route.stops directly from the new data structure
+  const stops = route?.stops || [];
 
   useEffect(() => {
-    if (details && details.coordinates && details.coordinates.length > 0) {
-      const bounds = L.latLngBounds(details.coordinates.map(c => [c.lat, c.lng]));
-      map.fitBounds(bounds, { padding: [100, 100], maxZoom: 15 });
+    if (stops && stops.length > 0) {
+      // Calculate bounds from stops
+      const bounds = L.latLngBounds(stops.map(s => [s.lat, s.lng]));
+      map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
     }
-  }, [details, map]);
+  }, [stops, map]);
 
-  if (!details) return null;
+  if (!route || stops.length === 0) return null;
 
-  const polylinePositions = details.coordinates.map(c => [c.lat, c.lng]);
+  // Create polyline from stops order
+  const polylinePositions = stops.map(s => [s.lat, s.lng]);
 
   return (
     <>
@@ -78,15 +80,19 @@ const MapRouteLayer = ({ route }) => {
         positions={polylinePositions}
         pathOptions={{ color: route.color || '#0A3B32', weight: 4, opacity: 0.9 }}
       />
-      {details.stops.map((stop) => (
+      {stops.map((stop) => (
         <Marker
           key={stop.id}
           position={[stop.lat, stop.lng]}
-          icon={createStopIcon(stop)}
+          icon={createStopIcon({ 
+            ...stop, 
+            color: route.color,
+            isWarehouse: stop.type === 'warehouse' 
+          })} // Pass route color and isWarehouse
         >
           <Popup>
-            <strong>{stop.name}</strong><br/>
-            {stop.address}<br/>
+            <strong>{stop.address}</strong><br/>
+            Type: {stop.type}<br/>
             Status: {stop.status}
           </Popup>
         </Marker>
