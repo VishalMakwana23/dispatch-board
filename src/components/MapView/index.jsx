@@ -1,15 +1,23 @@
-import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import React, { useState, useEffect, useMemo } from 'react';
+import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Box, Paper, Typography, IconButton } from '@mui/material';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import HomeIcon from '@mui/icons-material/Home'; // Using Home as Warehouse icon proxy if needed, or Store
 import StoreIcon from '@mui/icons-material/Store';
 import { mapPoints } from '../../mock/mapPoints';
+// import { markets } from '../../mock/markets'; // No longer needed for dynamic generation
+
+// Components
+import MarketPolygon from './MarketPolygon';
+import MarketMarkers from './MarketMarkers';
+import DefaultMarkers from './DefaultMarkers';
+import MapRouteLayer from '../MapRouteLayer';
+
+// Utils
+import { calculateConvexHull, calculateCenter, expandPolygon } from '../../utils/geoUtils';
 
 // Fix Leaflet default icon issue
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -24,40 +32,63 @@ let DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
-const createCustomIcon = (point) => {
-  if (point.type === 'warehouse') {
-    return L.divIcon({
-      className: 'custom-icon',
-      html: `<div style="background-color: black; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; color: white; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">
-               <span style="font-size: 16px;">🏠</span> 
-             </div>`, // Using emoji as simple icon, or could use SVG
-      iconSize: [30, 30],
-      iconAnchor: [15, 15],
-    });
-  }
+// Component to handle map view transitions
+const MapController = ({ marketMode, selectedMarket }) => {
+  const map = useMap();
 
-  const colorMap = {
-    green: '#2E7D32',
-    grey: '#9E9E9E',
-    orange: '#ED6C02',
-  };
-  
-  const bgColor = colorMap[point.color] || '#2E7D32';
+  useEffect(() => {
+    if (marketMode && selectedMarket) {
+      // Fit bounds to the market polygon
+      const polygon = selectedMarket.polygon;
+      if (polygon && polygon.length > 0) {
+        map.flyToBounds(polygon, {
+          padding: [50, 50],
+          duration: 1.5 // Smooth transition
+        });
+      }
+    } else {
+      // Reset to default view (approximate center of all points)
+      // For now, hardcoded to the initial center or we could calculate bounds of mapPoints
+      map.flyTo([31.1201, -97.7423], 12, {
+        duration: 1.5
+      });
+    }
+  }, [marketMode, selectedMarket, map]);
 
-  return L.divIcon({
-    className: 'custom-icon',
-    html: `<div style="background-color: ${bgColor}; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; color: white; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">
-             <span style="font-weight: bold; font-size: 14px;">${point.value}</span>
-           </div>`,
-    iconSize: [30, 30],
-    iconAnchor: [15, 15],
-  });
+  return null;
 };
 
-import MapRouteLayer from '../MapRouteLayer';
-
 const MapView = ({ panels }) => {
+  const [marketMode, setMarketMode] = useState(false);
+  
+  // Dynamically calculate market data based on mapPoints
+  const dynamicMarket = useMemo(() => {
+    const hull = calculateConvexHull(mapPoints);
+    const center = calculateCenter(mapPoints);
+    // Expand the polygon slightly so points aren't on the edge
+    const expandedHull = expandPolygon(hull, center, 1.3); 
+
+    return {
+        id: 'dynamic-killeen',
+        name: 'Killeen',
+        polygon: expandedHull,
+        center: center,
+        markers: mapPoints
+    };
+  }, []); // Re-calculate if mapPoints changes (in a real app, mapPoints would be a prop)
+
+  const [selectedMarket, setSelectedMarket] = useState(dynamicMarket);
+
+  // Update selected market if dynamic market changes (e.g. data update)
+  useEffect(() => {
+      setSelectedMarket(dynamicMarket);
+  }, [dynamicMarket]);
+
   const center = [31.1201, -97.7423]; // Centered on mock points
+
+  const handleMarketToggle = () => {
+    setMarketMode(!marketMode);
+  };
 
   return (
     <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
@@ -67,21 +98,39 @@ const MapView = ({ panels }) => {
         style={{ height: '100%', width: '100%', background: '#f0f0f0' }} 
         zoomControl={false}
       >
+        <MapController marketMode={marketMode} selectedMarket={selectedMarket} />
+        
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         />
-        {(!panels || panels.length === 0) && mapPoints.map((point) => (
-          <Marker 
-            key={point.id} 
-            position={[point.lat, point.lng]} 
-            icon={createCustomIcon(point)}
-          >
-            <Popup>
-              Value: {point.value} <br /> Type: {point.type}
-            </Popup>
-          </Marker>
-        ))}
+        
+        {/* Render Default Markers only if NOT in market mode (or faded out) */}
+        {/* Actually, the requirement says "fade-out non-market markers". 
+            We can achieve this by controlling opacity or conditionally rendering.
+            For "faded behind", we might need to render them with low opacity.
+            Let's try rendering them but maybe with a class or style if marketMode is on.
+            However, "Default markers (hidden in market mode)" was also mentioned in architecture.
+            "faded behind the overlay" suggests they are still there.
+            Let's render them but maybe the overlay covers them? 
+            The overlay has fillOpacity 0.35. If markers are UNDER the overlay, they will look faded.
+            But Leaflet renders markers on top of polygons usually (z-index).
+            Let's just hide them for now as per "Default markers (hidden in market mode)" in architecture section,
+            but "fade-out non-market markers" in functional requirements.
+            I will hide them for clarity as per the architecture list.
+        */}
+        {!marketMode && (!panels || panels.length === 0) && (
+          <DefaultMarkers points={mapPoints} />
+        )}
+
+        {/* Market Overlay Layers */}
+        {marketMode && selectedMarket && (
+          <>
+            <MarketPolygon market={selectedMarket} />
+            <MarketMarkers markers={mapPoints} />
+          </>
+        )}
+
         {panels && panels.map(panel => (
           <MapRouteLayer key={panel.routeId} route={panel.data} />
         ))}
@@ -113,13 +162,15 @@ const MapView = ({ panels }) => {
         {/* Market Button */}
         <Paper 
           elevation={3}
+          onClick={handleMarketToggle}
           sx={{ 
             width: 140, 
             borderRadius: 2, 
             overflow: 'hidden', 
-            bgcolor: 'white',
+            bgcolor: marketMode ? '#e0e0e0' : 'white', // Visual feedback for active state
             transition: 'all 0.2s',
-            '&:hover': { transform: 'translateY(-2px)', boxShadow: 4 }
+            '&:hover': { transform: 'translateY(-2px)', boxShadow: 4 },
+            border: marketMode ? '2px solid #1B3E38' : 'none'
           }}
         >
            <Box sx={{ p: 1.5, textAlign: 'center', cursor: 'pointer', '&:hover': { bgcolor: '#f5f5f5' } }}>
