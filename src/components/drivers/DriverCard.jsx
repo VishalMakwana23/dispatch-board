@@ -1,33 +1,25 @@
 import React from 'react';
 import { Box, Typography, Avatar, Chip, IconButton, Paper } from '@mui/material';
-import AltRouteIcon from '@mui/icons-material/AltRoute';
+import PersonOffOutlinedIcon from '@mui/icons-material/PersonOffOutlined';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import CircleIcon from '@mui/icons-material/Circle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import WarningIcon from '@mui/icons-material/Warning';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 const DriverCard = ({ driver, isSelected, onClick }) => {
   const getStatusColor = (status) => {
     switch (status.toLowerCase()) {
-      case 'active': return '#0B8143';
+      case 'active': return '#107C41'; // Green
       case 'inactive': return '#A0A0A0';
       case 'unavailable': return '#D64537';
       default: return '#A0A0A0';
     }
   };
 
-  const getPermitColor = (expiry) => {
-    if (expiry.includes('Missing')) return '#D64537'; // Red for missing
-    // Simple check for now, could be date logic
-    return '#E4A025'; // Orange for warning
-  };
-
   const getBorderColor = () => {
-    if (!isSelected) return '1px solid transparent';
-    // If there is a warning (permit expiry), use Orange
-    if (driver.permitExpiry && !driver.permitExpiry.includes('Missing')) return '2px solid #E4A025';
-    if (driver.permitExpiry && driver.permitExpiry.includes('Missing')) return '2px solid #D32F2F';
-    // Fallback to status color
-    return `2px solid ${getStatusColor(driver.status)}`;
+    if (isSelected) return '2px solid #FF5722'; // Orange when selected
+    return '1px solid #e0e0e0'; // Default grey border
   };
 
   return (
@@ -52,55 +44,36 @@ const DriverCard = ({ driver, isSelected, onClick }) => {
       {/* Header: Warning + Status */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1.5 }}>
         <Box>
-             {/* Work Permit Warning - Only show if relevant */}
-            {!driver.permitExpiry.includes('Missing') && (
+             {/* Work Permit Warning */}
+            {driver.permitExpiry && (
                 <Box sx={{ 
-                    bgcolor: '#FFF4E5', 
-                    color: '#E4A025', 
-                    px: 1, 
+                    bgcolor: '#FFF4E5', // Light Orange
+                    color: '#D32F2F', // Red text
+                    px: 1.5, 
                     py: 0.5, 
-                    borderRadius: '4px', 
+                    borderRadius: '6px', 
                     fontSize: '10px', 
-                    fontWeight: 700,
+                    fontWeight: 600,
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 0.5,
-                    mb: 1,
+                    gap: 0.8,
+                    mb: 1.5,
                     width: 'fit-content'
                 }}>
-                    <span style={{ fontSize: '12px' }}>⚠️</span> 
-                    Work Permit Expires {driver.permitExpiry}
-                </Box>
-            )}
-             {driver.permitExpiry.includes('Missing') && (
-                <Box sx={{ 
-                    bgcolor: '#FFEBEE', 
-                    color: '#D32F2F', 
-                    px: 1, 
-                    py: 0.5, 
-                    borderRadius: '4px', 
-                    fontSize: '10px', 
-                    fontWeight: 700,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 0.5,
-                    mb: 1,
-                    width: 'fit-content'
-                }}>
-                    <span style={{ fontSize: '12px' }}>⚠️</span> 
-                    {driver.permitExpiry}
+                    <WarningIcon sx={{ fontSize: 14, color: '#D32F2F' }} />
+                    {driver.permitExpiry.includes('Missing') ? driver.permitExpiry : `Work Permit Expires ${driver.permitExpiry}`}
                 </Box>
             )}
 
-            <Typography variant="subtitle1" sx={{ fontWeight: 700, fontFamily: 'Montserrat', lineHeight: 1.2 }}>
+            <Typography variant="h6" sx={{ fontWeight: 700, fontFamily: 'Montserrat', lineHeight: 1.2, fontSize: '18px', mb: 0.5 }}>
                 {driver.name}
             </Typography>
-            <Typography variant="caption" sx={{ color: '#888', fontFamily: 'Montserrat', fontSize: '11px' }}>
+            <Typography variant="body2" sx={{ color: '#666', fontFamily: 'Montserrat', fontSize: '13px' }}>
                 {driver.company}
             </Typography>
         </Box>
         
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 1 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 1.5 }}>
             <Chip 
                 label={driver.status} 
                 size="small" 
@@ -108,46 +81,49 @@ const DriverCard = ({ driver, isSelected, onClick }) => {
                     bgcolor: getStatusColor(driver.status), 
                     color: 'white', 
                     fontWeight: 600, 
-                    fontSize: '10px',
-                    height: '22px',
+                    fontSize: '11px',
+                    height: '24px',
                     textTransform: 'capitalize',
-                    '& .MuiChip-label': { px: 1 }
+                    borderRadius: '12px',
+                    '& .MuiChip-label': { px: 1.5 }
                 }} 
-                icon={<CircleIcon style={{ fontSize: 6, color: 'white' }} />}
+                icon={<CircleIcon style={{ fontSize: 6, color: 'white', marginLeft: 6 }} />}
             />
-            <Box sx={{ display: 'flex', gap: 0.5 }}>
-                <IconButton size="small" sx={{ bgcolor: '#F5F5F5', borderRadius: 1, p: 0.5, width: 24, height: 24 }}>
-                    <AltRouteIcon sx={{ fontSize: 14, color: '#555' }} />
+            <Box sx={{ display: 'flex', gap: 1 }}>
+                <IconButton size="small" sx={{ bgcolor: '#E0F2F1', borderRadius: 1, p: 0.8, width: 32, height: 32 }}>
+                    <PersonOffOutlinedIcon sx={{ fontSize: 18, color: '#00695C' }} />
                 </IconButton>
-                <IconButton size="small" sx={{ bgcolor: '#F5F5F5', borderRadius: 1, p: 0.5, width: 24, height: 24 }}>
-                    <ChatBubbleOutlineIcon sx={{ fontSize: 14, color: '#555' }} />
+                <IconButton size="small" sx={{ bgcolor: '#E0F2F1', borderRadius: 1, p: 0.8, width: 32, height: 32 }}>
+                    <ChatBubbleOutlineIcon sx={{ fontSize: 18, color: '#00695C' }} />
                 </IconButton>
             </Box>
         </Box>
       </Box>
 
       {/* Assignments */}
-      <Box sx={{ mt: 2 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-            <Typography variant="caption" sx={{ color: '#aaa', fontWeight: 600, fontSize: '10px' }}>Assignments</Typography>
-            <Typography variant="caption" sx={{ color: '#aaa', cursor: 'pointer', fontSize: '14px' }}>+</Typography>
+      <Box sx={{ mt: 3 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+            <Typography variant="caption" sx={{ color: '#999', fontWeight: 500, fontSize: '12px' }}>Assignments</Typography>
+            <IconButton size="small" sx={{ padding: 0 }}>
+                 <AddCircleOutlineIcon sx={{ color: '#ccc', fontSize: 20 }} />
+            </IconButton>
         </Box>
         
         {driver.assignments.map((assign, idx) => (
-            <Box key={idx} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.8 }}>
-                <Typography variant="caption" sx={{ fontFamily: 'Montserrat', fontWeight: 500, fontSize: '11px', color: '#333' }}>
+            <Box key={idx} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                <Typography variant="body2" sx={{ fontFamily: 'Montserrat', fontWeight: 500, fontSize: '13px', color: '#333' }}>
                     {assign.routeId}
                 </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
                     {assign.status === 'Ongoing' ? (
-                        <CircleIcon sx={{ fontSize: 8, color: '#0B8143' }} />
+                        <CircleIcon sx={{ fontSize: 12, color: '#2E7D32' }} />
                     ) : (
-                        <RadioButtonUncheckedIcon sx={{ fontSize: 8, color: '#ccc' }} />
+                        <RadioButtonUncheckedIcon sx={{ fontSize: 12, color: '#999' }} />
                     )}
                     <Typography variant="caption" sx={{ 
-                        color: assign.status === 'Ongoing' ? '#0B8143' : '#ccc',
+                        color: assign.status === 'Ongoing' ? '#2E7D32' : '#999',
                         fontWeight: 600,
-                        fontSize: '10px'
+                        fontSize: '12px'
                     }}>
                         {assign.status}
                     </Typography>

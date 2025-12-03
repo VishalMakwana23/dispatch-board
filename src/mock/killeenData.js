@@ -90,7 +90,7 @@ export const killeenData = {
         name: 'Johnson Doe',
         company: 'Leo Green Logistic - Edmonton',
         id: 'dr-1',
-        avatar: 'https://i.pravatar.cc/150?u=johnson',
+        avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
       },
       stats: {
         stops: 12,
@@ -119,7 +119,7 @@ export const killeenData = {
         name: 'Ariya SJ',
         company: 'Leo Green Logistic - Edmonton',
         id: 'dr-2',
-        avatar: 'https://i.pravatar.cc/150?u=ariya',
+        avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
       },
       stats: {
         stops: 6,
@@ -148,7 +148,7 @@ export const killeenData = {
         name: 'Mike Smith',
         company: 'Leo Green Logistic - Edmonton',
         id: 'dr-3',
-        avatar: 'https://i.pravatar.cc/150?u=mike',
+        avatar: 'https://randomuser.me/api/portraits/men/22.jpg',
       },
       stats: {
         stops: 7,
@@ -177,7 +177,7 @@ export const killeenData = {
         name: 'Ada SJ',
         company: 'Leo Green Logistic - Edmonton',
         id: 'dr-4',
-        avatar: 'https://i.pravatar.cc/150?u=ada',
+        avatar: 'https://randomuser.me/api/portraits/men/11.jpg',
       },
       stats: {
         stops: 12,
@@ -200,7 +200,7 @@ export const killeenData = {
       id: 'RT-5566778899',
       type: 'Final-Mile',
       status: 'Ongoing',
-      driver: { name: 'John Doe', company: 'Fast Logistics', id: 'dr-5', avatar: 'https://i.pravatar.cc/150?u=john' },
+      driver: { name: 'John Doe', company: 'Fast Logistics', id: 'dr-5', avatar: 'https://randomuser.me/api/portraits/men/60.jpg' },
       stats: { stops: 8, orders: 15, distance: '85 km', completed: 2, remaining: 6 },
       color: '#00BCD4', // Cyan
       stops: stopsData.slice(17, 20).map((s, i) => ({ ...s, status: i < 1 ? 'completed' : 'pending', window: '09:00 AM - 11:00 AM', parcels: 3, customer: `Customer ${s.id}` }))
@@ -211,7 +211,7 @@ export const killeenData = {
       status: 'Risk of Delay',
       alert: 'Risk of Delay',
       riskOfDelay: true,
-      driver: { name: 'Jane Smith', company: 'Quick Ship', id: 'dr-6', avatar: 'https://i.pravatar.cc/150?u=jane' },
+      driver: { name: 'Jane Smith', company: 'Quick Ship', id: 'dr-6', avatar: 'https://randomuser.me/api/portraits/men/61.jpg' },
       stats: { stops: 5, orders: 10, distance: '150 km', completed: 1, remaining: 4 },
       color: '#FF9800', // Orange
       stops: stopsData.slice(20, 23).map((s, i) => ({ ...s, status: 'pending', window: '10:00 AM - 12:00 PM', parcels: 5, customer: `Customer ${s.id}` }))
@@ -220,7 +220,7 @@ export const killeenData = {
       id: 'RT-7788990011',
       type: 'Final-Mile',
       status: 'Completed',
-      driver: { name: 'Bob Brown', company: 'Safe Delivery', id: 'dr-7', avatar: 'https://i.pravatar.cc/150?u=bob' },
+      driver: { name: 'Bob Brown', company: 'Safe Delivery', id: 'dr-7', avatar: 'https://randomuser.me/api/portraits/men/62.jpg' },
       stats: { stops: 10, orders: 20, distance: '95 km', completed: 10, remaining: 0 },
       color: '#4CAF50', // Green
       stops: stopsData.slice(23, 26).map((s, i) => ({ ...s, status: 'completed', window: '08:00 AM - 10:00 AM', parcels: 2, customer: `Customer ${s.id}` }))
@@ -232,7 +232,7 @@ export const killeenData = {
       alert: 'Missing POD',
       missingPod: true,
       statusCoded: true,
-      driver: { name: 'Alice Green', company: 'Eco Trans', id: 'dr-8', avatar: 'https://i.pravatar.cc/150?u=alice' },
+      driver: { name: 'Alice Green', company: 'Eco Trans', id: 'dr-8', avatar: 'https://randomuser.me/api/portraits/men/63.jpg' },
       stats: { stops: 12, orders: 25, distance: '110 km', completed: 8, remaining: 4 },
       color: '#F44336', // Red
       stops: stopsData.slice(26, 29).map((s, i) => ({ ...s, status: i < 2 ? 'completed' : 'pending', window: '01:00 PM - 03:00 PM', parcels: 4, customer: `Customer ${s.id}` }))
@@ -241,7 +241,7 @@ export const killeenData = {
       id: 'RT-9900112233',
       type: 'Mid-Mile',
       status: 'Ongoing',
-      driver: { name: 'Charlie Black', company: 'Night Moves', id: 'dr-9', avatar: 'https://i.pravatar.cc/150?u=charlie' },
+      driver: { name: 'Charlie Black', company: 'Night Moves', id: 'dr-9', avatar: 'https://randomuser.me/api/portraits/men/64.jpg' },
       stats: { stops: 4, orders: 8, distance: '200 km', completed: 1, remaining: 3 },
       color: '#673AB7', // Deep Purple
       stops: stopsData.slice(29, 32).map((s, i) => ({ ...s, status: 'pending', window: '11:00 AM - 01:00 PM', parcels: 6, customer: `Customer ${s.id}` }))
@@ -250,7 +250,7 @@ export const killeenData = {
       id: 'RT-0011223344',
       type: 'Final-Mile',
       status: 'Ongoing',
-      driver: { name: 'David White', company: 'Day Break', id: 'dr-10', avatar: 'https://i.pravatar.cc/150?u=david' },
+      driver: { name: 'David White', company: 'Day Break', id: 'dr-10', avatar: 'https://randomuser.me/api/portraits/men/65.jpg' },
       stats: { stops: 9, orders: 18, distance: '105 km', completed: 3, remaining: 6 },
       color: '#3F51B5', // Indigo
       stops: stopsData.slice(32, 35).map((s, i) => ({ ...s, status: i < 1 ? 'completed' : 'pending', window: '02:00 PM - 04:00 PM', parcels: 3, customer: `Customer ${s.id}` }))
@@ -261,7 +261,7 @@ export const killeenData = {
       status: 'Risk of Delay',
       alert: 'Risk of Delay',
       riskOfDelay: true,
-      driver: { name: 'Eva Blue', company: 'Sky High', id: 'dr-11', avatar: 'https://i.pravatar.cc/150?u=eva' },
+      driver: { name: 'Eva Blue', company: 'Sky High', id: 'dr-11', avatar: 'https://randomuser.me/api/portraits/men/66.jpg' },
       stats: { stops: 7, orders: 14, distance: '90 km', completed: 2, remaining: 5 },
       color: '#009688', // Teal
       stops: stopsData.slice(35, 38).map((s, i) => ({ ...s, status: 'pending', window: '09:30 AM - 11:30 AM', parcels: 4, customer: `Customer ${s.id}` }))
@@ -270,7 +270,7 @@ export const killeenData = {
       id: 'RT-2233445566',
       type: 'Mid-Mile',
       status: 'Completed',
-      driver: { name: 'Frank Red', company: 'Hot Shot', id: 'dr-12', avatar: 'https://i.pravatar.cc/150?u=frank' },
+      driver: { name: 'Frank Red', company: 'Hot Shot', id: 'dr-12', avatar: 'https://randomuser.me/api/portraits/men/67.jpg' },
       stats: { stops: 6, orders: 12, distance: '130 km', completed: 6, remaining: 0 },
       color: '#795548', // Brown
       stops: stopsData.slice(38, 41).map((s, i) => ({ ...s, status: 'completed', window: '07:00 AM - 09:00 AM', parcels: 5, customer: `Customer ${s.id}` }))
@@ -282,7 +282,7 @@ export const killeenData = {
       alert: 'Missing POD',
       missingPod: true,
       statusCoded: true,
-      driver: { name: 'Grace Yellow', company: 'Sun Ray', id: 'dr-13', avatar: 'https://i.pravatar.cc/150?u=grace' },
+      driver: { name: 'Grace Yellow', company: 'Sun Ray', id: 'dr-13', avatar: 'https://randomuser.me/api/portraits/men/68.jpg' },
       stats: { stops: 11, orders: 22, distance: '115 km', completed: 7, remaining: 4 },
       color: '#E91E63', // Pink
       stops: stopsData.slice(41, 44).map((s, i) => ({ ...s, status: i < 2 ? 'completed' : 'pending', window: '12:00 PM - 02:00 PM', parcels: 3, customer: `Customer ${s.id}` }))
@@ -291,7 +291,7 @@ export const killeenData = {
       id: 'RT-4455667788',
       type: 'Final-Mile',
       status: 'Ongoing',
-      driver: { name: 'Henry Gold', company: 'Rich Haul', id: 'dr-14', avatar: 'https://i.pravatar.cc/150?u=henry' },
+      driver: { name: 'Henry Gold', company: 'Rich Haul', id: 'dr-14', avatar: 'https://randomuser.me/api/portraits/men/69.jpg' },
       stats: { stops: 8, orders: 16, distance: '100 km', completed: 4, remaining: 4 },
       color: '#607D8B', // Blue Grey
       stops: stopsData.slice(44, 47).map((s, i) => ({ ...s, status: i < 1 ? 'completed' : 'pending', window: '03:00 PM - 05:00 PM', parcels: 4, customer: `Customer ${s.id}` }))

@@ -48,8 +48,8 @@ const DriverDetailsPopup = ({ driver, onClose }) => {
             {currentAssignment?.routeId || 'No Active Route'}
         </Typography>
         {currentAssignment && (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <CircleIcon style={{ fontSize: 10, color: '#0B8143' }} />
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                <CircleIcon style={{ fontSize: 8, color: '#0B8143', marginTop: 1 }} />
                 <Typography variant="caption" sx={{ color: '#0B8143', fontWeight: 700, fontSize: '13px' }}>
                     {currentAssignment.status}
                 </Typography>
@@ -62,20 +62,21 @@ const DriverDetailsPopup = ({ driver, onClose }) => {
         
         {/* Driver Info (Left) */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5 }}>
-            <Box sx={{ position: 'relative' }}>
+            <Box sx={{ position: 'relative', padding: '4px', border: '2px solid #E8F5E9', borderRadius: '50%' }}>
                 <Avatar 
                     src={driver.avatar} 
-                    sx={{ width: 64, height: 64, border: '3px solid #E8F5E9' }} 
+                    sx={{ width: 64, height: 64 }} 
                 />
                 <Box sx={{ 
                     position: 'absolute', 
-                    top: 2, 
-                    left: 2, 
-                    width: 12, 
-                    height: 12, 
+                    top: 0, 
+                    left: 0, 
+                    width: 14, 
+                    height: 14, 
                     bgcolor: '#0B8143', 
                     borderRadius: '50%', 
-                    border: '2px solid white' 
+                    border: '2px solid white',
+                    zIndex: 1
                 }} />
             </Box>
             <Box>
