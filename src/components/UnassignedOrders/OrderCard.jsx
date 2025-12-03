@@ -3,6 +3,10 @@ import { Paper, Box, Typography, IconButton } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn'; // Keeping imports just in case, though we use custom boxes now
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import MapIcon from '@mui/icons-material/Map'; 
+import pickupIcon from '../../assets/pickup.svg';
+import deliveryIcon from '../../assets/delivery.svg';
+import mckIcon from '../../assets/mck.png';
+import staplesIcon from '../../assets/staples.png'; 
 
 const OrderCard = ({ order, isSelected, onClick }) => {
   return (
@@ -32,10 +36,10 @@ const OrderCard = ({ order, isSelected, onClick }) => {
           {order.id}
         </Typography>
         {order.vendor === 'MCKESSON' && (
-            <img src="/src/assets/mck.png" alt="McKesson" style={{ height: '14px', objectFit: 'contain' }} />
+            <img src={mckIcon} alt="McKesson" style={{ height: '14px', objectFit: 'contain' }} />
         )}
         {order.vendor === 'STAPLES' && (
-            <img src="/src/assets/staples.png" alt="Staples" style={{ height: '22px', objectFit: 'contain' }} />
+            <img src={staplesIcon} alt="Staples" style={{ height: '22px', objectFit: 'contain' }} />
         )}
         {!['MCKESSON', 'STAPLES'].includes(order.vendor) && (
             <Typography
@@ -76,7 +80,7 @@ const OrderCard = ({ order, isSelected, onClick }) => {
       {/* Pickup Address */}
       <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1, mb: 1 }}>
         <Box sx={{ mt: 0.5, flexShrink: 0 }}>
-            <img src="/src/assets/pickup.svg" alt="Pickup" style={{ width: '16px', height: '16px' }} />
+            <img src={pickupIcon} alt="Pickup" style={{ width: '16px', height: '16px' }} />
         </Box>
         <Box>
           <Typography variant="caption" color="textSecondary" sx={{ fontSize: '10px', display: 'block', fontFamily: 'Montserrat' }}>Pickup Address</Typography>
@@ -89,7 +93,7 @@ const OrderCard = ({ order, isSelected, onClick }) => {
       {/* Delivery Address */}
       <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
         <Box sx={{ mt: 0.5, flexShrink: 0 }}>
-            <img src="/src/assets/delivery.svg" alt="Delivery" style={{ width: '16px', height: '16px' }} />
+            <img src={deliveryIcon} alt="Delivery" style={{ width: '16px', height: '16px' }} />
         </Box>
         <Box sx={{ flexGrow: 1 }}>
           <Typography variant="caption" color="textSecondary" sx={{ fontSize: '10px', display: 'block', fontFamily: 'Montserrat' }}>Delivery Address</Typography>
