@@ -9,10 +9,10 @@ import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrow
 import DonutLargeIcon from '@mui/icons-material/DonutLarge';
 
 const StatItem = ({ value, label, subLabel, icon, color }) => (
-  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', minWidth: '120px' }}>
+  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', minWidth: '140px' }}>
     <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 0.5 }}>
-      <Typography variant="h5" sx={{ fontWeight: 700 }}>{value}</Typography>
-      {subLabel && <Typography variant="caption" color="text.secondary">/ {subLabel}</Typography>}
+      <Typography variant="h4" sx={{ fontWeight: 700 }}>{value}</Typography>
+      {subLabel && <Typography variant="body2" color="text.secondary">/ {subLabel}</Typography>}
     </Box>
     {icon ? (
       <Box 
@@ -22,28 +22,28 @@ const StatItem = ({ value, label, subLabel, icon, color }) => (
           gap: 0.5, 
           border: `1px solid ${color}`, 
           borderRadius: '4px', 
-          px: 0.5, 
-          py: 0.2,
-          mt: 0.5,
+          px: 1, 
+          py: 0.5,
+          mt: 1,
           width: '100%'
         }}
       >
-        {React.cloneElement(icon, { sx: { fontSize: 14, color: color } })}
-        <Typography variant="caption" sx={{ fontWeight: 600, color: color, whiteSpace: 'nowrap' }}>
+        {React.cloneElement(icon, { sx: { fontSize: 16, color: color } })}
+        <Typography variant="caption" sx={{ fontWeight: 600, color: color, whiteSpace: 'nowrap', fontSize: '0.75rem' }}>
           {label}
         </Typography>
       </Box>
     ) : (
       <Box 
         sx={{ 
-          mt: 0.5, 
+          mt: 1, 
           bgcolor: color ? `${color}20` : 'transparent', 
-          px: 1, 
-          py: 0.2, 
+          px: 1.5, 
+          py: 0.5, 
           borderRadius: 1 
         }}
       >
-         <Typography variant="caption" sx={{ fontWeight: 600, color: color || 'text.secondary' }}>
+         <Typography variant="caption" sx={{ fontWeight: 600, color: color || 'text.secondary', fontSize: '0.75rem' }}>
            {label}
          </Typography>
       </Box>
@@ -76,26 +76,25 @@ const StatsFooter = ({ routes = [] }) => {
         onClick={() => setIsExpanded(true)}
         sx={{
           position: 'fixed',
-          bottom: 0,
-          left: '50%',
+          bottom: 30,
+          left: 'calc(50% + 215px)', // Center on map (assuming 430px sidebar)
           transform: 'translateX(-50%)',
           bgcolor: 'black',
           color: 'white',
           py: 1,
           px: 3,
-          borderTopLeftRadius: '12px',
-          borderTopRightRadius: '12px',
+          borderRadius: '24px',
           cursor: 'pointer',
           display: 'flex',
           alignItems: 'center',
           gap: 1,
           zIndex: 1000,
-          boxShadow: '0px -2px 10px rgba(0,0,0,0.2)'
+          boxShadow: '0px 4px 20px rgba(0,0,0,0.2)',
         }}
       >
-        <DonutLargeIcon fontSize="small" />
+        <DonutLargeIcon fontSize="small" color="inherit" />
         <Typography variant="subtitle2" fontWeight="600">Performance</Typography>
-        <KeyboardDoubleArrowUpIcon fontSize="small" />
+        <KeyboardDoubleArrowUpIcon fontSize="small" color="inherit" />
       </Box>
     );
   }
@@ -104,13 +103,15 @@ const StatsFooter = ({ routes = [] }) => {
     <Box
         sx={{
             position: 'fixed',
-            bottom: 0,
-            left: '430px',
-            right: 20,
+            bottom: 30,
+            left: 'calc(50% + 215px)', // Center on map
+            transform: 'translateX(-50%)',
             zIndex: 1000,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            width: 'fit-content',
+            maxWidth: '90vw',
         }}
     >
         {/* Header Tab */}
@@ -128,7 +129,7 @@ const StatsFooter = ({ routes = [] }) => {
                 gap: 1,
                 boxShadow: '0px -2px 5px rgba(0,0,0,0.05)',
                 mb: -1, // Overlap slightly
-                zIndex: 1,
+                zIndex: 3,
                 border: '1px solid #eee',
                 borderBottom: 'none'
             }}
@@ -142,21 +143,23 @@ const StatsFooter = ({ routes = [] }) => {
         elevation={3}
         sx={{
             width: '100%',
-            height: '80px',
+            height: '120px', // Increased height
             borderRadius: '10px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-around',
-            px: 3,
+            px: 5, // Increased horizontal padding
+            gap: 2, // Added gap between items
             position: 'relative',
-            zIndex: 2
+            zIndex: 2,
+            boxShadow: '0px 4px 20px rgba(0,0,0,0.1)'
         }}
         >
         <StatItem value={stats.total} label="Overall routes" color="#1C6E63" />
-        <Divider orientation="vertical" flexItem sx={{ height: '40px', alignSelf: 'center' }} />
+        <Divider orientation="vertical" flexItem sx={{ height: '60px', alignSelf: 'center' }} />
         
         <StatItem value="98%" label="OTDP" color="#1C6E63" />
-        <Divider orientation="vertical" flexItem sx={{ height: '40px', alignSelf: 'center' }} />
+        <Divider orientation="vertical" flexItem sx={{ height: '60px', alignSelf: 'center' }} />
         
         <StatItem 
             value={stats.completed} 
@@ -165,7 +168,7 @@ const StatsFooter = ({ routes = [] }) => {
             icon={<CheckCircleIcon />} 
             color="#2E7D32" 
         />
-        <Divider orientation="vertical" flexItem sx={{ height: '40px', alignSelf: 'center' }} />
+        <Divider orientation="vertical" flexItem sx={{ height: '60px', alignSelf: 'center' }} />
         
         <StatItem 
             value={stats.trackingOnTime} 
@@ -174,7 +177,7 @@ const StatsFooter = ({ routes = [] }) => {
             icon={<AccessTimeIcon />} 
             color="#2E7D32" 
         />
-        <Divider orientation="vertical" flexItem sx={{ height: '40px', alignSelf: 'center' }} />
+        <Divider orientation="vertical" flexItem sx={{ height: '60px', alignSelf: 'center' }} />
         
         <StatItem 
             value={stats.riskOfDelay} 
@@ -183,7 +186,7 @@ const StatsFooter = ({ routes = [] }) => {
             icon={<WarningIcon />} 
             color="#D32F2F" 
         />
-        <Divider orientation="vertical" flexItem sx={{ height: '40px', alignSelf: 'center' }} />
+        <Divider orientation="vertical" flexItem sx={{ height: '60px', alignSelf: 'center' }} />
         
         <StatItem 
             value={stats.statusCoded} 
