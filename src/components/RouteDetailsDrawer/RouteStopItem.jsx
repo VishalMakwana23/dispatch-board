@@ -4,6 +4,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import PersonIcon from '@mui/icons-material/Person';
 import truckIcon from '../../assets/truck.svg';
 import nameIcon from '../../assets/name.svg';
+import userIcon from '../../assets/Subtract.svg';
 
 const STATUS_COLORS = {
   green: '#107C41',
@@ -23,6 +24,10 @@ const RouteStopItem = ({ stop, isLast, isFirst, routeColor }) => {
   if (stop.isWarehouse) {
     // Warehouse: Green filled, "Load" text
     IconElement = <Typography variant="caption" sx={{ fontSize: '7px', fontWeight: 'bold' }}>Load</Typography>;
+  } else if (stop.status === 'last_location' || isLast) {
+     // Last Location / Last Stop: Orange filled, User icon (Subtract.svg)
+     // Use white icon on colored background
+     IconElement = <img src={userIcon} alt="User" style={{ width: '12px', height: '12px', filter: 'brightness(0) invert(1)' }} />;
   } else if (stop.status === 'completed') {
     // Completed: Green filled, name icon
     IconElement = <img src={nameIcon} alt="Completed" style={{ width: '12px', height: '12px', filter: 'brightness(0) invert(1)' }} />;
@@ -31,9 +36,6 @@ const RouteStopItem = ({ stop, isLast, isFirst, routeColor }) => {
     isFilled = false;
     // Force icon to be black (or colored if we could) so it shows on white background
     IconElement = <img src={truckIcon} alt="Truck" style={{ width: '12px', height: '12px', filter: 'brightness(0)' }} />; 
-  } else if (stop.status === 'last_location') {
-     // Last Location: Orange filled, Person icon
-     IconElement = <PersonIcon sx={{ fontSize: '12px' }} />;
   } else {
     // Others: Truck icon default (filled)
     IconElement = <img src={truckIcon} alt="Truck" style={{ width: '12px', height: '12px', filter: 'brightness(0) invert(1)' }} />;

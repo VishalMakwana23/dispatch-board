@@ -11,24 +11,36 @@ const stopsData = [
   { id: 'st-1-3', lat: 31.1380, lng: -97.7450, address: '800 W Central Texas Expy, Killeen, TX', type: 'delivery', name: 'John Doe' },
   { id: 'st-1-4', lat: 31.1300, lng: -97.7400, address: '200 E Rancier Ave, Killeen, TX', type: 'pickup', name: 'Name' },
   { id: 'st-1-5', lat: 31.1250, lng: -97.7350, address: '1001 E Veterans Memorial Blvd, Killeen, TX', type: 'delivery', name: 'Name' },
+  { id: 'st-1-6', lat: 31.1200, lng: -97.7300, address: '2002 S W S Young Dr, Killeen, TX', type: 'delivery', name: 'Alice' },
+  { id: 'st-1-7', lat: 31.1150, lng: -97.7250, address: '3003 W Stan Schlueter Loop, Killeen, TX', type: 'pickup', name: 'Bob' },
+  { id: 'st-1-8', lat: 31.1100, lng: -97.7200, address: '4004 E Central Texas Expy, Killeen, TX', type: 'delivery', name: 'Charlie' },
+  { id: 'st-1-9', lat: 31.1050, lng: -97.7150, address: '5005 Trimmier Rd, Killeen, TX', type: 'delivery', name: 'David' },
+  { id: 'st-1-10', lat: 31.1000, lng: -97.7100, address: '6006 Rosewood Dr, Killeen, TX', type: 'delivery', name: 'Eve' },
   
   // Route 2 Stops (Harker Heights)
   { id: 'st-2-1', lat: 31.0850, lng: -97.6600, address: '201 E Central Texas Expy, Harker Heights, TX', type: 'warehouse', name: 'Warehouse' },
   { id: 'st-2-2', lat: 31.0920, lng: -97.6550, address: '300 Indian Trail, Harker Heights, TX', type: 'delivery', name: 'Name' },
   { id: 'st-2-3', lat: 31.0980, lng: -97.6480, address: "600 Miller's Crossing, Harker Heights, TX", type: 'delivery', name: 'John Doe' },
   { id: 'st-2-4', lat: 31.1050, lng: -97.6400, address: '900 FM 2410 Rd, Harker Heights, TX', type: 'delivery', name: 'Name' },
+  { id: 'st-2-5', lat: 31.1100, lng: -97.6350, address: '1000 Knights Way, Harker Heights, TX', type: 'delivery', name: 'Frank' },
+  { id: 'st-2-6', lat: 31.1150, lng: -97.6300, address: '1100 E FM 2410 Rd, Harker Heights, TX', type: 'pickup', name: 'Grace' },
+  { id: 'st-2-7', lat: 31.1200, lng: -97.6250, address: '1200 Modoc Dr, Harker Heights, TX', type: 'delivery', name: 'Heidi' },
   
   // Route 3 Stops (Fort Hood / West Killeen)
   { id: 'st-3-1', lat: 31.1300, lng: -97.7800, address: 'T.J. Mills Blvd, Fort Hood, TX', type: 'warehouse', name: 'Warehouse' },
   { id: 'st-3-2', lat: 31.1250, lng: -97.7900, address: '761st Tank Battalion Ave, Fort Hood, TX', type: 'delivery', name: 'Name' },
   { id: 'st-3-3', lat: 31.1150, lng: -97.7950, address: 'Clarke Rd, Fort Hood, TX', type: 'delivery', name: 'Name' },
   { id: 'st-3-4', lat: 31.1050, lng: -97.7850, address: 'Clear Creek Rd, Killeen, TX', type: 'pickup', name: 'Name' },
+  { id: 'st-3-5', lat: 31.1000, lng: -97.7800, address: 'Battalion Ave, Fort Hood, TX', type: 'delivery', name: 'Ivan' },
+  { id: 'st-3-6', lat: 31.0950, lng: -97.7750, address: 'Support Ave, Fort Hood, TX', type: 'delivery', name: 'Jack' },
   
   // Route 4 Stops (South Killeen)
   { id: 'st-4-1', lat: 31.0900, lng: -97.7300, address: 'Stan Schlueter Loop, Killeen, TX', type: 'warehouse', name: 'Warehouse' },
   { id: 'st-4-2', lat: 31.0850, lng: -97.7200, address: 'Bunny Trail, Killeen, TX', type: 'delivery', name: 'Name' },
   { id: 'st-4-3', lat: 31.0750, lng: -97.7100, address: 'Stagecoach Rd, Killeen, TX', type: 'delivery', name: 'Name' },
   { id: 'st-4-4', lat: 31.0650, lng: -97.7000, address: 'Trimmier Rd, Killeen, TX', type: 'delivery', name: 'Name' },
+  { id: 'st-4-5', lat: 31.0600, lng: -97.6900, address: 'Elms Rd, Killeen, TX', type: 'delivery', name: 'Karen' },
+  { id: 'st-4-6', lat: 31.0550, lng: -97.6800, address: 'Robinett Rd, Killeen, TX', type: 'pickup', name: 'Leo' },
   // Route 5 Stops (Killeen East)
   { id: 'st-5-1', lat: 31.1150, lng: -97.7100, address: 'E Central Texas Expy, Killeen, TX', type: 'warehouse', name: 'Warehouse' },
   { id: 'st-5-2', lat: 31.1200, lng: -97.7000, address: 'W.S. Young Dr, Killeen, TX', type: 'delivery', name: 'Name' },
@@ -93,19 +105,22 @@ export const killeenData = {
         avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
       },
       stats: {
-        stops: 12,
+        stops: 10,
         orders: 12,
         distance: '112 km',
-        completed: 3,
-        remaining: 9,
+        completed: 4,
+        remaining: 6,
       },
       color: '#1976D2', // Blue
-      stops: stopsData.slice(0, 5).map((s, i) => ({
+      stops: stopsData.slice(0, 10).map((s, i) => ({
         ...s,
-        status: i < 2 ? 'completed' : (i === 2 ? 'ongoing' : 'pending'),
+        status: i < 4 ? 'completed' : (i === 4 ? 'ongoing' : 'pending'),
         window: '10:30 AM - 12:30 PM',
+        time: '10:30 AM',
+        orders: Math.floor(Math.random() * 3) + 1,
         parcels: Math.floor(Math.random() * 5) + 1,
-        customer: `Customer ${s.id}`
+        customer: `Customer ${s.id}`,
+        color: i < 4 ? 'green' : (i === 4 ? 'yellow' : 'grey')
       }))
     },
     {
@@ -122,19 +137,22 @@ export const killeenData = {
         avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
       },
       stats: {
-        stops: 6,
+        stops: 7,
         orders: 6,
         distance: '123 km',
-        completed: 2,
+        completed: 3,
         remaining: 4,
       },
       color: '#2E7D32', // Green
-      stops: stopsData.slice(5, 9).map((s, i) => ({
+      stops: stopsData.slice(10, 17).map((s, i) => ({
         ...s,
-        status: i < 1 ? 'completed' : (i === 1 ? 'ongoing' : 'pending'),
+        status: i < 3 ? 'completed' : (i === 3 ? 'ongoing' : 'pending'),
         window: '12:30 PM - 02:30 PM',
+        time: '12:30 PM',
+        orders: Math.floor(Math.random() * 3) + 1,
         parcels: Math.floor(Math.random() * 10) + 1,
-        customer: `Customer ${s.id}`
+        customer: `Customer ${s.id}`,
+        color: i < 3 ? 'green' : (i === 3 ? 'yellow' : 'grey')
       }))
     },
     {
@@ -151,19 +169,22 @@ export const killeenData = {
         avatar: 'https://randomuser.me/api/portraits/men/22.jpg',
       },
       stats: {
-        stops: 7,
+        stops: 6,
         orders: 7,
         distance: '234 km',
-        completed: 5,
-        remaining: 2,
+        completed: 3,
+        remaining: 3,
       },
       color: '#ED6C02', // Orange
-      stops: stopsData.slice(9, 13).map((s, i) => ({
+      stops: stopsData.slice(17, 23).map((s, i) => ({
         ...s,
         status: i < 3 ? 'completed' : 'pending',
         window: '02:00 PM - 04:00 PM',
+        time: '02:00 PM',
+        orders: Math.floor(Math.random() * 3) + 1,
         parcels: Math.floor(Math.random() * 3) + 1,
-        customer: `Customer ${s.id}`
+        customer: `Customer ${s.id}`,
+        color: i < 3 ? 'green' : 'grey'
       }))
     },
     {
@@ -180,19 +201,22 @@ export const killeenData = {
         avatar: 'https://randomuser.me/api/portraits/men/11.jpg',
       },
       stats: {
-        stops: 12,
+        stops: 6,
         orders: 12,
         distance: '234 km',
-        completed: 4,
-        remaining: 8,
+        completed: 0,
+        remaining: 6,
       },
       color: '#9C27B0', // Purple
-      stops: stopsData.slice(13, 17).map((s, i) => ({
+      stops: stopsData.slice(23, 29).map((s, i) => ({
         ...s,
         status: 'pending',
         window: '08:00 AM - 10:00 AM',
+        time: '08:00 AM',
+        orders: Math.floor(Math.random() * 3) + 1,
         parcels: Math.floor(Math.random() * 8) + 1,
-        customer: `Customer ${s.id}`
+        customer: `Customer ${s.id}`,
+        color: 'grey'
       }))
     },
     // New Routes
@@ -203,7 +227,7 @@ export const killeenData = {
       driver: { name: 'John Doe', company: 'Fast Logistics', id: 'dr-5', avatar: 'https://randomuser.me/api/portraits/men/60.jpg' },
       stats: { stops: 8, orders: 15, distance: '85 km', completed: 2, remaining: 6 },
       color: '#00BCD4', // Cyan
-      stops: stopsData.slice(17, 20).map((s, i) => ({ ...s, status: i < 1 ? 'completed' : 'pending', window: '09:00 AM - 11:00 AM', parcels: 3, customer: `Customer ${s.id}` }))
+      stops: stopsData.slice(29, 32).map((s, i) => ({ ...s, status: i < 1 ? 'completed' : 'pending', window: '09:00 AM - 11:00 AM', time: '09:00 AM', orders: 2, parcels: 3, customer: `Customer ${s.id}`, color: i < 1 ? 'green' : 'grey' }))
     },
     {
       id: 'RT-6677889900',
@@ -214,7 +238,7 @@ export const killeenData = {
       driver: { name: 'Jane Smith', company: 'Quick Ship', id: 'dr-6', avatar: 'https://randomuser.me/api/portraits/men/61.jpg' },
       stats: { stops: 5, orders: 10, distance: '150 km', completed: 1, remaining: 4 },
       color: '#FF9800', // Orange
-      stops: stopsData.slice(20, 23).map((s, i) => ({ ...s, status: 'pending', window: '10:00 AM - 12:00 PM', parcels: 5, customer: `Customer ${s.id}` }))
+      stops: stopsData.slice(32, 35).map((s, i) => ({ ...s, status: 'pending', window: '10:00 AM - 12:00 PM', time: '10:00 AM', orders: 2, parcels: 5, customer: `Customer ${s.id}`, color: 'grey' }))
     },
     {
       id: 'RT-7788990011',
@@ -223,7 +247,7 @@ export const killeenData = {
       driver: { name: 'Bob Brown', company: 'Safe Delivery', id: 'dr-7', avatar: 'https://randomuser.me/api/portraits/men/62.jpg' },
       stats: { stops: 10, orders: 20, distance: '95 km', completed: 10, remaining: 0 },
       color: '#4CAF50', // Green
-      stops: stopsData.slice(23, 26).map((s, i) => ({ ...s, status: 'completed', window: '08:00 AM - 10:00 AM', parcels: 2, customer: `Customer ${s.id}` }))
+      stops: stopsData.slice(35, 38).map((s, i) => ({ ...s, status: 'completed', window: '08:00 AM - 10:00 AM', time: '08:00 AM', orders: 2, parcels: 2, customer: `Customer ${s.id}`, color: 'green' }))
     },
     {
       id: 'RT-8899001122',
@@ -235,7 +259,7 @@ export const killeenData = {
       driver: { name: 'Alice Green', company: 'Eco Trans', id: 'dr-8', avatar: 'https://randomuser.me/api/portraits/men/63.jpg' },
       stats: { stops: 12, orders: 25, distance: '110 km', completed: 8, remaining: 4 },
       color: '#F44336', // Red
-      stops: stopsData.slice(26, 29).map((s, i) => ({ ...s, status: i < 2 ? 'completed' : 'pending', window: '01:00 PM - 03:00 PM', parcels: 4, customer: `Customer ${s.id}` }))
+      stops: stopsData.slice(38, 41).map((s, i) => ({ ...s, status: i < 2 ? 'completed' : 'pending', window: '01:00 PM - 03:00 PM', time: '01:00 PM', orders: 2, parcels: 4, customer: `Customer ${s.id}`, color: i < 2 ? 'green' : 'grey' }))
     },
     {
       id: 'RT-9900112233',
@@ -244,7 +268,7 @@ export const killeenData = {
       driver: { name: 'Charlie Black', company: 'Night Moves', id: 'dr-9', avatar: 'https://randomuser.me/api/portraits/men/64.jpg' },
       stats: { stops: 4, orders: 8, distance: '200 km', completed: 1, remaining: 3 },
       color: '#673AB7', // Deep Purple
-      stops: stopsData.slice(29, 32).map((s, i) => ({ ...s, status: 'pending', window: '11:00 AM - 01:00 PM', parcels: 6, customer: `Customer ${s.id}` }))
+      stops: stopsData.slice(41, 44).map((s, i) => ({ ...s, status: 'pending', window: '11:00 AM - 01:00 PM', time: '11:00 AM', orders: 2, parcels: 6, customer: `Customer ${s.id}`, color: 'grey' }))
     },
     {
       id: 'RT-0011223344',
@@ -253,7 +277,7 @@ export const killeenData = {
       driver: { name: 'David White', company: 'Day Break', id: 'dr-10', avatar: 'https://randomuser.me/api/portraits/men/65.jpg' },
       stats: { stops: 9, orders: 18, distance: '105 km', completed: 3, remaining: 6 },
       color: '#3F51B5', // Indigo
-      stops: stopsData.slice(32, 35).map((s, i) => ({ ...s, status: i < 1 ? 'completed' : 'pending', window: '02:00 PM - 04:00 PM', parcels: 3, customer: `Customer ${s.id}` }))
+      stops: stopsData.slice(44, 47).map((s, i) => ({ ...s, status: i < 1 ? 'completed' : 'pending', window: '02:00 PM - 04:00 PM', time: '02:00 PM', orders: 2, parcels: 3, customer: `Customer ${s.id}`, color: i < 1 ? 'green' : 'grey' }))
     },
     {
       id: 'RT-1122334455',
@@ -264,7 +288,7 @@ export const killeenData = {
       driver: { name: 'Eva Blue', company: 'Sky High', id: 'dr-11', avatar: 'https://randomuser.me/api/portraits/men/66.jpg' },
       stats: { stops: 7, orders: 14, distance: '90 km', completed: 2, remaining: 5 },
       color: '#009688', // Teal
-      stops: stopsData.slice(35, 38).map((s, i) => ({ ...s, status: 'pending', window: '09:30 AM - 11:30 AM', parcels: 4, customer: `Customer ${s.id}` }))
+      stops: stopsData.slice(47, 50).map((s, i) => ({ ...s, status: 'pending', window: '09:30 AM - 11:30 AM', time: '09:30 AM', orders: 2, parcels: 4, customer: `Customer ${s.id}`, color: 'grey' }))
     },
     {
       id: 'RT-2233445566',
@@ -273,7 +297,7 @@ export const killeenData = {
       driver: { name: 'Frank Red', company: 'Hot Shot', id: 'dr-12', avatar: 'https://randomuser.me/api/portraits/men/67.jpg' },
       stats: { stops: 6, orders: 12, distance: '130 km', completed: 6, remaining: 0 },
       color: '#795548', // Brown
-      stops: stopsData.slice(38, 41).map((s, i) => ({ ...s, status: 'completed', window: '07:00 AM - 09:00 AM', parcels: 5, customer: `Customer ${s.id}` }))
+      stops: stopsData.slice(50, 53).map((s, i) => ({ ...s, status: 'completed', window: '07:00 AM - 09:00 AM', time: '07:00 AM', orders: 2, parcels: 5, customer: `Customer ${s.id}`, color: 'green' }))
     },
     {
       id: 'RT-3344556677',
@@ -285,7 +309,7 @@ export const killeenData = {
       driver: { name: 'Grace Yellow', company: 'Sun Ray', id: 'dr-13', avatar: 'https://randomuser.me/api/portraits/men/68.jpg' },
       stats: { stops: 11, orders: 22, distance: '115 km', completed: 7, remaining: 4 },
       color: '#E91E63', // Pink
-      stops: stopsData.slice(41, 44).map((s, i) => ({ ...s, status: i < 2 ? 'completed' : 'pending', window: '12:00 PM - 02:00 PM', parcels: 3, customer: `Customer ${s.id}` }))
+      stops: stopsData.slice(53, 56).map((s, i) => ({ ...s, status: i < 2 ? 'completed' : 'pending', window: '12:00 PM - 02:00 PM', time: '12:00 PM', orders: 2, parcels: 3, customer: `Customer ${s.id}`, color: i < 2 ? 'green' : 'grey' }))
     },
     {
       id: 'RT-4455667788',
@@ -294,7 +318,7 @@ export const killeenData = {
       driver: { name: 'Henry Gold', company: 'Rich Haul', id: 'dr-14', avatar: 'https://randomuser.me/api/portraits/men/69.jpg' },
       stats: { stops: 8, orders: 16, distance: '100 km', completed: 4, remaining: 4 },
       color: '#607D8B', // Blue Grey
-      stops: stopsData.slice(44, 47).map((s, i) => ({ ...s, status: i < 1 ? 'completed' : 'pending', window: '03:00 PM - 05:00 PM', parcels: 4, customer: `Customer ${s.id}` }))
+      stops: stopsData.slice(56, 59).map((s, i) => ({ ...s, status: i < 1 ? 'completed' : 'pending', window: '03:00 PM - 05:00 PM', time: '03:00 PM', orders: 2, parcels: 4, customer: `Customer ${s.id}`, color: i < 1 ? 'green' : 'grey' }))
     }
   ],
   unassigned: [

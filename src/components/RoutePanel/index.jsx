@@ -6,11 +6,16 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import RouteTimeline from '../RouteTimeline';
-import { routeDetailsMock } from '../../mock/routeDetails';
 
 const RoutePanel = ({ route, expanded, onToggle, onClose }) => {
-  // Use mock details if available
-  const details = route ? (routeDetailsMock[route.id] || routeDetailsMock["123445677886544"]) : null;
+  // Use route data directly
+  const stops = route?.stops ? route.stops.map(stop => ({
+    ...stop,
+    isWarehouse: stop.type === 'warehouse',
+    timeWindow: stop.window 
+  })) : [];
+
+  const details = route ? { ...route, stops } : null;
 
   if (!details) return null;
 
