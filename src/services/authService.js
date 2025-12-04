@@ -1,7 +1,7 @@
 
 const users = [
-  { email: "client@ziing.ai", password: "Client@123", role: "client" },
-  { email: "admin@ziing.ai", password: "Admin@123", role: "admin" }
+  { email: "client.portal@ziing.ai", password: "Ziing@123", role: "client" },
+  { email: "admin.portal@ziing.ai", password: "Ziing@123", role: "admin" }
 ];
 
 export const login = (email, password) => {
