@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { Polyline, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
+import warehouseIcon from '../../assets/werehouse.svg';
+import destinationIcon from '../../assets/Subtract.svg';
 
 // Mock Route Path (Coordinates)
 // In a real app, this would come from a routing API based on the route's stops
@@ -15,18 +17,45 @@ const generateMockPath = (centerLat, centerLng) => {
   ];
 };
 
-const stopIcon = L.divIcon({
-  className: 'route-stop-icon',
-  html: `<div style="
-    background-color: #0B8A41; 
-    width: 12px; 
-    height: 12px; 
-    border-radius: 50%; 
-    border: 2px solid white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-  "></div>`,
-  iconSize: [12, 12],
-});
+// Custom Icons
+const createStopIcon = (index, totalStops) => {
+  let iconHtml = '';
+  let iconSize = [12, 12];
+  let iconAnchor = [6, 6];
+
+  if (index === 0) {
+     // Warehouse (Start)
+     iconSize = [40, 40];
+     iconAnchor = [20, 20];
+     iconHtml = `<div style="background-color: #1A3C34; border-radius: 50%; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+                  <img src="${warehouseIcon}" alt="Warehouse" style="width: 20px; height: 20px; filter: brightness(0) invert(1);" />
+                </div>`;
+  } else if (index === totalStops - 1) {
+     // Destination (End)
+     iconSize = [40, 40];
+     iconAnchor = [20, 20];
+     iconHtml = `<div style="background-color: #FF6300; border-radius: 50%; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+                  <img src="${destinationIcon}" alt="Destination" style="width: 20px; height: 20px; filter: brightness(0) invert(1);" />
+                </div>`;
+  } else {
+     // Intermediate Stops
+     iconHtml = `<div style="
+        background-color: #0B8A41; 
+        width: 12px; 
+        height: 12px; 
+        border-radius: 50%; 
+        border: 2px solid white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      "></div>`;
+  }
+
+  return L.divIcon({
+    className: 'route-stop-icon',
+    html: iconHtml,
+    iconSize: iconSize,
+    iconAnchor: iconAnchor,
+  });
+};
 
 const RoutePreviewLayer = ({ route, order }) => {
   const map = useMap();
@@ -47,13 +76,15 @@ const RoutePreviewLayer = ({ route, order }) => {
       {/* Route Path */}
       <Polyline 
         positions={path} 
-        pathOptions={{ color: '#333', weight: 3, opacity: 0.8 }} 
+        pathOptions={{ color: '#1A3C34', weight: 4, opacity: 1 }} 
       />
 
       {/* Existing Stops */}
       {path.map((pos, idx) => (
-        <Marker key={idx} position={pos} icon={stopIcon}>
-           <Popup>Stop {idx + 1}</Popup>
+        <Marker key={idx} position={pos} icon={createStopIcon(idx, path.length)}>
+           <Popup>
+             {idx === 0 ? 'Warehouse' : idx === path.length - 1 ? 'Destination' : `Stop ${idx}`}
+           </Popup>
         </Marker>
       ))}
 
