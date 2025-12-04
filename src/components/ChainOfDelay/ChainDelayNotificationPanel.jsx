@@ -106,6 +106,7 @@ const ChainDelayNotificationPanel = ({
                     <InputBase
                       multiline
                       fullWidth
+                      placeholder="Type your message here..."
                       value={recipientMessages[group.id] || ''}
                       onChange={(e) => {
                           if (e.target.value.length <= 255) onMessageChange(group.id, e.target.value);

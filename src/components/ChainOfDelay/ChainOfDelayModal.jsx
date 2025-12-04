@@ -112,6 +112,13 @@ const ChainOfDelayModal = ({
     }
   };
 
+  const handleStatusCodeChange = (code) => {
+    if (code !== selectedStatusCode) {
+      setSelectedStatusCode(code);
+      setComment(""); // Clear comment on status change
+    }
+  };
+
   return (
     <Dialog
       open={open}
@@ -120,14 +127,15 @@ const ChainOfDelayModal = ({
       fullWidth
       PaperProps={{
         sx: {
-          borderRadius: '12px',
+          borderRadius: '16px',
           background: 'linear-gradient(180deg, #FFFFFF 0%, #FEFDFB 100%)',
-          height: '80vh',
-          maxHeight: '800px',
+          height: '85vh',
+          maxHeight: '850px',
+          boxShadow: '0px 4px 40px rgba(0, 0, 0, 0.08)'
         },
       }}
     >
-      <Box sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ p: 4, height: '100%', display: 'flex', flexDirection: 'column' }}>
         {/* Close Button (Absolute) */}
         <IconButton 
           onClick={onClose} 
@@ -141,56 +149,56 @@ const ChainOfDelayModal = ({
           <Close />
         </IconButton>
 
-        <Grid container spacing={4} sx={{ flex: 1, overflow: 'hidden', mb: 2, mt: 4 }}>
+        <Grid container spacing={4} sx={{ flex: 1, overflow: 'hidden', mb: 2, mt: 2 }}>
           {/* Left Panel: Route Info & Affected Routes */}
           <Grid item xs={12} md={4} sx={{ height: '100%' }}>
-            <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', borderRight: '1px solid #E0E0E0', pr: 4 }}>
+            <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', borderRight: '1px solid #F0F0F0', pr: 4 }}>
               {/* Chain of Delay Header */}
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 4 }}>
                 <Warning sx={{ color: '#D24A43' }} />
-                <Typography variant="h6" sx={{ fontWeight: 700, color: '#D24A43', fontSize: '1.1rem' }}>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: '#D24A43', fontSize: '1.25rem' }}>
                   Chain of Delay
                 </Typography>
               </Box>
             <Paper
               elevation={0}
               sx={{
-                p: 2,
-                mb: 3,
+                p: 2.5,
+                mb: 4,
                 border: '1px solid #E0E0E0',
-                borderRadius: '10px',
+                borderRadius: '12px',
                 position: 'relative',
                 overflow: 'hidden'
               }}
             >
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
                 <Typography variant="h6" sx={{ color: '#D24A43', fontWeight: 700, fontSize: '1.1rem' }}>
                   {mainRoute.id}
                 </Typography>
-                <Typography variant="caption" sx={{ color: '#D24A43', fontWeight: 700, bgcolor: '#FFF0F0', px: 1, py: 0.5, borderRadius: '4px' }}>
+                <Typography variant="caption" sx={{ color: '#D24A43', fontWeight: 700, bgcolor: '#FFF0F0', px: 1.5, py: 0.5, borderRadius: '6px' }}>
                   {mainRoute.delayMinutes} mins late
                 </Typography>
               </Box>
-              <Box sx={{ display: 'flex', gap: 4 }}>
+              <Box sx={{ display: 'flex', gap: 5 }}>
                 <Box>
-                  <Typography variant="caption" sx={{ color: '#888', display: 'block' }}>Pin Time</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  <Typography variant="caption" sx={{ color: '#888', display: 'block', mb: 0.5 }}>Pin Time</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: '#333' }}>
                     {format(new Date(mainRoute.pinTime), 'yyyy-MM-dd HH:mm a')}
                   </Typography>
                 </Box>
                 <Box>
-                  <Typography variant="caption" sx={{ color: '#888', display: 'block' }}>Assigned Driver</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  <Typography variant="caption" sx={{ color: '#888', display: 'block', mb: 0.5 }}>Assigned Driver</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: '#333' }}>
                     {mainRoute.driver}
                   </Typography>
                 </Box>
               </Box>
             </Paper>
 
-            <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1.5, color: '#333' }}>
               Affected Routes
             </Typography>
-            <Typography variant="body2" sx={{ color: '#666', mb: 2 }}>
+            <Typography variant="body2" sx={{ color: '#666', mb: 2.5 }}>
               Select the affected route(s) below you want to take action on.
             </Typography>
 
@@ -209,8 +217,8 @@ const ChainOfDelayModal = ({
 
           {/* Middle Panel: ZAI Suggestions */}
           <Grid item xs={12} md={3}>
-            <Box sx={{ height: '100%', borderRight: '1px solid #EEE', pr: 4 }}>
-              <Typography variant="h6" sx={{ fontWeight: 700, mb: 3, display: 'flex', alignItems: 'center', gap: 1, fontSize: '1.1rem', color: '#666' }}>
+            <Box sx={{ height: '100%', borderRight: '1px solid #F0F0F0', pr: 4, pl: 1 }}>
+              <Typography variant="h6" sx={{ fontWeight: 700, mb: 4, display: 'flex', alignItems: 'center', gap: 1.5, fontSize: '1.1rem', color: '#333' }}>
                 <img src={ziingLogo} alt="ZAI" style={{ width: '24px', height: '24px' }} /> ZAI Suggestions
               </Typography>
 
@@ -221,16 +229,21 @@ const ChainOfDelayModal = ({
                 endIcon={<ChevronRight />}
                 sx={{
                   justifyContent: 'space-between',
-                  py: 1.5,
+                  py: 1.2,
+                  px: 2,
                   mb: 2,
                   borderColor: step === 'main' ? '#333' : '#E0E0E0',
-                  backgroundColor: step === 'main' ? '#F9F9F9' : 'transparent',
+                  backgroundColor: step === 'main' ? '#fff' : 'transparent',
                   color: '#333',
                   fontWeight: 600,
-                  borderRadius: '10px',
+                  borderRadius: '8px',
+                  borderWidth: '1px',
+                  textTransform: 'none',
+                  boxShadow: step === 'main' ? '0px 2px 8px rgba(0,0,0,0.05)' : 'none',
                   '&:hover': {
                     borderColor: '#333',
-                    backgroundColor: '#F5F5F5',
+                    backgroundColor: '#FAFAFA',
+                    borderWidth: '1px',
                   },
                 }}
               >
@@ -244,15 +257,20 @@ const ChainOfDelayModal = ({
                 endIcon={<ChevronRight />}
                 sx={{
                   justifyContent: 'space-between',
-                  py: 1.5,
+                  py: 1.2,
+                  px: 2,
                   borderColor: step === 'notifications' ? '#333' : '#E0E0E0',
-                  backgroundColor: step === 'notifications' ? '#F9F9F9' : 'transparent',
+                  backgroundColor: step === 'notifications' ? '#fff' : 'transparent',
                   color: '#333',
                   fontWeight: 600,
-                  borderRadius: '10px',
+                  borderRadius: '8px',
+                  borderWidth: '1px',
+                  textTransform: 'none',
+                  boxShadow: step === 'notifications' ? '0px 2px 8px rgba(0,0,0,0.05)' : 'none',
                   '&:hover': {
                     borderColor: '#333',
-                    backgroundColor: '#F5F5F5',
+                    backgroundColor: '#FAFAFA',
+                    borderWidth: '1px',
                   },
                 }}
               >
@@ -262,7 +280,7 @@ const ChainOfDelayModal = ({
           </Grid>
 
           {/* Right Panel: Dynamic Content */}
-          <Grid item xs={12} md={5} sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <Grid item xs={12} md={5} sx={{ display: 'flex', flexDirection: 'column', height: '100%', pl: 2 }}>
             
             <Box sx={{ flex: 1, overflowY: 'auto', pr: 1 }}>
               {/* STEP: MAIN (Status Selection with Inline Comments) */}
@@ -274,39 +292,39 @@ const ChainOfDelayModal = ({
                       <Paper
                         key={code}
                         elevation={0}
-                        onClick={() => setSelectedStatusCode(code)}
+                        onClick={() => handleStatusCodeChange(code)}
                         sx={{
-                          p: 2,
+                          p: isSelected ? 2 : 1.5,
                           mb: 2,
                           borderRadius: '12px',
                           border: isSelected ? '1px solid #F26A2E' : '1px solid #E0E0E0',
                           backgroundColor: '#FFFFFF',
                           cursor: 'pointer',
-                          transition: 'all 0.2s',
-                          boxShadow: isSelected ? '0px 4px 20px rgba(0, 0, 0, 0.05)' : 'none',
+                          transition: 'all 0.2s ease-in-out',
+                          boxShadow: isSelected ? '0px 4px 12px rgba(242, 106, 46, 0.1)' : 'none',
                         }}
                       >
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                           <Radio
                             checked={isSelected}
-                            onChange={() => setSelectedStatusCode(code)}
+                            onChange={() => handleStatusCodeChange(code)}
                             value={code}
                             sx={{
-                              color: '#C4C4C4',
+                              color: '#E0E0E0',
                               p: 0.5,
-                              mr: 1,
+                              mr: 1.5,
                               '&.Mui-checked': { color: '#F26A2E' },
                             }}
                           />
-                          <Typography variant="body2" sx={{ fontWeight: 500, color: isSelected ? '#F26A2E' : '#333' }}>
+                          <Typography variant="body1" sx={{ fontWeight: isSelected ? 600 : 500, color: isSelected ? '#333' : '#555' }}>
                             {code}
                           </Typography>
                         </Box>
 
                         {/* Inline Comment Box */}
                         {isSelected && (
-                          <Box sx={{ mt: 2, pl: 4, pr: 1, pb: 1 }}>
-                            <Typography variant="caption" sx={{ color: '#999', mb: 0.5, display: 'block' }}>
+                          <Box sx={{ mt: 2, pl: 5, pr: 1, pb: 1 }}>
+                            <Typography variant="caption" sx={{ color: '#999', mb: 0.8, display: 'block', fontWeight: 500 }}>
                               Comments
                             </Typography>
                             <TextField
@@ -326,11 +344,17 @@ const ChainOfDelayModal = ({
                                   borderRadius: '8px',
                                   backgroundColor: '#FAFAFA',
                                   fontSize: '0.875rem',
-                                  p: 1.5
+                                  p: 1.5,
+                                  '& fieldset': {
+                                    borderColor: '#EEE',
+                                  },
+                                  '&:hover fieldset': {
+                                    borderColor: '#DDD',
+                                  },
+                                  '&.Mui-focused fieldset': {
+                                    borderColor: '#F26A2E', // Match brand color on focus
+                                  }
                                 },
-                                '& .MuiOutlinedInput-notchedOutline': {
-                                  borderColor: '#EEE'
-                                }
                               }}
                             />
                             <Typography variant="caption" sx={{ color: '#CCC', display: 'block', textAlign: 'right', mt: 0.5 }}>
@@ -363,21 +387,23 @@ const ChainOfDelayModal = ({
         </Grid>
 
         {/* Fixed Footer Buttons */}
-        <Box sx={{ display: 'flex', gap: 2, pt: 2, borderTop: '1px solid #F5F5F5', justifyContent: 'flex-end' }}>
+        <Box sx={{ display: 'flex', gap: 2, pt: 3, borderTop: '1px solid #F5F5F5', justifyContent: 'flex-end', mr: 2 }}>
           <Button
             variant="outlined"
             onClick={onClose}
             sx={{
               borderColor: '#333',
               color: '#333',
-              borderRadius: '25px',
-              px: 4,
+              borderRadius: '30px',
+              px: 5,
               py: 1,
               fontWeight: 600,
               textTransform: 'none',
+              borderWidth: '1px',
               '&:hover': {
                 borderColor: '#000',
-                backgroundColor: 'rgba(0,0,0,0.04)'
+                backgroundColor: 'rgba(0,0,0,0.04)',
+                borderWidth: '1px',
               }
             }}
           >
@@ -393,8 +419,8 @@ const ChainOfDelayModal = ({
             sx={{
               backgroundColor: '#1C4E46',
               color: '#fff',
-              borderRadius: '25px',
-              px: 4,
+              borderRadius: '30px',
+              px: 5,
               py: 1,
               fontWeight: 600,
               textTransform: 'none',
