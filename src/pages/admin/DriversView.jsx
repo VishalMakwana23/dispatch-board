@@ -6,7 +6,7 @@ import DriversPanel from '../../components/drivers/DriversPanel';
 import DriverDetailsPopup from '../../components/drivers/DriverDetailsPopup';
 import DriverMapLayer from '../../components/drivers/DriverMapLayer';
 
-const DriversView = ({ activeView, setActiveView }) => {
+const DriversView = ({ activeView, setActiveView, isCollapsed }) => {
   const [selectedDriver, setSelectedDriver] = useState(null);
 
   const handleDriverSelect = (driver) => {
@@ -23,6 +23,7 @@ const DriversView = ({ activeView, setActiveView }) => {
         setActiveView={setActiveView}
         onDriverSelect={handleDriverSelect}
         selectedDriverId={selectedDriver?.id}
+        isCollapsed={isCollapsed}
       />
 
       {/* Right Map Area */}

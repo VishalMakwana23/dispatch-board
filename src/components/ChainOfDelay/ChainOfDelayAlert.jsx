@@ -8,9 +8,15 @@ const ChainOfDelayAlert = ({
   onCloseBigAlert,
   onOpenModal,
   onReview,
-  route
+  route,
+  isCollapsed = true // Default to collapsed if not provided
 }) => {
   if (!bigAlertVisible && !buttonVisible) return null;
+
+  // Calculate dynamic left position
+  // Sidebar (65/240) + RoutesPanel (350) + Padding (e.g., 20px)
+  const baseLeft = (isCollapsed ? 65 : 240) + 350;
+  const alertLeft = `${baseLeft + 20}px`; // Add some padding
 
   return (
     <>
@@ -21,12 +27,12 @@ const ChainOfDelayAlert = ({
           sx={{
             position: 'absolute',
             top: 90, // Below Topbar (64px) + spacing
-            left: 'calc(50% + 205px)', // Center on map (Sidebar + RoutesPanel = 410px)
-            transform: 'translateX(-50%)',
+            left: alertLeft, // Dynamic left
+            // transform: 'translateX(-50%)', // Removed centering logic as we want it relative to panel
             zIndex: 1300,
             width: 'auto',
             minWidth: '600px',
-            maxWidth: '90%',
+            maxWidth: 'calc(100vw - ' + alertLeft + ' - 20px)', // Prevent overflow
             borderRadius: '12px',
             p: '16px 24px',
             display: 'flex',
@@ -35,6 +41,7 @@ const ChainOfDelayAlert = ({
             backgroundColor: '#FFF5F5', // Light red background
             border: '1px solid #FECACA',
             boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.08)',
+            transition: 'left 0.3s ease', // Smooth transition
           }}
         >
           {/* Close Button - Absolute Top Right */}
@@ -122,7 +129,7 @@ const ChainOfDelayAlert = ({
           sx={{
             position: 'absolute',
             top: 80,
-            left: 430, // Adjust as needed based on sidebar width
+            left: alertLeft, // Dynamic left
             zIndex: 1200,
             backgroundColor: '#FFF5F5',
             color: '#991B1B',
@@ -133,6 +140,7 @@ const ChainOfDelayAlert = ({
             boxShadow: '0px 2px 8px rgba(0,0,0,0.1)',
             px: 2,
             py: 1,
+            transition: 'left 0.3s ease', // Smooth transition
             '&:hover': {
               backgroundColor: '#FEE2E2',
               boxShadow: '0px 4px 12px rgba(0,0,0,0.15)',

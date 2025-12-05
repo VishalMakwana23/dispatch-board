@@ -24,7 +24,7 @@ const STATUS_CODES = [
   "Weather Issue"
 ];
 
-const ChainOfDelayContainer = () => {
+const ChainOfDelayContainer = ({ isCollapsed }) => {
   // State Management
   const [bigAlertVisible, setBigAlertVisible] = useState(true);
   const [buttonVisible, setButtonVisible] = useState(false);
@@ -105,6 +105,7 @@ const ChainOfDelayContainer = () => {
         onOpenModal={handleOpenModal}
         onReview={handleReview}
         route={MOCK_MAIN_ROUTE}
+        isCollapsed={isCollapsed}
       />
 
       <ChainOfDelayModal
