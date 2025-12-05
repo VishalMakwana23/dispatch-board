@@ -7,10 +7,10 @@ const KILLEEN_CENTER = { lat: 31.1171, lng: -97.7278 };
 const stopsData = [
   // Route 1 Stops (Killeen North)
   { id: 'st-1-1', lat: 31.1350, lng: -97.7650, address: '123 Main St, Killeen, TX', type: 'warehouse', name: 'Warehouse' },
-  { id: 'st-1-2', lat: 31.1420, lng: -97.7580, address: '450 Veteran Memorial Blvd, Killeen, TX', type: 'delivery', name: 'Name' },
+  { id: 'st-1-2', lat: 31.1420, lng: -97.7580, address: '450 Veteran Memorial Blvd, Killeen, TX', type: 'delivery', name: 'Oliver Queen' },
   { id: 'st-1-3', lat: 31.1380, lng: -97.7450, address: '800 W Central Texas Expy, Killeen, TX', type: 'delivery', name: 'John Doe' },
-  { id: 'st-1-4', lat: 31.1300, lng: -97.7400, address: '200 E Rancier Ave, Killeen, TX', type: 'pickup', name: 'Name' },
-  { id: 'st-1-5', lat: 31.1250, lng: -97.7350, address: '1001 E Veterans Memorial Blvd, Killeen, TX', type: 'delivery', name: 'Name' },
+  { id: 'st-1-4', lat: 31.1300, lng: -97.7400, address: '200 E Rancier Ave, Killeen, TX', type: 'pickup', name: 'Thea Queen' },
+  { id: 'st-1-5', lat: 31.1250, lng: -97.7350, address: '1001 E Veterans Memorial Blvd, Killeen, TX', type: 'delivery', name: 'Roy Harper' },
   { id: 'st-1-6', lat: 31.1200, lng: -97.7300, address: '2002 S W S Young Dr, Killeen, TX', type: 'delivery', name: 'Alice' },
   { id: 'st-1-7', lat: 31.1150, lng: -97.7250, address: '3003 W Stan Schlueter Loop, Killeen, TX', type: 'pickup', name: 'Bob' },
   { id: 'st-1-8', lat: 31.1100, lng: -97.7200, address: '4004 E Central Texas Expy, Killeen, TX', type: 'delivery', name: 'Charlie' },
@@ -19,77 +19,77 @@ const stopsData = [
   
   // Route 2 Stops (Harker Heights)
   { id: 'st-2-1', lat: 31.0850, lng: -97.6600, address: '201 E Central Texas Expy, Harker Heights, TX', type: 'warehouse', name: 'Warehouse' },
-  { id: 'st-2-2', lat: 31.0920, lng: -97.6550, address: '300 Indian Trail, Harker Heights, TX', type: 'delivery', name: 'Name' },
+  { id: 'st-2-2', lat: 31.0920, lng: -97.6550, address: '300 Indian Trail, Harker Heights, TX', type: 'delivery', name: 'Slade Wilson' },
   { id: 'st-2-3', lat: 31.0980, lng: -97.6480, address: "600 Miller's Crossing, Harker Heights, TX", type: 'delivery', name: 'John Doe' },
-  { id: 'st-2-4', lat: 31.1050, lng: -97.6400, address: '900 FM 2410 Rd, Harker Heights, TX', type: 'delivery', name: 'Name' },
+  { id: 'st-2-4', lat: 31.1050, lng: -97.6400, address: '900 FM 2410 Rd, Harker Heights, TX', type: 'delivery', name: 'Malcolm Merlyn' },
   { id: 'st-2-5', lat: 31.1100, lng: -97.6350, address: '1000 Knights Way, Harker Heights, TX', type: 'delivery', name: 'Frank' },
   { id: 'st-2-6', lat: 31.1150, lng: -97.6300, address: '1100 E FM 2410 Rd, Harker Heights, TX', type: 'pickup', name: 'Grace' },
   { id: 'st-2-7', lat: 31.1200, lng: -97.6250, address: '1200 Modoc Dr, Harker Heights, TX', type: 'delivery', name: 'Heidi' },
   
   // Route 3 Stops (Fort Hood / West Killeen)
   { id: 'st-3-1', lat: 31.1300, lng: -97.7800, address: 'T.J. Mills Blvd, Fort Hood, TX', type: 'warehouse', name: 'Warehouse' },
-  { id: 'st-3-2', lat: 31.1250, lng: -97.7900, address: '761st Tank Battalion Ave, Fort Hood, TX', type: 'delivery', name: 'Name' },
-  { id: 'st-3-3', lat: 31.1150, lng: -97.7950, address: 'Clarke Rd, Fort Hood, TX', type: 'delivery', name: 'Name' },
-  { id: 'st-3-4', lat: 31.1050, lng: -97.7850, address: 'Clear Creek Rd, Killeen, TX', type: 'pickup', name: 'Name' },
+  { id: 'st-3-2', lat: 31.1250, lng: -97.7900, address: '761st Tank Battalion Ave, Fort Hood, TX', type: 'delivery', name: 'Barry Allen' },
+  { id: 'st-3-3', lat: 31.1150, lng: -97.7950, address: 'Clarke Rd, Fort Hood, TX', type: 'delivery', name: 'Iris West' },
+  { id: 'st-3-4', lat: 31.1050, lng: -97.7850, address: 'Clear Creek Rd, Killeen, TX', type: 'pickup', name: 'Joe West' },
   { id: 'st-3-5', lat: 31.1000, lng: -97.7800, address: 'Battalion Ave, Fort Hood, TX', type: 'delivery', name: 'Ivan' },
   { id: 'st-3-6', lat: 31.0950, lng: -97.7750, address: 'Support Ave, Fort Hood, TX', type: 'delivery', name: 'Jack' },
   
   // Route 4 Stops (South Killeen)
   { id: 'st-4-1', lat: 31.0900, lng: -97.7300, address: 'Stan Schlueter Loop, Killeen, TX', type: 'warehouse', name: 'Warehouse' },
-  { id: 'st-4-2', lat: 31.0850, lng: -97.7200, address: 'Bunny Trail, Killeen, TX', type: 'delivery', name: 'Name' },
-  { id: 'st-4-3', lat: 31.0750, lng: -97.7100, address: 'Stagecoach Rd, Killeen, TX', type: 'delivery', name: 'Name' },
-  { id: 'st-4-4', lat: 31.0650, lng: -97.7000, address: 'Trimmier Rd, Killeen, TX', type: 'delivery', name: 'Name' },
+  { id: 'st-4-2', lat: 31.0850, lng: -97.7200, address: 'Bunny Trail, Killeen, TX', type: 'delivery', name: 'Caitlin Snow' },
+  { id: 'st-4-3', lat: 31.0750, lng: -97.7100, address: 'Stagecoach Rd, Killeen, TX', type: 'delivery', name: 'Cisco Ramon' },
+  { id: 'st-4-4', lat: 31.0650, lng: -97.7000, address: 'Trimmier Rd, Killeen, TX', type: 'delivery', name: 'Harrison Wells' },
   { id: 'st-4-5', lat: 31.0600, lng: -97.6900, address: 'Elms Rd, Killeen, TX', type: 'delivery', name: 'Karen' },
   { id: 'st-4-6', lat: 31.0550, lng: -97.6800, address: 'Robinett Rd, Killeen, TX', type: 'pickup', name: 'Leo' },
   // Route 5 Stops (Killeen East)
   { id: 'st-5-1', lat: 31.1150, lng: -97.7100, address: 'E Central Texas Expy, Killeen, TX', type: 'warehouse', name: 'Warehouse' },
-  { id: 'st-5-2', lat: 31.1200, lng: -97.7000, address: 'W.S. Young Dr, Killeen, TX', type: 'delivery', name: 'Name' },
-  { id: 'st-5-3', lat: 31.1250, lng: -97.6900, address: 'E Rancier Ave, Killeen, TX', type: 'delivery', name: 'Name' },
+  { id: 'st-5-2', lat: 31.1200, lng: -97.7000, address: 'W.S. Young Dr, Killeen, TX', type: 'delivery', name: 'Bruce Wayne' },
+  { id: 'st-5-3', lat: 31.1250, lng: -97.6900, address: 'E Rancier Ave, Killeen, TX', type: 'delivery', name: 'Dick Grayson' },
 
   // Route 6 Stops (Killeen West)
   { id: 'st-6-1', lat: 31.1100, lng: -97.7600, address: 'W Veterans Memorial Blvd, Killeen, TX', type: 'warehouse', name: 'Warehouse' },
-  { id: 'st-6-2', lat: 31.1050, lng: -97.7700, address: 'S Fort Hood St, Killeen, TX', type: 'delivery', name: 'Name' },
-  { id: 'st-6-3', lat: 31.1000, lng: -97.7800, address: 'W Stan Schlueter Loop, Killeen, TX', type: 'delivery', name: 'Name' },
+  { id: 'st-6-2', lat: 31.1050, lng: -97.7700, address: 'S Fort Hood St, Killeen, TX', type: 'delivery', name: 'Jason Todd' },
+  { id: 'st-6-3', lat: 31.1000, lng: -97.7800, address: 'W Stan Schlueter Loop, Killeen, TX', type: 'delivery', name: 'Tim Drake' },
 
   // Route 7 Stops (Harker Heights South)
   { id: 'st-7-1', lat: 31.0700, lng: -97.6500, address: 'FM 2410 Rd, Harker Heights, TX', type: 'warehouse', name: 'Warehouse' },
-  { id: 'st-7-2', lat: 31.0650, lng: -97.6400, address: 'Stillhouse Lake Rd, Harker Heights, TX', type: 'delivery', name: 'Name' },
-  { id: 'st-7-3', lat: 31.0600, lng: -97.6300, address: 'Mountain Lion Rd, Harker Heights, TX', type: 'delivery', name: 'Name' },
+  { id: 'st-7-2', lat: 31.0650, lng: -97.6400, address: 'Stillhouse Lake Rd, Harker Heights, TX', type: 'delivery', name: 'Barbara Gordon' },
+  { id: 'st-7-3', lat: 31.0600, lng: -97.6300, address: 'Mountain Lion Rd, Harker Heights, TX', type: 'delivery', name: 'Alfred Pennyworth' },
 
   // Route 8 Stops (Nolanville)
   { id: 'st-8-1', lat: 31.0900, lng: -97.6000, address: 'Main St, Nolanville, TX', type: 'warehouse', name: 'Warehouse' },
-  { id: 'st-8-2', lat: 31.0850, lng: -97.5900, address: 'Old Nolanville Rd, Nolanville, TX', type: 'delivery', name: 'Name' },
-  { id: 'st-8-3', lat: 31.0800, lng: -97.5800, address: 'Paddy Hamilton Rd, Nolanville, TX', type: 'delivery', name: 'Name' },
+  { id: 'st-8-2', lat: 31.0850, lng: -97.5900, address: 'Old Nolanville Rd, Nolanville, TX', type: 'delivery', name: 'Clark Kent' },
+  { id: 'st-8-3', lat: 31.0800, lng: -97.5800, address: 'Paddy Hamilton Rd, Nolanville, TX', type: 'delivery', name: 'Lois Lane' },
 
   // Route 9 Stops (Copperas Cove)
   { id: 'st-9-1', lat: 31.1200, lng: -97.9000, address: 'E Bus 190, Copperas Cove, TX', type: 'warehouse', name: 'Warehouse' },
-  { id: 'st-9-2', lat: 31.1250, lng: -97.9100, address: 'S 1st St, Copperas Cove, TX', type: 'delivery', name: 'Name' },
-  { id: 'st-9-3', lat: 31.1300, lng: -97.9200, address: 'N Main St, Copperas Cove, TX', type: 'delivery', name: 'Name' },
+  { id: 'st-9-2', lat: 31.1250, lng: -97.9100, address: 'S 1st St, Copperas Cove, TX', type: 'delivery', name: 'Diana Prince' },
+  { id: 'st-9-3', lat: 31.1300, lng: -97.9200, address: 'N Main St, Copperas Cove, TX', type: 'delivery', name: 'Steve Trevor' },
 
   // Route 10 Stops (Kempner)
   { id: 'st-10-1', lat: 31.0800, lng: -97.9500, address: 'US-190, Kempner, TX', type: 'warehouse', name: 'Warehouse' },
-  { id: 'st-10-2', lat: 31.0750, lng: -97.9600, address: 'FM 2313, Kempner, TX', type: 'delivery', name: 'Name' },
-  { id: 'st-10-3', lat: 31.0700, lng: -97.9700, address: 'CR 3300, Kempner, TX', type: 'delivery', name: 'Name' },
+  { id: 'st-10-2', lat: 31.0750, lng: -97.9600, address: 'FM 2313, Kempner, TX', type: 'delivery', name: 'Arthur Curry' },
+  { id: 'st-10-3', lat: 31.0700, lng: -97.9700, address: 'CR 3300, Kempner, TX', type: 'delivery', name: 'Mera' },
 
   // Route 11 Stops (Belton)
   { id: 'st-11-1', lat: 31.0600, lng: -97.4600, address: 'N Main St, Belton, TX', type: 'warehouse', name: 'Warehouse' },
-  { id: 'st-11-2', lat: 31.0550, lng: -97.4700, address: 'W 2nd Ave, Belton, TX', type: 'delivery', name: 'Name' },
-  { id: 'st-11-3', lat: 31.0500, lng: -97.4800, address: 'S Loop 121, Belton, TX', type: 'delivery', name: 'Name' },
+  { id: 'st-11-2', lat: 31.0550, lng: -97.4700, address: 'W 2nd Ave, Belton, TX', type: 'delivery', name: 'Hal Jordan' },
+  { id: 'st-11-3', lat: 31.0500, lng: -97.4800, address: 'S Loop 121, Belton, TX', type: 'delivery', name: 'Carol Ferris' },
 
   // Route 12 Stops (Temple)
   { id: 'st-12-1', lat: 31.1000, lng: -97.3400, address: 'S 31st St, Temple, TX', type: 'warehouse', name: 'Warehouse' },
-  { id: 'st-12-2', lat: 31.0950, lng: -97.3500, address: 'W Adams Ave, Temple, TX', type: 'delivery', name: 'Name' },
-  { id: 'st-12-3', lat: 31.0900, lng: -97.3600, address: 'Airport Rd, Temple, TX', type: 'delivery', name: 'Name' },
+  { id: 'st-12-2', lat: 31.0950, lng: -97.3500, address: 'W Adams Ave, Temple, TX', type: 'delivery', name: 'Victor Stone' },
+  { id: 'st-12-3', lat: 31.0900, lng: -97.3600, address: 'Airport Rd, Temple, TX', type: 'delivery', name: 'Silas Stone' },
   
   // Route 13 Stops (Salado)
   { id: 'st-13-1', lat: 30.9500, lng: -97.5300, address: 'N Main St, Salado, TX', type: 'warehouse', name: 'Warehouse' },
-  { id: 'st-13-2', lat: 30.9450, lng: -97.5400, address: 'Royal St, Salado, TX', type: 'delivery', name: 'Name' },
-  { id: 'st-13-3', lat: 30.9400, lng: -97.5500, address: 'Thomas Arnold Rd, Salado, TX', type: 'delivery', name: 'Name' },
+  { id: 'st-13-2', lat: 30.9450, lng: -97.5400, address: 'Royal St, Salado, TX', type: 'delivery', name: 'Billy Batson' },
+  { id: 'st-13-3', lat: 30.9400, lng: -97.5500, address: 'Thomas Arnold Rd, Salado, TX', type: 'delivery', name: 'Freddy Freeman' },
 
   // Route 14 Stops (Jarrell)
   { id: 'st-14-1', lat: 30.8200, lng: -97.6000, address: 'N 5th St, Jarrell, TX', type: 'warehouse', name: 'Warehouse' },
-  { id: 'st-14-2', lat: 30.8150, lng: -97.6100, address: 'CR 305, Jarrell, TX', type: 'delivery', name: 'Name' },
-  { id: 'st-14-3', lat: 30.8100, lng: -97.6200, address: 'Ronald Reagan Blvd, Jarrell, TX', type: 'delivery', name: 'Name' },
+  { id: 'st-14-2', lat: 30.8150, lng: -97.6100, address: 'CR 305, Jarrell, TX', type: 'delivery', name: 'Carter Hall' },
+  { id: 'st-14-3', lat: 30.8100, lng: -97.6200, address: 'Ronald Reagan Blvd, Jarrell, TX', type: 'delivery', name: 'Shiera Hall' },
 ];
 
 export const killeenData = {

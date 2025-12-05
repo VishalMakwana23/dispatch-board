@@ -33,8 +33,8 @@ export const routeDetailsMock = {
       },
       {
         id: 2,
-        name: "Name",
-        address: "123 Main St, City AB W9E2S",
+        name: "Sarah Connor",
+        address: "450 Veteran Memorial Blvd, Killeen, TX",
         time: "12:30 PM PDT 2025/11/18",
         timeWindow: "Pln: 12:30 PM PDT 2025/11/18",
         orders: "2 Orders",
@@ -46,7 +46,7 @@ export const routeDetailsMock = {
       {
         id: 3,
         name: "John Doe",
-        address: "123 Main St, City AB W9E2S",
+        address: "800 W Central Texas Expy, Killeen, TX",
         time: "12:30 PM PDT 2025/11/18",
         timeWindow: "Pln: 12:30 PM PDT 2025/11/18",
         orders: "2 Orders",
@@ -58,8 +58,8 @@ export const routeDetailsMock = {
       },
       {
         id: 4,
-        name: "Name",
-        address: "123 Main St, City AB W9E2S",
+        name: "Mike Ross",
+        address: "200 E Rancier Ave, Killeen, TX",
         time: "12:30 PM PDT 2025/11/18",
         timeWindow: "Pln: 12:30 PM PDT 2025/11/18",
         orders: "2 Orders",
@@ -70,8 +70,8 @@ export const routeDetailsMock = {
       },
       {
         id: 5,
-        name: "Name",
-        address: "123 Main St, City AB W9E2S",
+        name: "Harvey Specter",
+        address: "1001 E Veterans Memorial Blvd, Killeen, TX",
         time: "12:30 PM PDT 2025/11/18",
         timeWindow: "Pln: 12:30 PM PDT 2025/11/18",
         orders: "2 Orders",
@@ -84,7 +84,7 @@ export const routeDetailsMock = {
       {
         id: 6,
         name: "John Doe",
-        address: "123 Main St, City AB W9E2S",
+        address: "200 E Rancier Ave, Killeen, TX",
         time: "Est: 12:30 PM PDT 2025/11/18",
         timeWindow: "Pln: 12:30 PM PDT 2025/11/18",
         orders: "2 Orders",
@@ -96,8 +96,8 @@ export const routeDetailsMock = {
       },
       {
         id: 7,
-        name: "Name",
-        address: "123 Main St, City AB W9E2S",
+        name: "Jessica Pearson",
+        address: "3003 W Stan Schlueter Loop, Killeen, TX",
         time: "12:30 PM PDT 2025/11/18",
         timeWindow: "Pln: 12:30 PM PDT 2025/11/18",
         orders: "2 Orders",
@@ -108,8 +108,8 @@ export const routeDetailsMock = {
       },
        {
         id: 8,
-        name: "John Doe",
-        address: "123 Main St, City AB W9E2S",
+        name: "Louis Litt",
+        address: "567 East Veterans Memorial Blvd",
         time: "12:30 PM PDT 2025/11/18",
         timeWindow: "Pln: 12:30 PM PDT 2025/11/18",
         orders: "2 Orders",
