@@ -232,7 +232,7 @@ export const killeenData = {
     {
       id: 'RT-6677889900',
       type: 'Mid-Mile',
-      status: 'Risk of Delay',
+      status: 'Ongoing',
       alert: 'Risk of Delay',
       riskOfDelay: true,
       driver: { name: 'Jane Smith', company: 'Quick Ship', id: 'dr-6', avatar: 'https://randomuser.me/api/portraits/men/61.jpg' },
@@ -252,7 +252,7 @@ export const killeenData = {
     {
       id: 'RT-8899001122',
       type: 'Final-Mile',
-      status: 'Missing POD',
+      status: 'Status Coded',
       alert: 'Missing POD',
       missingPod: true,
       statusCoded: true,
@@ -282,7 +282,7 @@ export const killeenData = {
     {
       id: 'RT-1122334455',
       type: 'Final-Mile',
-      status: 'Risk of Delay',
+      status: 'Ongoing',
       alert: 'Risk of Delay',
       riskOfDelay: true,
       driver: { name: 'Eva Blue', company: 'Sky High', id: 'dr-11', avatar: 'https://randomuser.me/api/portraits/men/66.jpg' },
@@ -302,7 +302,7 @@ export const killeenData = {
     {
       id: 'RT-3344556677',
       type: 'Final-Mile',
-      status: 'Missing POD',
+      status: 'Status Coded',
       alert: 'Missing POD',
       missingPod: true,
       statusCoded: true,

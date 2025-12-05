@@ -295,22 +295,5 @@ export const mockDrivers = [
     ],
     stats: { totalDistance: '12KM', startTime: '08:00 AM', endTime: '-', duration: '-', loginLocation: 'Academy', logoutLocation: '-', vehicleType: 'Car', stopCount: 2 }
   },
-  // Driver 15 - Morgan's Point Resort
-  {
-    id: "DRV15",
-    name: "Ralph Edwards",
-    avatar: "https://randomuser.me/api/portraits/men/85.jpg",
-    status: "active",
-    permitExpiry: "2023-11-12",
-    company: "Lake View · Morgan's Point",
-    assignments: [ { routeId: "R115", status: "Ongoing" } ],
-    routeColor: '#009688', // Teal
-    stops: [
-        { id: '15-1', lat: 31.1400, lng: -97.4000, status: 'completed', name: 'Warehouse', address: 'Morgan\'s Point Rd', type: 'warehouse', time: '09:00 AM', etaWindow: '09:00-10:00', orders: 2, parcels: 3},
-        { id: '15-2', lat: 31.1450, lng: -97.4050, status: 'ongoing', name: 'Stop 1', address: 'Lake Shore Dr', time: '09:30 AM', etaWindow: '09:15-10:15', orders: 4, parcels: 4, isDriverHere: true},
-        { id: '15-3', lat: 31.1500, lng: -97.4100, status: 'pending', name: 'Stop 2', address: 'Marina Dr', time: '10:00 AM', etaWindow: '09:45-10:45', orders: 2, parcels: 3},
-        { id: '15-4', lat: 31.1550, lng: -97.4150, status: 'pending', name: 'Stop 3', address: 'Cliffside Dr', time: '10:30 AM', etaWindow: '10:15-11:15', orders: 1, parcels: 1}
-    ],
-    stats: { totalDistance: '18KM', startTime: '09:00 AM', endTime: '-', duration: '-', loginLocation: 'Morgan\'s Point', logoutLocation: '-', vehicleType: 'SUV', stopCount: 4 }
-  }
+
 ];

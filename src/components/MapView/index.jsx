@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { MapContainer, TileLayer, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Box, Paper, Typography, IconButton } from '@mui/material';
@@ -15,6 +15,8 @@ import MarketPolygon from './MarketPolygon';
 import MarketMarkers from './MarketMarkers';
 import DefaultMarkers from './DefaultMarkers';
 import MapRouteLayer from '../MapRouteLayer';
+import { killeenData } from '../../mock/killeenData';
+import warehouseIcon from '../../assets/werehouse.svg';
 
 // Utils
 import { calculateConvexHull, calculateCenter, expandPolygon } from '../../utils/geoUtils';
@@ -137,9 +139,34 @@ const MapView = ({ panels, selectedRoutes }) => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         />
         
-        {/* Render Default Markers only if NOT in market mode AND no routes selected */}
-        {!marketMode && (!selectedRoutes || selectedRoutes.length === 0) && (
-          <DefaultMarkers points={mapPoints} />
+        {/* Render Route Warehouses (Default View) */}
+        {!marketMode && (!selectedRoutes || selectedRoutes.length === 0) && (!panels || panels.length === 0) && (
+          <>
+             {killeenData.routes.map(route => {
+                 const warehouse = route.stops.find(s => s.type === 'warehouse') || route.stops[0];
+                 if (!warehouse) return null;
+                 
+                 return (
+                     <Marker
+                        key={route.id}
+                        position={[warehouse.lat, warehouse.lng]}
+                        icon={L.divIcon({
+                            className: 'global-warehouse-icon',
+                            html: `<div style="background-color: black; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); cursor: pointer;">
+                                     <img src="${warehouseIcon}" alt="Warehouse" style="width: 22px; height: 22px; filter: brightness(0) invert(1);" />
+                                   </div>`,
+                            iconSize: [40, 40],
+                            iconAnchor: [20, 20]
+                        })}
+                     >
+                        <Popup>
+                            <strong>Route {route.id}</strong><br />
+                            {route.driver?.name}
+                        </Popup>
+                     </Marker>
+                 );
+             })}
+          </>
         )}
 
         {/* Market Overlay Layers */}

@@ -98,11 +98,11 @@ const DriverMapLayer = ({ driver, allDrivers, onDriverSelect }) => {
     });
   };
 
-  const createTruckIcon = () => {
+  const createGlobalWarehouseIcon = () => {
        return L.divIcon({
-          className: 'driver-truck-icon',
-          html: `<div style="background-color: #E8A72B; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); cursor: pointer;">
-                   <img src="${truckIcon}" alt="Truck" style="width: 24px; height: 24px; filter: brightness(0) invert(1);" />
+          className: 'global-warehouse-icon',
+          html: `<div style="background-color: black; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); cursor: pointer;">
+                   <img src="${warehouseIcon}" alt="Warehouse" style="width: 22px; height: 22px; filter: brightness(0) invert(1);" />
                  </div>`,
           iconSize: [40, 40],
           iconAnchor: [20, 20]
@@ -142,38 +142,31 @@ const DriverMapLayer = ({ driver, allDrivers, onDriverSelect }) => {
   }
 
   // --- RENDER: ALL DRIVERS VIEW ---
+  // Requirement: Show ONLY Warehouse icons for every route.
   if (allDrivers && allDrivers.length > 0) {
       return (
           <>
             {allDrivers.map((drv) => {
-                // Find current location
-                const currentStop = drv.stops.find(s => s.isDriverHere || s.status === 'ongoing') || drv.stops[0];
-                const polylinePositions = drv.stops?.map(s => [s.lat, s.lng]) || [];
+                // Find Warehouse location (usually first stop or type='warehouse')
+                const warehouseStop = drv.stops.find(s => s.type === 'warehouse') || drv.stops[0];
                 
-                if (!currentStop) return null;
+                if (!warehouseStop) return null;
 
                 return (
-                    <React.Fragment key={drv.id}>
-                        {/* Route Line for every driver */}
-                        <Polyline 
-                            positions={polylinePositions} 
-                            pathOptions={{ color: drv.routeColor || '#1A3C34', weight: 4, opacity: 0.6 }}
-                        />
-
-                        {/* Truck Icon for every driver */}
-                        <Marker
-                            position={[currentStop.lat, currentStop.lng]}
-                            icon={createTruckIcon()}
-                            eventHandlers={{
-                                click: () => onDriverSelect && onDriverSelect(drv)
-                            }}
-                        >
-                            <Popup>
-                                <strong>{drv.name}</strong><br/>
-                                {drv.company}
-                            </Popup>
-                        </Marker>
-                    </React.Fragment>
+                    <Marker
+                        key={drv.id}
+                        position={[warehouseStop.lat, warehouseStop.lng]}
+                        icon={createGlobalWarehouseIcon()}
+                        eventHandlers={{
+                            click: () => onDriverSelect && onDriverSelect(drv)
+                        }}
+                    >
+                        <Popup>
+                            <strong>{drv.name}</strong><br/>
+                            {drv.company}<br/>
+                            <span style={{fontSize: '0.8em', color: '#666'}}>Click to view route</span>
+                        </Popup>
+                    </Marker>
                 );
             })}
           </>
