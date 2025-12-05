@@ -6,9 +6,11 @@ import MapView from '../components/MapView';
 const Dashboard = () => {
   const { panels, openPanel, closePanel, togglePanelExpand, closeAllPanels } = useRoutePanels();
   const [marketMode, setMarketMode] = useState(false);
+  const [trafficMode, setTrafficMode] = useState(false);
 
   const handleRouteSelect = (route) => {
-    setMarketMode(false); // Turn off market mode when selecting a route
+    setMarketMode(false); // Turn off market mode
+    setTrafficMode(false); // Turn off traffic mode
     openPanel(route);
   };
 
@@ -17,7 +19,18 @@ const Dashboard = () => {
     setMarketMode(newMarketMode);
     
     if (newMarketMode) {
-      closeAllPanels(); // Close all active route panels when enabling market mode
+      setTrafficMode(false); // Turn off traffic
+      closeAllPanels(); // Deselect routes
+    }
+  };
+
+  const handleTrafficToggle = () => {
+    const newTrafficMode = !trafficMode;
+    setTrafficMode(newTrafficMode);
+
+    if (newTrafficMode) {
+      setMarketMode(false); // Turn off market
+      closeAllPanels(); // Deselect routes
     }
   };
 
@@ -33,6 +46,8 @@ const Dashboard = () => {
         selectedRoutes={panels.map(p => p.data)} 
         marketMode={marketMode}
         onMarketToggle={handleMarketToggle}
+        trafficMode={trafficMode}
+        onTrafficToggle={handleTrafficToggle}
       />
     </DashboardLayout>
   );

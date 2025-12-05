@@ -35,11 +35,11 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 // Component to handle map view transitions
-const MapController = ({ marketMode, selectedMarket, selectedRoutes }) => {
+const MapController = ({ marketMode, trafficMode, selectedMarket, selectedRoutes }) => {
   const map = useMap();
 
   useEffect(() => {
-    if (marketMode && selectedMarket) {
+    if ((marketMode || trafficMode) && selectedMarket) {
       // Fit bounds to the market polygon
       const polygon = selectedMarket.polygon;
       if (polygon && polygon.length > 0) {
@@ -71,7 +71,7 @@ const MapController = ({ marketMode, selectedMarket, selectedRoutes }) => {
         duration: 1.5
       });
     }
-  }, [marketMode, selectedMarket, selectedRoutes, map]);
+  }, [marketMode, trafficMode, selectedMarket, selectedRoutes, map]);
 
   return null;
 };
@@ -91,7 +91,7 @@ const ZoomControl = () => {
   );
 };
 
-const MapView = ({ panels, selectedRoutes, marketMode, onMarketToggle }) => {
+const MapView = ({ panels, selectedRoutes, marketMode, onMarketToggle, trafficMode, onTrafficToggle }) => {
   // Local state for marketMode removed - lifted to parent
   
   // Dynamically calculate market data based on killeenData routes
@@ -138,6 +138,14 @@ const MapView = ({ panels, selectedRoutes, marketMode, onMarketToggle }) => {
 
   const center = [31.1201, -97.7423]; // Centered on mock points
 
+  // Calculate bounds for traffic layer if market exists
+  const trafficBounds = useMemo(() => {
+      if (dynamicMarket && dynamicMarket.polygon) {
+          return L.polygon(dynamicMarket.polygon).getBounds();
+      }
+      return null;
+  }, [dynamicMarket]);
+
   return (
     <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
       <MapContainer 
@@ -146,13 +154,23 @@ const MapView = ({ panels, selectedRoutes, marketMode, onMarketToggle }) => {
         style={{ height: '100%', width: '100%', background: '#f0f0f0' }} 
         zoomControl={false}
       >
-        <MapController marketMode={marketMode} selectedMarket={selectedMarket} selectedRoutes={selectedRoutes} />
+        <MapController marketMode={marketMode} trafficMode={trafficMode} selectedMarket={selectedMarket} selectedRoutes={selectedRoutes} />
         <ZoomControl />
         
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         />
+        
+        {/* Real-time Traffic Layer - Restricted to Market Zones */}
+        {trafficMode && trafficBounds && (
+            <TileLayer
+                url="https://mt0.google.com/vt?lyrs=h,traffic&x={x}&y={y}&z={z}"
+                bounds={trafficBounds}
+                opacity={0.9}
+                zIndex={10}
+            />
+        )}
         
         {/* Render Route Warehouses (Default View) */}
         {!marketMode && (!selectedRoutes || selectedRoutes.length === 0) && (!panels || panels.length === 0) && (
@@ -248,13 +266,15 @@ const MapView = ({ panels, selectedRoutes, marketMode, onMarketToggle }) => {
         {/* Traffic Button */}
         <Paper 
           elevation={3}
+          onClick={onTrafficToggle}
           sx={{ 
             width: 140, 
             borderRadius: 2, 
             overflow: 'hidden', 
-            bgcolor: 'white',
+            bgcolor: trafficMode ? '#e0e0e0' : 'white',
             transition: 'all 0.2s',
-            '&:hover': { transform: 'translateY(-2px)', boxShadow: 4 }
+            '&:hover': { transform: 'translateY(-2px)', boxShadow: 4 },
+            border: trafficMode ? '2px solid #1B3E38' : 'none'
           }}
         >
            <Box sx={{ p: 1.5, textAlign: 'center', cursor: 'pointer', '&:hover': { bgcolor: '#f5f5f5' } }}>
