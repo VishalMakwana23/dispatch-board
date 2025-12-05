@@ -47,15 +47,15 @@ const DashboardLayout = ({ children, panels, onRouteSelect, onTogglePanel, onClo
   const marginLeft = `${(isCollapsed ? 65 : 240) + 350}px`;
 
   const clientMenuItems = [
-    { icon: dashboardIcon, label: 'INSIGHT Engine', path: '/dashboard', action: () => navigate('/dashboard'), disabled: true }, 
-    { icon: <AltRouteIcon />, label: 'APEX Dispatch', active: true, action: () => {} }, 
-    { icon: assetTrackingIcon, label: 'CARE Intelligence', id: 'asset_tracking', disabled: true },
-    { icon: upcomingRouteIcon, label: 'FIELD Command', id: 'upcoming_routes', disabled: true },
-    { icon: currentRouteIcon, label: 'PAYFlow Engine', id: 'current_route', disabled: true },
-    // { icon: pastRouteIcon, label: 'Past Route', id: 'past_route', disabled: true },
-    // { icon: overagesIcon, label: 'Overages', id: 'overages', disabled: true },
-    // { icon: orderLogIcon, label: 'Order Log', id: 'order_log', disabled: true },
-    // { icon: archiveDataIcon, label: 'Archive Data', id: 'archive_data', disabled: true },
+    { icon: dashboardIcon, label: 'Dashboard', path: '/dashboard', action: () => navigate('/dashboard'), disabled: true }, 
+    { icon: <AltRouteIcon />, label: 'Routes', active: true, action: () => {} }, 
+    { icon: assetTrackingIcon, label: 'Asset Tracking', id: 'asset_tracking', disabled: true },
+    { icon: upcomingRouteIcon, label: 'Upcoming Routes', id: 'upcoming_routes', disabled: true },
+    { icon: currentRouteIcon, label: 'Current Route', id: 'current_route', disabled: true },
+    { icon: pastRouteIcon, label: 'Past Route', id: 'past_route', disabled: true },
+    { icon: overagesIcon, label: 'Overages', id: 'overages', disabled: true },
+    { icon: orderLogIcon, label: 'Order Log', id: 'order_log', disabled: true },
+    { icon: archiveDataIcon, label: 'Archive Data', id: 'archive_data', disabled: true },
   ];
 
   return (
