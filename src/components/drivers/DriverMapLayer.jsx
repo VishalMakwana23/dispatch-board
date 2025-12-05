@@ -142,21 +142,38 @@ const DriverMapLayer = ({ driver, allDrivers, onDriverSelect }) => {
   }
 
   // --- RENDER: ALL DRIVERS VIEW ---
-  // Requirement: Show ONLY Warehouse icons for every route.
+  // Requirement: Show Driver icons at their current location.
   if (allDrivers && allDrivers.length > 0) {
       return (
           <>
             {allDrivers.map((drv) => {
-                // Find Warehouse location (usually first stop or type='warehouse')
-                const warehouseStop = drv.stops.find(s => s.type === 'warehouse') || drv.stops[0];
+                // Find driver's current location (isDriverHere or ongoing) or fallback to first stop
+                const currentStop = drv.stops.find(s => s.isDriverHere || s.status === 'ongoing') || drv.stops[0];
                 
-                if (!warehouseStop) return null;
+                if (!currentStop) return null;
+
+                // Create a driver icon similar to single view but maybe slightly simpler if needed, 
+                // or exactly the same to match "Image 2" which likely implies the "Driver Here" look.
+                // We'll use a slightly scaled down version of the "Detailed" driver icon for the overview
+                // to avoid too much clutter, or just use the same style.
+                // Let's use a explicit creator for clarity.
+                
+                const iconHtml = `<div style="background-color: #E8A72B; border-radius: 50%; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.4);">
+                                    <img src="${truckIcon}" alt="Truck" style="width: 20px; height: 20px; filter: brightness(0) invert(1);" />
+                                  </div>`;
+
+                const driverIcon = L.divIcon({
+                    className: 'global-driver-icon',
+                    html: iconHtml,
+                    iconSize: [36, 36], // Slightly smaller than the 40x40 active one, or same. Let's go 36.
+                    iconAnchor: [18, 18]
+                });
 
                 return (
                     <Marker
                         key={drv.id}
-                        position={[warehouseStop.lat, warehouseStop.lng]}
-                        icon={createGlobalWarehouseIcon()}
+                        position={[currentStop.lat, currentStop.lng]}
+                        icon={driverIcon}
                         eventHandlers={{
                             click: () => onDriverSelect && onDriverSelect(drv)
                         }}
