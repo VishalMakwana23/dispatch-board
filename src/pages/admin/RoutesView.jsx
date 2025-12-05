@@ -10,9 +10,11 @@ import { Box } from '@mui/material';
 const RoutesView = ({ activeView, setActiveView, isCollapsed }) => {
   const { panels, openPanel, closePanel, togglePanelExpand, closeAllPanels } = useRoutePanels();
   const [marketMode, setMarketMode] = useState(false);
+  const [trafficMode, setTrafficMode] = useState(false);
 
   const handleRouteSelect = (route) => {
     setMarketMode(false);
+    setTrafficMode(false);
     openPanel(route);
   };
 
@@ -21,6 +23,17 @@ const RoutesView = ({ activeView, setActiveView, isCollapsed }) => {
     setMarketMode(newMarketMode);
     
     if (newMarketMode) {
+      setTrafficMode(false);
+      closeAllPanels();
+    }
+  };
+
+  const handleTrafficToggle = () => {
+    const newTrafficMode = !trafficMode;
+    setTrafficMode(newTrafficMode);
+
+    if (newTrafficMode) {
+      setMarketMode(false);
       closeAllPanels();
     }
   };
@@ -47,6 +60,8 @@ const RoutesView = ({ activeView, setActiveView, isCollapsed }) => {
             selectedRoutes={panels.map(p => p.data)} 
             marketMode={marketMode}
             onMarketToggle={handleMarketToggle}
+            trafficMode={trafficMode}
+            onTrafficToggle={handleTrafficToggle}
         />
         <StatsFooter routes={routes} />
       </Box>
