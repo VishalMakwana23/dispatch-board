@@ -16,6 +16,9 @@ import overagesIcon from '../assets/overage.svg';
 import orderLogIcon from '../assets/dns.svg';
 import archiveDataIcon from '../assets/archive.svg';
 
+import SettingsPanel from '../components/SettingsPanel';
+import ProfilePopup from '../components/ProfilePopup';
+
 const AdminLayout = ({ children, activeView, setActiveView, isCollapsed, setIsCollapsed }) => {
   const navigate = useNavigate();
 
@@ -92,6 +95,8 @@ const AdminLayout = ({ children, activeView, setActiveView, isCollapsed, setIsCo
       >
         {children}
       </Box>
+      <SettingsPanel />
+      <ProfilePopup />
     </Box>
   );
 };
