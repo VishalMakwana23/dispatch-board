@@ -69,8 +69,9 @@ const UnassignedOrdersView = ({ activeView = 'orders', setActiveView, isCollapse
 
   const handleOrderClick = (order) => {
     if (selectedOrder?.id === order.id) {
-      setRecommendationOpen(true);
-      setConfirmingRoute(null); // Reset confirmation if re-clicking
+      setSelectedOrder(null);
+      setRecommendationOpen(false);
+      setConfirmingRoute(null);
     } else {
       setSelectedOrder(order);
       setRecommendationOpen(true);

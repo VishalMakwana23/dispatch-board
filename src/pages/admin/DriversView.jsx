@@ -10,7 +10,11 @@ const DriversView = ({ activeView, setActiveView, isCollapsed }) => {
   const [selectedDriver, setSelectedDriver] = useState(null);
 
   const handleDriverSelect = (driver) => {
-    setSelectedDriver(driver);
+    if (selectedDriver?.id === driver.id) {
+        setSelectedDriver(null);
+    } else {
+        setSelectedDriver(driver);
+    }
   };
 
   const center = [31.1201, -97.7423]; // Default center
