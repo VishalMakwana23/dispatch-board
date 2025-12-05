@@ -35,6 +35,18 @@ const uiSlice = createSlice({
       state.isSettingsOpen = false;
       state.isProfileOpen = false;
     },
+    selectStop: (state, action) => {
+      state.selectedStopId = action.payload;
+    },
+    clearSelectedStop: (state, action) => {
+      if (action.payload) {
+        if (state.selectedStopId === action.payload) {
+            state.selectedStopId = null;
+        }
+      } else {
+        state.selectedStopId = null;
+      }
+    },
   },
 });
 
@@ -46,6 +58,8 @@ export const {
   closeProfile,
   toggleProfile,
   closeAll,
+  selectStop,
+  clearSelectedStop,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

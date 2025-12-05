@@ -74,6 +74,21 @@ const MapController = ({ marketMode, selectedMarket, selectedRoutes }) => {
   return null;
 };
 
+// Zoom Control Component
+const ZoomControl = () => {
+  const map = useMap();
+  
+  return (
+    <Box sx={{ position: 'absolute', bottom: 24, right: 24, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 1 }}>
+         <Paper sx={{ display: 'flex', flexDirection: 'column', borderRadius: 2 }}>
+            <IconButton size="small" onClick={() => map.zoomIn()}><AddIcon /></IconButton>
+            <IconButton size="small" onClick={() => map.zoomOut()}><RemoveIcon /></IconButton>
+         </Paper>
+         {/* Store Icon Removed as per request */}
+    </Box>
+  );
+};
+
 const MapView = ({ panels, selectedRoutes }) => {
   const [marketMode, setMarketMode] = useState(false);
   
@@ -115,6 +130,7 @@ const MapView = ({ panels, selectedRoutes }) => {
         zoomControl={false}
       >
         <MapController marketMode={marketMode} selectedMarket={selectedMarket} selectedRoutes={selectedRoutes} />
+        <ZoomControl />
         
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
@@ -205,16 +221,7 @@ const MapView = ({ panels, selectedRoutes }) => {
         </Paper>
       </Box>
 
-      {/* Zoom Controls Bottom Right */}
-      <Box sx={{ position: 'absolute', bottom: 120, right: 20, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 1 }}>
-         <Paper sx={{ display: 'flex', flexDirection: 'column', borderRadius: 2 }}>
-            <IconButton size="small"><AddIcon /></IconButton>
-            <IconButton size="small"><RemoveIcon /></IconButton>
-         </Paper>
-         <Paper sx={{ borderRadius: '50%', p: 0.5, bgcolor: 'black', color: 'white' }}>
-            <IconButton size="small" sx={{ color: 'white' }}><StoreIcon /></IconButton>
-         </Paper>
-      </Box>
+      {/* Zoom Controls Removed from here and moved inside MapContainer */}
     </Box>
   );
 };

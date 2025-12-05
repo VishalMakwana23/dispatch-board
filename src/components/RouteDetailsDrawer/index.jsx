@@ -4,8 +4,23 @@ import CloseIcon from '@mui/icons-material/Close';
 import CircleIcon from '@mui/icons-material/Circle';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import RouteStopItem from './RouteStopItem';
+import { useRef, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectStop } from '../../redux/slices/uiSlice';
+
 const RouteDetailsDrawer = ({ route, open, onClose }) => {
+  const dispatch = useDispatch();
+  const selectedStopId = useSelector(state => state.ui.selectedStopId);
+  const itemRefs = useRef({});
+
   if (!route) return null;
+
+  // Scroll to selected item
+  useEffect(() => {
+    if (open && selectedStopId && itemRefs.current[selectedStopId]) {
+      itemRefs.current[selectedStopId].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [selectedStopId, open]);
 
   // Map stops to ensure isWarehouse is present
   const stops = route.stops ? route.stops.map(stop => ({
@@ -69,13 +84,16 @@ const RouteDetailsDrawer = ({ route, open, onClose }) => {
         {/* Content - Scrollable */}
         <Box sx={{ flexGrow: 1, overflowY: 'auto', p: 2 }}>
           {details.stops.map((stop, index) => (
-            <RouteStopItem
-              key={stop.id}
-              stop={stop}
-              routeColor={route.color}
-              isFirst={index === 0}
-              isLast={index === details.stops.length - 1}
-            />
+            <div key={stop.id} ref={el => itemRefs.current[stop.id] = el}>
+                <RouteStopItem
+                stop={stop}
+                routeColor={route.color}
+                isFirst={index === 0}
+                isLast={index === details.stops.length - 1}
+                isSelected={selectedStopId === stop.id}
+                onSelect={() => dispatch(selectStop(stop.id))}
+                />
+            </div>
           ))}
         </Box>
       </Paper>
