@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import DriversPanel from '../../components/drivers/DriversPanel';
 import DriverDetailsPopup from '../../components/drivers/DriverDetailsPopup';
 import DriverMapLayer from '../../components/drivers/DriverMapLayer';
+import { mockDrivers } from '../../data/mockDrivers';
 
 const DriversView = ({ activeView, setActiveView, isCollapsed }) => {
   const [selectedDriver, setSelectedDriver] = useState(null);
@@ -17,7 +18,8 @@ const DriversView = ({ activeView, setActiveView, isCollapsed }) => {
     }
   };
 
-  const center = [31.1201, -97.7423]; // Default center
+  // Center map on Killeen, TX by default
+  const center = [31.1201, -97.7423]; 
 
   return (
     <Box sx={{ display: 'flex', height: '100%', width: '100%' }}>
@@ -49,7 +51,11 @@ const DriversView = ({ activeView, setActiveView, isCollapsed }) => {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
             />
             
-            <DriverMapLayer driver={selectedDriver} />
+            <DriverMapLayer 
+                driver={selectedDriver} 
+                allDrivers={mockDrivers}
+                onDriverSelect={handleDriverSelect}
+            />
         </MapContainer>
 
         {/* Bottom Popup */}
