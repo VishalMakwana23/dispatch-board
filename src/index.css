@@ -5,7 +5,8 @@ body {
   padding: 0;
   font-family: 'Montserrat', sans-serif;
   background-color: #F6F7F8;
-  overflow: hidden; /* Prevent global scroll since we have internal scrolling */
+  overflow: hidden;
+  /* Prevent global scroll since we have internal scrolling */
 }
 
 /* Custom Scrollbar for Routes Panel */
@@ -14,20 +15,44 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1; 
+  background: #f1f1f1;
 }
- 
+
 ::-webkit-scrollbar-thumb {
-  background: #ccc; 
+  background: #ccc;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #aaa; 
+  background: #aaa;
 }
 
 /* Leaflet Custom Icon Styles */
 .custom-icon {
   background: transparent;
   border: none;
+}
+
+/* Driver Icon Animation - Zoom In/Out Pulse */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.9);
+    box-shadow: 0 0 0 0 rgba(232, 167, 43, 0.7);
+  }
+
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 10px rgba(232, 167, 43, 0);
+  }
+
+  100% {
+    transform: scale(0.9);
+    box-shadow: 0 0 0 0 rgba(232, 167, 43, 0);
+  }
+}
+
+.pulse-ring {
+  animation: pulse-ring 2s infinite ease-in-out;
+  border-radius: 50%;
+  transform-origin: center center;
 }
