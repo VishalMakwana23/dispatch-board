@@ -4,6 +4,7 @@ import L from 'leaflet';
 import warehouseIcon from '../../assets/werehouse.svg';
 import destinationIcon from '../../assets/Subtract.svg';
 import truckIcon from '../../assets/truck.svg';
+import nameIcon from '../../assets/name.svg';
 
 const STATUS_COLORS = {
   completed: '#107C41', // Green
@@ -86,6 +87,12 @@ const DriverMapLayer = ({ driver, allDrivers, onDriverSelect }) => {
        iconHtml = `<div style="background-color: #1A3C34; border-radius: 50%; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
                     <img src="${warehouseIcon}" alt="Warehouse" style="width: 20px; height: 20px; filter: brightness(0) invert(1);" />
                   </div>`;
+    } else if (stop.status === 'completed') {
+        // Use nameIcon (Checkmark) for completed stops
+        // Using Green #107C41
+        iconHtml = `<div style="background-color: #107C41; border-radius: 50%; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.3);">
+                      <img src="${nameIcon}" alt="Completed" style="width: 14px; height: 14px; filter: brightness(0) invert(1);" />
+                    </div>`;
     } else {
        iconHtml = `<div style="background-color: ${color}; border-radius: 50%; width: 100%; height: 100%; border: 3px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.3);"></div>`;
     }

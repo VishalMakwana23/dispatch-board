@@ -3,6 +3,7 @@ import { Paper, Box, Typography } from '@mui/material';
 import truckIcon from '../../assets/truck.svg';
 import warehouseIcon from '../../assets/werehouse.svg';
 import destinationIcon from '../../assets/Subtract.svg';
+import doneIcon from '../../assets/done_all.svg'; // Using done_all for completed check
 import nameIcon from '../../assets/name.svg'; // Using name icon for generic stop if needed, or we can use custom circles
 
 const LegendItem = ({ color, label, icon, isOutline }) => (
@@ -40,7 +41,8 @@ const MapLegend = () => {
       }}
     >
       <Box mb={1}>
-        <LegendItem icon={warehouseIcon} color="#1A3C34" label="Completed Stop" />
+        <LegendItem icon={warehouseIcon} color="#1A3C34" label="Warehouse" />
+        <LegendItem icon={nameIcon} color="#107C41" label="Completed Stop" />
         <LegendItem icon={truckIcon} color="#E8A72B" label="Current Stop (Driver Here)" />
         <LegendItem icon={truckIcon} color="#AAAAAA" label="Upcoming Stop" isOutline /> 
       </Box>
