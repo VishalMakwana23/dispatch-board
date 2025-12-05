@@ -1,7 +1,7 @@
 
 const users = [
-  { email: "client.portal@ziing.ai", password: "Ziing@123", role: "client" },
-  { email: "admin.portal@ziing.ai", password: "Ziing@123", role: "admin" }
+  { email: "client.portal@ziing.ai", password: "Ziing@123", role: "client", name: "Client Portal" },
+  { email: "admin.portal@ziing.ai", password: "Ziing@123", role: "admin", name: "Admin Portal" }
 ];
 
 export const login = (email, password) => {
@@ -10,7 +10,7 @@ export const login = (email, password) => {
   );
   
   if (user) {
-    return { success: true, role: user.role };
+    return { success: true, user: { name: user.name, email: user.email, role: user.role } };
   } else {
     return { success: false, error: "Invalid email or password" };
   }

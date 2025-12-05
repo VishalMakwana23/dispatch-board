@@ -1,32 +1,21 @@
-import React, { useState } from 'react';
-import { Box, Typography, IconButton, Button, Avatar, Menu, MenuItem } from '@mui/material';
+import React from 'react';
+import { Box, Typography, IconButton, Button, Avatar } from '@mui/material';
 import LanguageIcon from '@mui/icons-material/Language';
-import SettingsIcon from '@mui/icons-material/Settings';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import { useNavigate } from 'react-router-dom';
+import SettingsIcon from '@mui/icons-material/Settings'; // Default MUI fallback if Iconify failed, but we use text/icon button
+import { Icon } from '@iconify/react';
+import { useDispatch } from 'react-redux';
+import { openSettings, openProfile } from '../../redux/slices/uiSlice';
 
 import ziingLogo from '../../assets/ziingLogo.png';
 
 const Topbar = ({ isCollapsed }) => {
-  const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const dispatch = useDispatch();
 
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleLogout = () => {
-    handleMenuClose();
-    localStorage.removeItem('rememberedEmail'); // Optional: clear remember me if desired, or just session
-    // In a real app, you'd clear the auth token here
-    navigate('/login');
+  const currentUser = JSON.parse(localStorage.getItem('currentUser')) || {
+    name: 'John Doe',
+    email: 'johndoe@ziing.ai'
   };
 
   return (
@@ -57,56 +46,37 @@ const Topbar = ({ isCollapsed }) => {
         <Button
           startIcon={<LanguageIcon />}
           endIcon={<KeyboardArrowDownIcon />}
-          sx={{ color: 'text.primary' }}
+          sx={{ color: 'text.primary', textTransform: 'none', fontFamily: 'Montserrat' }}
         >
           EN
         </Button>
         
         <Button
-          startIcon={<SettingsIcon />}
-          sx={{ color: 'text.primary' }}
+          startIcon={<Icon icon="mdi:cog-outline" width="20" height="20" />}
+          sx={{ color: 'text.primary', textTransform: 'none', fontFamily: 'Montserrat' }}
+          onClick={() => dispatch(openSettings())}
         >
           Settings
         </Button>
 
         <Button
           startIcon={<HelpOutlineIcon />}
-          sx={{ color: 'text.primary' }}
+          sx={{ color: 'text.primary', textTransform: 'none', fontFamily: 'Montserrat' }}
         >
           Support
         </Button>
 
         <Box 
           sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 2, cursor: 'pointer' }}
-          onClick={handleMenuOpen}
+          onClick={() => dispatch(openProfile())}
         >
-          <Avatar sx={{ bgcolor: '#FF7043', width: 32, height: 32 }}>J</Avatar>
+          <Avatar sx={{ bgcolor: '#FF7043', width: 32, height: 32 }}>{currentUser.name.charAt(0)}</Avatar>
           <Box>
-             <Typography variant="subtitle2" sx={{ lineHeight: 1.2 }}>Hi John!</Typography>
-             <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1 }}>jasonsmith@mck.com</Typography>
+             <Typography variant="subtitle2" sx={{ lineHeight: 1.2, fontFamily: 'Montserrat' }}>{currentUser.name}</Typography>
+             <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1, fontFamily: 'Montserrat' }}>{currentUser.email}</Typography>
           </Box>
         </Box>
-        <Menu
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleMenuClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-        >
-          <MenuItem onClick={handleLogout}>Logout</MenuItem>
-        </Menu>
       </Box>
-      
-      {/* Date Picker & Toggles (Floating on Map usually, but let's put them in Topbar or a sub-bar if they are global) 
-          In the screenshot they look like they are floating on the map top right.
-          I will put them in the MapView component as absolute positioned elements.
-      */}
     </Box>
   );
 };

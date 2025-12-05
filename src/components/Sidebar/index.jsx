@@ -1,29 +1,20 @@
 import React, { useState } from 'react';
-import { Box, IconButton, Tooltip, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Divider } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu'; // Still import, but might change icon
+import { Box, IconButton, Tooltip, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import SettingsIcon from '@mui/icons-material/Settings';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
-import LogoutIcon from '@mui/icons-material/Logout';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Icon } from '@iconify/react';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { openSettings, openProfile } from '../../redux/slices/uiSlice';
 
 const Sidebar = ({ isCollapsed, setIsCollapsed, menuItems = [] }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const openProfileMenu = Boolean(anchorEl);
-
-  const handleProfileClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleProfileClose = () => {
-    setAnchorEl(null);
-  };
+  
+  // Use Redux
+  const dispatch = useDispatch();
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -134,7 +125,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, menuItems = [] }) => {
                       sx={{ 
                         opacity: isCollapsed ? 0 : 1, 
                         color: 'white',
-                        '& .MuiTypography-root': { fontWeight: active ? 600 : 400 }
+                        '& .MuiTypography-root': { fontWeight: active ? 600 : 400, fontFamily: 'Montserrat' }
                       }} 
                     />
                   </ListItemButton>
@@ -152,6 +143,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, menuItems = [] }) => {
           <ListItem disablePadding sx={{ display: 'block', mb: 1 }}>
             <Tooltip title={isCollapsed ? "Settings" : ""} placement="right">
               <ListItemButton
+                onClick={() => dispatch(openSettings())}
                 sx={{
                   minHeight: 48,
                   justifyContent: isCollapsed ? 'center' : 'initial',
@@ -161,9 +153,9 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, menuItems = [] }) => {
                 }}
               >
                 <ListItemIcon sx={{ minWidth: 0, mr: isCollapsed ? 0 : 3, justifyContent: 'center', color: 'white' }}>
-                  <SettingsIcon />
+                   <Icon icon="mdi:cog-outline" width="24" height="24" />
                 </ListItemIcon>
-                <ListItemText primary="Settings" sx={{ opacity: isCollapsed ? 0 : 1, color: 'white' }} />
+                <ListItemText primary="Settings" sx={{ opacity: isCollapsed ? 0 : 1, color: 'white', '& .MuiTypography-root': { fontFamily: 'Montserrat' } }} />
               </ListItemButton>
             </Tooltip>
           </ListItem>
@@ -172,7 +164,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, menuItems = [] }) => {
           <ListItem disablePadding sx={{ display: 'block' }}>
             <Tooltip title={isCollapsed ? "Profile" : ""} placement="right">
               <ListItemButton
-                onClick={handleProfileClick}
+                onClick={() => dispatch(openProfile())}
                 sx={{
                   minHeight: 48,
                   justifyContent: isCollapsed ? 'center' : 'initial',
@@ -182,40 +174,11 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, menuItems = [] }) => {
                 }}
               >
                 <ListItemIcon sx={{ minWidth: 0, mr: isCollapsed ? 0 : 3, justifyContent: 'center', color: 'white' }}>
-                  <PersonOutlineIcon />
+                  <Icon icon="mdi:account-circle" width="24" height="24" />
                 </ListItemIcon>
-                <ListItemText primary="Profile" sx={{ opacity: isCollapsed ? 0 : 1, color: 'white' }} />
+                <ListItemText primary="Profile" sx={{ opacity: isCollapsed ? 0 : 1, color: 'white', '& .MuiTypography-root': { fontFamily: 'Montserrat' } }} />
               </ListItemButton>
             </Tooltip>
-            
-            {/* Profile Menu */}
-            <Menu
-              anchorEl={anchorEl}
-              open={openProfileMenu}
-              onClose={handleProfileClose}
-              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-              transformOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-              PaperProps={{
-                sx: {
-                  mt: -5,
-                  ml: 2,
-                  backgroundColor: '#FFFFFF',
-                  color: '#333',
-                  borderRadius: '10px',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-                }
-              }}
-            >
-              <MenuItem onClick={handleProfileClose}>
-                <ListItemIcon><AccountCircleIcon fontSize="small" /></ListItemIcon>
-                My Account
-              </MenuItem>
-              <Divider />
-              <MenuItem onClick={handleProfileClose}>
-                <ListItemIcon><LogoutIcon fontSize="small" /></ListItemIcon>
-                Logout
-              </MenuItem>
-            </Menu>
           </ListItem>
         </List>
       </Box>

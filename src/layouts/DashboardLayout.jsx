@@ -22,6 +22,9 @@ import overagesIcon from '../assets/overage.svg';
 import orderLogIcon from '../assets/dns.svg';
 import archiveDataIcon from '../assets/archive.svg';
 
+import SettingsPanel from '../components/SettingsPanel';
+import ProfilePopup from '../components/ProfilePopup';
+
 const DashboardLayout = ({ children, panels, onRouteSelect, onTogglePanel, onClosePanel }) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const navigate = useNavigate();
@@ -103,6 +106,8 @@ const DashboardLayout = ({ children, panels, onRouteSelect, onTogglePanel, onClo
         <StatsFooter routes={killeenData.routes} />
       </Box>
       <ChainOfDelayContainer isCollapsed={isCollapsed} />
+      <SettingsPanel />
+      <ProfilePopup />
     </Box>
   );
 };

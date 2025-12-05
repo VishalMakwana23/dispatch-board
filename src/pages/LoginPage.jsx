@@ -71,9 +71,11 @@ const LoginPage = () => {
         localStorage.removeItem('rememberedEmail');
       }
 
-      if (result.role === 'client') {
+      localStorage.setItem('currentUser', JSON.stringify(result.user));
+
+      if (result.user.role === 'client') {
         navigate('/dashboard');
-      } else if (result.role === 'admin') {
+      } else if (result.user.role === 'admin') {
         navigate('/admin');
       }
     } else {
