@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Box, Typography, Chip } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import PersonIcon from '@mui/icons-material/Person';
@@ -16,6 +16,15 @@ const STATUS_COLORS = {
 };
 
 const RouteStopItem = ({ stop, isLast, isFirst, routeColor, isSelected, onSelect }) => {
+  const itemRef = useRef(null);
+
+  // Auto-scroll into view when selected
+  useEffect(() => {
+    if (isSelected && itemRef.current) {
+        itemRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [isSelected]);
+
   const color = STATUS_COLORS[stop.color] || STATUS_COLORS.grey;
   
   // Determine Icon and Fill
@@ -26,7 +35,7 @@ const RouteStopItem = ({ stop, isLast, isFirst, routeColor, isSelected, onSelect
 
   if (stop.isWarehouse) {
     IconElement = <img src={warehouseIcon} alt="Warehouse" style={{ width: '14px', height: '14px', filter: 'brightness(0) invert(1)' }} />;
-  } else if (stop.status === 'last_location' || isLast) {
+  } else if (stop.status === 'last_location') {
      IconElement = <img src={userIcon} alt="User" style={{ width: '14px', height: '14px', filter: 'brightness(0) invert(1)' }} />;
   } else if (stop.status === 'completed') {
     IconElement = <img src={nameIcon} alt="Completed" style={{ width: '14px', height: '14px', filter: 'brightness(0) invert(1)' }} />;
@@ -55,6 +64,7 @@ const RouteStopItem = ({ stop, isLast, isFirst, routeColor, isSelected, onSelect
 
   return (
     <Box 
+        ref={itemRef}
         onClick={onSelect}
         sx={{ 
             display: 'flex', 

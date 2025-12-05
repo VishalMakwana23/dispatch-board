@@ -6,8 +6,11 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import RouteTimeline from '../RouteTimeline';
+import { useDispatch } from 'react-redux';
+import { clearSelectedStop } from '../../redux/slices/uiSlice';
 
 const RoutePanel = ({ route, expanded, onToggle, onClose }) => {
+  const dispatch = useDispatch();
   // Use route data directly
   const stops = route?.stops ? route.stops.map(stop => ({
     ...stop,
@@ -18,6 +21,12 @@ const RoutePanel = ({ route, expanded, onToggle, onClose }) => {
   const details = route ? { ...route, stops } : null;
 
   if (!details) return null;
+
+  const handleClose = (e) => {
+    e.stopPropagation();
+    dispatch(clearSelectedStop());
+    onClose();
+  };
 
   // Determine status color
   const statusColor = details.stops.find(s => s.isWarehouse)?.color || 'green';
@@ -113,7 +122,7 @@ const RoutePanel = ({ route, expanded, onToggle, onClose }) => {
              
              {/* Show Close Icon ONLY when expanded */}
              {expanded && (
-                 <IconButton onClick={(e) => { e.stopPropagation(); onClose(); }} size="small">
+                 <IconButton onClick={handleClose} size="small">
                    <CloseIcon />
                  </IconButton>
              )}
