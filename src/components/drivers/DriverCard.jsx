@@ -41,10 +41,9 @@ const DriverCard = ({ driver, isSelected, onClick }) => {
         }
       }}
     >
-      {/* Header: Warning + Status */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1.5 }}>
-        <Box>
-             {/* Work Permit Warning */}
+      {/* Row 1: Warning (Left) & Status (Right) */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, minHeight: '24px' }}>
+         <Box>
             {driver.permitExpiry && (
                 <Box sx={{ 
                     bgcolor: '#FFF4E5', // Light Orange
@@ -57,14 +56,43 @@ const DriverCard = ({ driver, isSelected, onClick }) => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: 0.8,
-                    mb: 1.5,
                     width: 'fit-content'
                 }}>
-                    <WarningIcon sx={{ fontSize: 14, color: '#D32F2F' }} />
-                    {driver.permitExpiry.includes('Missing') ? driver.permitExpiry : `Work Permit Expires ${driver.permitExpiry}`}
+                    <WarningIcon sx={{ fontSize: 14, color: '#D32F2F', flexShrink: 0 }} />
+                    <Box component="span">
+                        {driver.permitExpiry.includes('Missing') ? driver.permitExpiry : (
+                            <>
+                                Work Permit Expires{' '}
+                                <Box component="span" sx={{ whiteSpace: 'nowrap' }}>
+                                    {driver.permitExpiry}
+                                </Box>
+                            </>
+                        )}
+                    </Box>
                 </Box>
             )}
+         </Box>
+         
+         <Chip 
+            label={driver.status} 
+            size="small" 
+            sx={{ 
+                bgcolor: getStatusColor(driver.status), 
+                color: 'white', 
+                fontWeight: 600, 
+                fontSize: '11px',
+                height: '24px',
+                textTransform: 'capitalize',
+                borderRadius: '12px',
+                '& .MuiChip-label': { px: 1.5 }
+            }} 
+            icon={<CircleIcon style={{ fontSize: 6, color: 'white', marginLeft: 6 }} />}
+        />
+      </Box>
 
+      {/* Row 2: Name/Company (Left) & Icons (Right) */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+        <Box>
             <Typography variant="h6" sx={{ fontWeight: 700, fontFamily: 'Montserrat', lineHeight: 1.2, fontSize: '18px', mb: 0.5 }}>
                 {driver.name}
             </Typography>
@@ -73,63 +101,53 @@ const DriverCard = ({ driver, isSelected, onClick }) => {
             </Typography>
         </Box>
         
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 1.5 }}>
-            <Chip 
-                label={driver.status} 
-                size="small" 
-                sx={{ 
-                    bgcolor: getStatusColor(driver.status), 
-                    color: 'white', 
-                    fontWeight: 600, 
-                    fontSize: '11px',
-                    height: '24px',
-                    textTransform: 'capitalize',
-                    borderRadius: '12px',
-                    '& .MuiChip-label': { px: 1.5 }
-                }} 
-                icon={<CircleIcon style={{ fontSize: 6, color: 'white', marginLeft: 6 }} />}
-            />
-            <Box sx={{ display: 'flex', gap: 1 }}>
-                <IconButton size="small" sx={{ bgcolor: '#E0F2F1', borderRadius: 1, p: 0.8, width: 32, height: 32 }}>
-                    <PersonOffOutlinedIcon sx={{ fontSize: 18, color: '#00695C' }} />
-                </IconButton>
-                <IconButton size="small" sx={{ bgcolor: '#E0F2F1', borderRadius: 1, p: 0.8, width: 32, height: 32 }}>
-                    <ChatBubbleOutlineIcon sx={{ fontSize: 18, color: '#00695C' }} />
-                </IconButton>
-            </Box>
+        <Box sx={{ display: 'flex', gap: 1 }}>
+            <IconButton size="small" sx={{ bgcolor: '#E0F2F1', borderRadius: 1, p: 0.8, width: 32, height: 32 }}>
+                <PersonOffOutlinedIcon sx={{ fontSize: 18, color: '#00695C' }} />
+            </IconButton>
+            <IconButton size="small" sx={{ bgcolor: '#E0F2F1', borderRadius: 1, p: 0.8, width: 32, height: 32 }}>
+                <ChatBubbleOutlineIcon sx={{ fontSize: 18, color: '#00695C' }} />
+            </IconButton>
         </Box>
       </Box>
 
+      {/* Divider */}
+      <Box sx={{ borderBottom: '1px solid #f0f0f0', mb: 2 }} />
+
       {/* Assignments */}
-      <Box sx={{ mt: 3 }}>
+      <Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
-            <Typography variant="caption" sx={{ color: '#999', fontWeight: 500, fontSize: '12px' }}>Assignments</Typography>
+            <Typography variant="caption" sx={{ color: '#999', fontWeight: 500, fontSize: '13px', fontFamily: 'Montserrat' }}>Assignments</Typography>
             <IconButton size="small" sx={{ padding: 0 }}>
-                 <AddCircleOutlineIcon sx={{ color: '#ccc', fontSize: 20 }} />
+                 <AddCircleOutlineIcon sx={{ color: '#ccc', fontSize: 24 }} />
             </IconButton>
         </Box>
         
         {driver.assignments.map((assign, idx) => (
-            <Box key={idx} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                <Typography variant="body2" sx={{ fontFamily: 'Montserrat', fontWeight: 500, fontSize: '13px', color: '#333' }}>
+            <Box key={idx} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+                <Typography variant="body2" sx={{ fontFamily: 'Montserrat', fontWeight: 500, fontSize: '15px', color: '#333' }}>
                     {assign.routeId}
                 </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    {/* Status Indicator */}
                     {assign.status === 'Ongoing' ? (
-                        <CircleIcon sx={{ fontSize: 12, color: '#2E7D32' }} />
+                        <CircleIcon sx={{ fontSize: 14, color: '#2E7D32' }} /> // Filled for Ongoing
                     ) : (
-                        <RadioButtonUncheckedIcon sx={{ fontSize: 12, color: '#999' }} />
+                        <RadioButtonUncheckedIcon sx={{ fontSize: 14, color: '#999' }} /> // Hollow for Planned
                     )}
+                    
                     <Typography variant="caption" sx={{ 
                         color: assign.status === 'Ongoing' ? '#2E7D32' : '#999',
-                        fontWeight: 600,
-                        fontSize: '12px'
+                        fontWeight: 700,
+                        fontSize: '13px',
+                        textTransform: 'capitalize'
                     }}>
                         {assign.status}
                     </Typography>
                 </Box>
             </Box>
         ))}
+        {/* Placeholder if no assignments to match look? No, assuming data exists */}
       </Box>
     </Paper>
   );

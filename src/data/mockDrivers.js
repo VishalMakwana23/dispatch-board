@@ -67,7 +67,7 @@ export const mockDrivers = [
     name: "Esther Howard",
     avatar: "https://randomuser.me/api/portraits/women/44.jpg",
     status: "inactive",
-    permitExpiry: "2023-9-11",
+    permitExpiry: "2023-09-11",
     company: "Fast Track · Austin",
     assignments: [],
     routeColor: '#9C27B0', // Purple
@@ -183,7 +183,7 @@ export const mockDrivers = [
     id: "DRV8",
     name: "Guy Hawkins",
     avatar: "https://randomuser.me/api/portraits/men/50.jpg",
-    status: "issue",
+    status: "unavailable",
     permitExpiry: "2023-11-12",
     company: "Reliable Delivery · Temple",
      assignments: [ { routeId: "R108", status: "Ongoing" } ],
@@ -284,8 +284,8 @@ export const mockDrivers = [
     id: "DRV14",
     name: "Bessie Cooper",
     avatar: "https://randomuser.me/api/portraits/women/10.jpg",
-    status: "warning",
-    permitExpiry: "2023-11-12",
+    status: "unavailable",
+    permitExpiry: "2023-02-01",
     company: "East Bell · Academy",
     assignments: [ { routeId: "R114", status: "Ongoing" } ],
     routeColor: '#FFC107', // Amber
