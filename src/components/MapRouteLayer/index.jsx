@@ -189,7 +189,7 @@ const StopMarker = ({ stop, index, isDriverHere, isSelected, isLast, dispatch })
                 dispatch(selectStop(stop.id));
             },
             popupclose: () => {
-                dispatch(clearSelectedStop(stop.id));
+                dispatch(clearSelectedStop(stop.id)); // Potential conflict with sidebar selection
             }
         }}
         zIndexOffset={isSelected ? 1000 : (isDriverHere ? 900 : 0)}
