@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useRoutePanels from '../../hooks/useRoutePanels';
 import RoutesPanel from '../../components/RoutesPanel';
 import RightPanelContainer from '../../components/RightPanelContainer';
@@ -8,12 +8,27 @@ import { routes } from '../../mock/routes';
 import { Box } from '@mui/material';
 
 const RoutesView = ({ activeView, setActiveView, isCollapsed }) => {
-  const { panels, openPanel, closePanel, togglePanelExpand } = useRoutePanels();
+  const { panels, openPanel, closePanel, togglePanelExpand, closeAllPanels } = useRoutePanels();
+  const [marketMode, setMarketMode] = useState(false);
+
+  const handleRouteSelect = (route) => {
+    setMarketMode(false);
+    openPanel(route);
+  };
+
+  const handleMarketToggle = () => {
+    const newMarketMode = !marketMode;
+    setMarketMode(newMarketMode);
+    
+    if (newMarketMode) {
+      closeAllPanels();
+    }
+  };
 
   return (
     <>
       <RoutesPanel 
-        onRouteSelect={openPanel} 
+        onRouteSelect={handleRouteSelect} 
         openRouteIds={panels?.map(p => p.routeId) || []} 
         isAdmin={true}
         activeView={activeView}
@@ -27,7 +42,12 @@ const RoutesView = ({ activeView, setActiveView, isCollapsed }) => {
         isCollapsed={isCollapsed}
       />
       <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
-        <MapView panels={panels} />
+        <MapView 
+            panels={panels} 
+            selectedRoutes={panels.map(p => p.data)} 
+            marketMode={marketMode}
+            onMarketToggle={handleMarketToggle}
+        />
         <StatsFooter routes={routes} />
       </Box>
     </>

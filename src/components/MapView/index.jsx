@@ -7,7 +7,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import StoreIcon from '@mui/icons-material/Store';
-import { mapPoints } from '../../mock/mapPoints';
+// import { mapPoints } from '../../mock/mapPoints'; // Deprecated
 // import { markets } from '../../mock/markets'; // No longer needed for dynamic generation
 
 // Components
@@ -91,13 +91,32 @@ const ZoomControl = () => {
   );
 };
 
-const MapView = ({ panels, selectedRoutes }) => {
-  const [marketMode, setMarketMode] = useState(false);
+const MapView = ({ panels, selectedRoutes, marketMode, onMarketToggle }) => {
+  // Local state for marketMode removed - lifted to parent
   
-  // Dynamically calculate market data based on mapPoints
+  // Dynamically calculate market data based on killeenData routes
   const dynamicMarket = useMemo(() => {
-    const hull = calculateConvexHull(mapPoints);
-    const center = calculateCenter(mapPoints);
+    // Collect all stops from all routes
+    const allStops = [];
+    killeenData.routes.forEach(route => {
+        if (route.stops) {
+            route.stops.forEach(stop => {
+                allStops.push({
+                    lat: stop.lat,
+                    lng: stop.lng,
+                    id: stop.id,
+                    type: stop.type,
+                    value: stop.orders || 1, // Default to 1 if undefined
+                    color: stop.color || route.color || 'grey' // Use stop color, fallback to route color
+                });
+            });
+        }
+    });
+
+    if (allStops.length === 0) return null;
+
+    const hull = calculateConvexHull(allStops);
+    const center = calculateCenter(allStops);
     // Expand the polygon slightly so points aren't on the edge
     const expandedHull = expandPolygon(hull, center, 1.3); 
 
@@ -106,9 +125,9 @@ const MapView = ({ panels, selectedRoutes }) => {
         name: 'Killeen',
         polygon: expandedHull,
         center: center,
-        markers: mapPoints
+        markers: allStops // Pass actual stops to markers if needed, or stick to a simplified view
     };
-  }, []); // Re-calculate if mapPoints changes (in a real app, mapPoints would be a prop)
+  }, []); // killeenData is imported, so it's stable. In real app, it would be a dependency.
 
   const [selectedMarket, setSelectedMarket] = useState(dynamicMarket);
 
@@ -118,10 +137,6 @@ const MapView = ({ panels, selectedRoutes }) => {
   }, [dynamicMarket]);
 
   const center = [31.1201, -97.7423]; // Centered on mock points
-
-  const handleMarketToggle = () => {
-    setMarketMode(!marketMode);
-  };
 
   return (
     <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
@@ -173,7 +188,7 @@ const MapView = ({ panels, selectedRoutes }) => {
         {marketMode && selectedMarket && (
           <>
             <MarketPolygon market={selectedMarket} />
-            <MarketMarkers markers={mapPoints} />
+            <MarketMarkers markers={selectedMarket.markers} />
           </>
         )}
 
@@ -214,7 +229,7 @@ const MapView = ({ panels, selectedRoutes }) => {
         {/* Market Button */}
         <Paper 
           elevation={3}
-          onClick={handleMarketToggle}
+          onClick={onMarketToggle}
           sx={{ 
             width: 140, 
             borderRadius: 2, 

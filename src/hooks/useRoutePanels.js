@@ -37,11 +37,16 @@ const useRoutePanels = () => {
     );
   }, []);
 
+  const closeAllPanels = useCallback(() => {
+    setPanels([]);
+  }, []);
+
   return {
     panels,
     openPanel,
     closePanel,
     togglePanelExpand,
+    closeAllPanels,
   };
 };
 
