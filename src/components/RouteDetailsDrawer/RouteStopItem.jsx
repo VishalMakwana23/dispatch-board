@@ -15,7 +15,7 @@ const STATUS_COLORS = {
   grey: '#AAAAAA',
 };
 
-const RouteStopItem = ({ stop, isLast, isFirst, routeColor }) => {
+const RouteStopItem = ({ stop, isLast, isFirst, routeColor, isSelected, onSelect }) => {
   const color = STATUS_COLORS[stop.color] || STATUS_COLORS.grey;
   
   // Determine Icon and Fill
@@ -25,45 +25,59 @@ const RouteStopItem = ({ stop, isLast, isFirst, routeColor }) => {
   let iconBorderColor = color;
 
   if (stop.isWarehouse) {
-    // Warehouse: Green filled, Warehouse icon
     IconElement = <img src={warehouseIcon} alt="Warehouse" style={{ width: '14px', height: '14px', filter: 'brightness(0) invert(1)' }} />;
   } else if (stop.status === 'last_location' || isLast) {
-     // Last Location / Last Stop: Orange filled, User icon
      IconElement = <img src={userIcon} alt="User" style={{ width: '14px', height: '14px', filter: 'brightness(0) invert(1)' }} />;
   } else if (stop.status === 'completed') {
-    // Completed: Green filled, name icon (or checkmark?) Design shows checkmark or similar? 
-    // Image shows "Name" with green circle and white icon inside.
     IconElement = <img src={nameIcon} alt="Completed" style={{ width: '14px', height: '14px', filter: 'brightness(0) invert(1)' }} />;
+  } else if (stop.status === 'ongoing') {
+      // Show Truck Icon? Or just standard icon? 
+      // Requirement says "Place driver marker... on the ongoing stop".
+      // Sidebar should also show it.
+      IconElement = <img src={truckIcon} alt="Truck" style={{ width: '14px', height: '14px', filter: 'brightness(0) invert(1)' }} />;
   } else if (stop.status === 'upcoming' || stop.status === 'pending') {
-    // Upcoming: Outline, Truck icon
     isFilled = false;
     iconBgColor = 'white';
-    // Icon needs to be colored (e.g. green or grey)
     IconElement = <img src={truckIcon} alt="Truck" style={{ width: '14px', height: '14px', filter: 'brightness(0)' }} />; 
   } else {
-    // Others: Truck icon default (filled)
     IconElement = <img src={truckIcon} alt="Truck" style={{ width: '14px', height: '14px', filter: 'brightness(0) invert(1)' }} />;
   }
 
-  // Override for specific design in image:
-  // Warehouse: Green Circle with Warehouse Icon
-  // Stops: Green Circle with Initials/Icon? Or just generic icon.
-  // The image shows:
-  // - Start: Green Circle with "Load" or Warehouse Icon
-  // - Middle: Green Circle with "Name" icon (person?)
-  // - End: Orange Circle with House/User icon
-  // - Connecting line: Green (if completed) or Grey/Dotted? Image shows solid green line.
+  // Vertical Line Color Logic
+  let lineColor = STATUS_COLORS.grey; // Default
+  if (stop.status === 'completed') {
+      lineColor = STATUS_COLORS.green;
+  } else if (stop.status === 'ongoing') {
+      lineColor = STATUS_COLORS.yellow;
+  } else {
+      lineColor = STATUS_COLORS.grey;
+  }
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '80px' }}> 
+    <Box 
+        onClick={onSelect}
+        sx={{ 
+            display: 'flex', 
+            minHeight: '80px',
+            cursor: 'pointer',
+            p: 1,
+            borderRadius: '8px',
+            bgcolor: isSelected ? '#F5F9FF' : 'transparent', // More distinct blue tint
+            border: isSelected ? '1px solid #1976D2' : '1px solid transparent', // Add border
+            transition: 'all 0.2s',
+            '&:hover': {
+                bgcolor: isSelected ? '#F5F9FF' : 'rgba(0,0,0,0.02)'
+            }
+        }}
+    > 
       {/* Timeline Column */}
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mr: 2, minWidth: '32px' }}> 
         
         {/* The Dot/Icon */}
         <Box
           sx={{
-            width: '32px', 
-            height: '32px',
+            width: isSelected ? '36px' : '32px', 
+            height: isSelected ? '36px' : '32px',
             borderRadius: '50%',
             backgroundColor: iconBgColor,
             border: `2px solid ${iconBorderColor}`,
@@ -72,7 +86,8 @@ const RouteStopItem = ({ stop, isLast, isFirst, routeColor }) => {
             justifyContent: 'center',
             zIndex: 1,
             color: isFilled ? 'white' : color,
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            boxShadow: isSelected ? '0 0 0 4px rgba(0,0,0,0.1)' : '0 2px 4px rgba(0,0,0,0.1)',
+            transition: 'all 0.3s ease'
           }}
         >
             {IconElement}
@@ -84,8 +99,10 @@ const RouteStopItem = ({ stop, isLast, isFirst, routeColor }) => {
             sx={{
               width: '3px',
               flexGrow: 1,
-              bgcolor: routeColor || STATUS_COLORS.green, // Consistent line color
-              my: 0,
+              bgcolor: lineColor,
+              opacity: stop.status === 'pending' ? 0.3 : 1, // Optional: make grey line lighter
+              borderRadius: '2px', // Rounded line ends
+              my: 0.5, // Tiny gap from dot
             }}
           />
         )}
@@ -93,9 +110,15 @@ const RouteStopItem = ({ stop, isLast, isFirst, routeColor }) => {
 
       {/* Content Column */}
       <Box sx={{ pb: 3, flexGrow: 1 }}> 
-        <Typography variant="subtitle1" sx={{ fontWeight: 700, fontSize: '15px', lineHeight: 1.2, mb: 0.5 }}>
-          {stop.name}
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+             <Typography variant="subtitle1" sx={{ fontWeight: 700, fontSize: '15px', lineHeight: 1.2, mb: 0.5 }}>
+                {stop.name}
+            </Typography>
+            {stop.status === 'ongoing' && (
+                <Chip icon={<img src={truckIcon} style={{width: 12, height: 12, filter: 'brightness(0) invert(1)'}} />} label="Driver Here" size="small" sx={{ height: 20, fontSize: '10px', bgcolor: '#E8A72B', color: 'white' }} />
+            )}
+        </Box>
+       
         
         <Typography variant="body2" sx={{ fontSize: '13px', color: '#555', mb: 1, lineHeight: 1.4 }}>
           {stop.address}
