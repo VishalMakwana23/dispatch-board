@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Box } from '@mui/material';
 import RoutePanel from '../RoutePanel';
 
-const RightPanelContainer = ({ panels, onToggle, onClose }) => {
+const RightPanelContainer = ({ panels, onToggle, onClose, isCollapsed = true }) => {
   const containerRef = useRef(null);
 
   // Auto-scroll to the right when a new panel is added
@@ -19,7 +19,7 @@ const RightPanelContainer = ({ panels, onToggle, onClose }) => {
       ref={containerRef}
       sx={{
         position: 'fixed',
-        left: '410px', // Start after Sidebar (60) + RoutesPanel (350)
+        left: `${(isCollapsed ? 65 : 240) + 350}px`, // Dynamic left: Sidebar + RoutesPanel
         right: 0,      // Extend to the right edge
         top: 80, 
         bottom: 0,
@@ -32,6 +32,7 @@ const RightPanelContainer = ({ panels, onToggle, onClose }) => {
         zIndex: 1200,
         overflowX: 'auto', 
         pointerEvents: 'none', 
+        transition: 'left 0.3s ease', // Smooth transition
         '& > *': {
           pointerEvents: 'auto', 
         },

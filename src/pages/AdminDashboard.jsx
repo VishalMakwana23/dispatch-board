@@ -10,6 +10,7 @@ import { login } from '../services/authService'; // We might need a checkAuth fu
 
 const AdminDashboard = () => {
   const [activeView, setActiveView] = useState('routes');
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const navigate = useNavigate();
 
   // Simple role check simulation (in a real app, use AuthContext)
@@ -28,18 +29,23 @@ const AdminDashboard = () => {
   const renderView = () => {
     switch (activeView) {
       case 'routes':
-        return <RoutesView activeView={activeView} setActiveView={setActiveView} />;
+        return <RoutesView activeView={activeView} setActiveView={setActiveView} isCollapsed={isCollapsed} />;
       case 'drivers':
-        return <DriversView activeView={activeView} setActiveView={setActiveView} />;
+        return <DriversView activeView={activeView} setActiveView={setActiveView} isCollapsed={isCollapsed} />;
       case 'orders':
-        return <UnassignedOrdersView activeView={activeView} setActiveView={setActiveView} />;
+        return <UnassignedOrdersView activeView={activeView} setActiveView={setActiveView} isCollapsed={isCollapsed} />;
       default:
-        return <RoutesView />;
+        return <RoutesView isCollapsed={isCollapsed} />;
     }
   };
 
   return (
-    <AdminLayout activeView={activeView} setActiveView={setActiveView}>
+    <AdminLayout 
+      activeView={activeView} 
+      setActiveView={setActiveView}
+      isCollapsed={isCollapsed}
+      setIsCollapsed={setIsCollapsed}
+    >
       {renderView()}
     </AdminLayout>
   );

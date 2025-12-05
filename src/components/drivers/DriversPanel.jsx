@@ -11,7 +11,7 @@ import DriverCard from './DriverCard';
 import { mockDrivers } from '../../data/mockDrivers';
 import FilterPopup from '../RoutesPanel/FilterPopup'; // Assuming relative path is correct based on file structure
 
-const DriversPanel = ({ onDriverSelect, selectedDriverId, activeView, setActiveView }) => {
+const DriversPanel = ({ onDriverSelect, selectedDriverId, activeView, setActiveView, isCollapsed = true }) => {
   const [viewAnchorEl, setViewAnchorEl] = useState(null);
   const viewOpen = Boolean(viewAnchorEl);
 
@@ -104,9 +104,10 @@ const DriversPanel = ({ onDriverSelect, selectedDriverId, activeView, setActiveV
         flexDirection: 'column',
         borderRight: '1px solid #e0e0e0',
         position: 'fixed',
-        left: '60px',
+        left: isCollapsed ? '65px' : '240px', // Dynamic left based on sidebar state
         top: '64px', // Assuming Topbar is 64px
         zIndex: 1100,
+        transition: 'left 0.3s ease', // Smooth transition
       }}
     >
       <Box sx={{ p: 2, pb: 1 }}>

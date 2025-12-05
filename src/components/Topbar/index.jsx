@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 import ziingLogo from '../../assets/ziingLogo.png';
 
-const Topbar = () => {
+const Topbar = ({ isCollapsed }) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -35,7 +35,7 @@ const Topbar = () => {
         height: '64px',
         position: 'fixed',
         top: 0,
-        left: '60px', // Sidebar width
+        left: isCollapsed ? '65px' : '240px', // Dynamic left based on sidebar state
         right: 0,
         backgroundColor: 'white',
         zIndex: 1000,
@@ -44,10 +44,11 @@ const Topbar = () => {
         justifyContent: 'space-between',
         px: 3,
         borderBottom: '1px solid #e0e0e0',
+        transition: 'left 0.3s ease', // Smooth transition
       }}
     >
-      {/* Logo */}
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      {/* Logo - Only show if sidebar is collapsed */}
+      <Box sx={{ display: 'flex', alignItems: 'center', opacity: isCollapsed ? 1 : 0, transition: 'opacity 0.2s', pointerEvents: isCollapsed ? 'auto' : 'none' }}>
         <img src={ziingLogo} alt="ziing.ai" style={{ height: '32px' }} />
       </Box>
 

@@ -1,18 +1,82 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box } from '@mui/material';
-import AdminSidebar from '../components/AdminSidebar';
+import Sidebar from '../components/Sidebar';
 import Topbar from '../components/Topbar';
+import LogoHeader from '../components/LogoHeader';
+import { useNavigate } from 'react-router-dom';
+import AltRouteIcon from '@mui/icons-material/AltRoute';
 
-const AdminLayout = ({ children, activeView, setActiveView }) => {
-  // Determine margin based on active view
-  // If 'routes', we expect the RoutesPanel to be present (width 350px) + Sidebar (60px) = 410px
-  // If other views, we only have Sidebar (60px)
-  const marginLeft = activeView === 'routes' ? '410px' : '60px';
+// Import SVG Assets
+import dashboardIcon from '../assets/space_dashboard.svg';
+import assetTrackingIcon from '../assets/person_pin_circle.svg';
+import upcomingRouteIcon from '../assets/route.svg';
+import currentRouteIcon from '../assets/update.svg';
+import pastRouteIcon from '../assets/done_all.svg';
+import overagesIcon from '../assets/overage.svg';
+import orderLogIcon from '../assets/dns.svg';
+import archiveDataIcon from '../assets/archive.svg';
+
+const AdminLayout = ({ children, activeView, setActiveView, isCollapsed, setIsCollapsed }) => {
+  const navigate = useNavigate();
+
+  // Sidebar width: Collapsed = 65px, Expanded = 240px
+  // LogoHeader width: 240px (Static)
+  // Topbar left: 240px (Static)
+  // RoutesPanel width: 350px
+  
+  // Main Content Margin:
+  // If Sidebar is collapsed (65px), we still have LogoHeader at 240px?
+  // User said "logo... static". 
+  // If we want the content to expand when sidebar collapses, the Topbar and LogoHeader relationship is tricky.
+  // But typically "Static Logo Header" means the top-left corner is fixed.
+  // Let's keep Topbar fixed at 240px left for now as per "static" request implies stability.
+  // But the Sidebar below it collapses.
+  
+  const sidebarWidth = isCollapsed ? 65 : 240;
+  const routesPanelWidth = activeView === 'routes' ? 350 : 0;
+  
+  // Adjust margin to align with the visual sidebar/panel edge, 
+  // BUT if Topbar is fixed at 240px, maybe content should also start at 240px?
+  // Or does the content slide under the "empty" logo area?
+  // Let's make content responsive to sidebar.
+  const marginLeft = `${sidebarWidth + routesPanelWidth}px`;
+
+  const adminMenuItems = [
+    { icon: dashboardIcon, label: 'Dashboard', path: '/dashboard', action: () => navigate('/dashboard'), disabled: true },
+    { icon: <AltRouteIcon />, label: 'Routes', id: 'routes', action: () => setActiveView('routes'), active: ['routes', 'drivers', 'orders'].includes(activeView) },
+    { icon: assetTrackingIcon, label: 'Asset Tracking', id: 'asset_tracking', disabled: true },
+    { icon: upcomingRouteIcon, label: 'Upcoming Routes', id: 'upcoming_routes', disabled: true },
+    { icon: currentRouteIcon, label: 'Current Route', id: 'current_route', disabled: true },
+    { icon: pastRouteIcon, label: 'Past Route', id: 'past_route', disabled: true },
+    { icon: overagesIcon, label: 'Overages', id: 'overages', disabled: true },
+    { icon: orderLogIcon, label: 'Order Log', id: 'order_log', disabled: true },
+    { icon: archiveDataIcon, label: 'Archive Data', id: 'archive_data', disabled: true },
+  ];
 
   return (
     <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
-      <AdminSidebar activeView={activeView} setActiveView={setActiveView} />
-      <Topbar />
+      <LogoHeader />
+      <Sidebar 
+        isCollapsed={isCollapsed} 
+        setIsCollapsed={setIsCollapsed} 
+        menuItems={adminMenuItems}
+      />
+      
+      {/* Topbar needs to be adjusted. It was accepting isCollapsed to move. 
+          If LogoHeader is static 240px, Topbar should probably start at 240px always?
+          Or should it move? "give collapse and un collapse at the top menu"
+          If I collapse sidebar, does logo header collapse? User said "logo... static".
+          I will force Topbar to be static left 240px for now to match "static logo".
+      */}
+      <Box sx={{ 
+        position: 'fixed', 
+        top: 0, 
+        left: '240px', 
+        right: 0, 
+        zIndex: 1000 
+      }}>
+        <Topbar isCollapsed={false} /> {/* Pass false to keep it expanded/fixed position if Topbar logic relies on it, or update Topbar CSS override */}
+      </Box>
       
       <Box
         component="main"
@@ -20,10 +84,10 @@ const AdminLayout = ({ children, activeView, setActiveView }) => {
           flexGrow: 1,
           height: '100vh',
           overflow: 'hidden',
-          marginLeft: marginLeft,
-          paddingTop: '64px', // Topbar height
+          marginLeft: marginLeft, // Content still moves with sidebar
+          paddingTop: '64px',
           position: 'relative',
-          transition: 'margin-left 0.3s ease', // Smooth transition when switching views
+          transition: 'margin-left 0.3s ease',
         }}
       >
         {children}

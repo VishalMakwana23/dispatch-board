@@ -7,7 +7,7 @@ import StatsFooter from '../../components/StatsFooter';
 import { routes } from '../../mock/routes';
 import { Box } from '@mui/material';
 
-const RoutesView = ({ activeView, setActiveView }) => {
+const RoutesView = ({ activeView, setActiveView, isCollapsed }) => {
   const { panels, openPanel, closePanel, togglePanelExpand } = useRoutePanels();
 
   return (
@@ -18,11 +18,13 @@ const RoutesView = ({ activeView, setActiveView }) => {
         isAdmin={true}
         activeView={activeView}
         setActiveView={setActiveView}
+        isCollapsed={isCollapsed}
       />
       <RightPanelContainer 
         panels={panels} 
         onToggle={togglePanelExpand} 
         onClose={closePanel} 
+        isCollapsed={isCollapsed}
       />
       <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
         <MapView panels={panels} />

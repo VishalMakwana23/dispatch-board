@@ -7,7 +7,7 @@ import { killeenData } from '../../mock/killeenData';
 import FilterPopup from './FilterPopup';
 import ViewSwitcher from '../ViewSwitcher';
 
-const RoutesPanel = ({ onRouteSelect, openRouteIds = [], isAdmin = false, activeView = 'routes', setActiveView }) => {
+const RoutesPanel = ({ onRouteSelect, openRouteIds = [], isAdmin = false, activeView = 'routes', setActiveView, isCollapsed = true }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
   const filterOpen = Boolean(filterAnchorEl);
@@ -32,9 +32,10 @@ const RoutesPanel = ({ onRouteSelect, openRouteIds = [], isAdmin = false, active
         flexDirection: 'column',
         borderRight: '1px solid #e0e0e0',
         position: 'fixed',
-        left: '60px', // Width of Sidebar
+        left: isCollapsed ? '65px' : '240px', // Dynamic left based on sidebar state
         top: '64px',
         zIndex: 1100,
+        transition: 'left 0.3s ease', // Smooth transition
       }}
     >
       <Box sx={{ p: 2, pb: 1, bgcolor: 'white', borderBottom: '1px solid #e0e0e0' }}>

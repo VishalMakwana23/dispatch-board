@@ -44,7 +44,7 @@ const generateRecommendations = (orderId) => {
   ];
 };
 
-const UnassignedOrdersView = ({ activeView = 'orders', setActiveView }) => {
+const UnassignedOrdersView = ({ activeView = 'orders', setActiveView, isCollapsed = true }) => {
   const [orders, setOrders] = useState(MOCK_UNASSIGNED_ORDERS);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [recommendationOpen, setRecommendationOpen] = useState(false);
@@ -177,7 +177,7 @@ const UnassignedOrdersView = ({ activeView = 'orders', setActiveView }) => {
         sx={{ 
           width: '350px', 
           position: 'fixed',
-          left: '60px', // Match AdminLayout sidebar width
+          left: isCollapsed ? '65px' : '240px', // Dynamic left based on sidebar state
           top: '64px', // Match Topbar height
           bottom: 0,
           bgcolor: '#fff', 
@@ -185,6 +185,7 @@ const UnassignedOrdersView = ({ activeView = 'orders', setActiveView }) => {
           display: 'flex', 
           flexDirection: 'column',
           zIndex: 1100, // Match RoutesPanel z-index
+          transition: 'left 0.3s ease', // Smooth transition
         }}
       >
         {/* Header / Search */}
