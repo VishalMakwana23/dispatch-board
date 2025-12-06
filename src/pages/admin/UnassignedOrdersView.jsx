@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Box, Typography, IconButton, TextField, InputAdornment, Menu, MenuItem, Radio, Badge } from '@mui/material';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -209,8 +209,18 @@ const UnassignedOrdersView = ({ activeView = 'orders', setActiveView, isCollapse
         return true;
     });
   }, [orders, searchQuery, activeFilters]);
-
+  
   const activeFilterCount = activeFilters.markets.length + activeFilters.clients.length;
+
+  // Scroll to selected order in sidebar
+  useEffect(() => {
+    if (selectedOrder) {
+      const element = document.getElementById(`order-card-${selectedOrder.id}`);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  }, [selectedOrder]);
 
   return (
     <Box sx={{ height: 'calc(100vh - 64px)', overflow: 'hidden', bgcolor: '#F4F5F7', position: 'relative' }}>
@@ -267,12 +277,13 @@ const UnassignedOrdersView = ({ activeView = 'orders', setActiveView, isCollapse
         {/* List */}
         <Box sx={{ flexGrow: 1, overflowY: 'auto', p: 2, bgcolor: '#F8F9FA' }}>
           {filteredOrders.map(order => (
-            <OrderCard
-              key={order.id}
-              order={order}
-              isSelected={selectedOrder?.id === order.id}
-              onClick={handleOrderClick}
-            />
+            <div id={`order-card-${order.id}`} key={order.id}>
+                <OrderCard
+                order={order}
+                isSelected={selectedOrder?.id === order.id}
+                onClick={handleOrderClick}
+                />
+            </div>
           ))}
           {filteredOrders.length === 0 && (
             <Typography variant="body2" color="textSecondary" align="center" sx={{ mt: 4 }}>
@@ -304,6 +315,7 @@ const UnassignedOrdersView = ({ activeView = 'orders', setActiveView, isCollapse
             orders={filteredOrders} 
             selectedOrder={selectedOrder} 
             drivers={confirmingRoute ? [] : mockDrivers}
+            onSelectOrder={handleOrderClick}
           />
 
           {/* Preview Layer: Show Route when confirming */}

@@ -97,7 +97,7 @@ const createSelectedOrderIcon = (type) => {
     }
 };
 
-const OrderMapLayer = ({ orders, selectedOrder, drivers }) => {
+const OrderMapLayer = ({ orders, selectedOrder, drivers, onSelectOrder }) => {
   const map = useMap();
 
   useEffect(() => {
@@ -194,6 +194,9 @@ const OrderMapLayer = ({ orders, selectedOrder, drivers }) => {
           key={order.id}
           position={[order.pickup.lat, order.pickup.lng]}
           icon={createOrderIcon(order)}
+          eventHandlers={{
+            click: () => onSelectOrder && onSelectOrder(order)
+          }}
         >
            <Popup maxWidth={200}>
                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '5px', gap: '8px' }}>
