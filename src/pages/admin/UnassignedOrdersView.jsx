@@ -18,7 +18,8 @@ import SuccessToast from '../../components/UnassignedOrders/SuccessToast';
 import ViewSwitcher from '../../components/ViewSwitcher';
 import FilterPopup from '../../components/RoutesPanel/FilterPopup';
 
-import { MOCK_UNASSIGNED_ORDERS, MOCK_CLUSTERS } from '../../data/mockUnassignedOrders';
+import { MOCK_UNASSIGNED_ORDERS } from '../../data/mockUnassignedOrders';
+import { mockDrivers } from '../../data/mockDrivers';
 
 const generateRecommendations = (orderId) => {
   const suffix = orderId.slice(-4);
@@ -260,8 +261,8 @@ const UnassignedOrdersView = ({ activeView = 'orders', setActiveView, isCollapse
           {/* Base Layer: Order Markers */}
           <OrderMapLayer 
             orders={filteredOrders} 
-            clusters={MOCK_CLUSTERS}
             selectedOrder={selectedOrder} 
+            drivers={mockDrivers}
           />
 
           {/* Preview Layer: Show Route when confirming */}

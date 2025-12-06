@@ -1,0 +1,95 @@
+/* Marker Animations */
+
+.custom-order-icon,
+.custom-cluster-icon,
+.custom-driver-icon {
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.custom-order-icon:hover,
+.custom-cluster-icon:hover {
+    transform: scale(1.1);
+    z-index: 1000 !important;
+}
+
+.custom-driver-icon:hover {
+    transform: scale(1.15);
+    z-index: 1000 !important;
+}
+
+/* Driver Icon Styling */
+.driver-marker-container {
+    position: relative;
+    width: 48px;
+    height: 48px;
+}
+
+.driver-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid #22C55E;
+    /* Default active green */
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.driver-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.vehicle-badge {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 20px;
+    height: 20px;
+    background-color: #333;
+    border: 2px solid white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Cluster Marker */
+.cluster-marker {
+    background-color: #333;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    border: 2px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Order Marker */
+.order-marker svg {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Selected Marker Bounce Animation */
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.fa-bounce svg {
+    animation: bounce 1.5s infinite;
+}
