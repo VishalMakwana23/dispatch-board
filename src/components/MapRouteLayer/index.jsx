@@ -308,7 +308,7 @@ const MapRouteLayer = ({ route }) => {
         );
       })}
 
-      <MapLegend />
+      <MapLegend showPickupDelivery={route?.isUnassignedPreview} />
     </>
   );
 };

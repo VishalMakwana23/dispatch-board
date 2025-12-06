@@ -21,29 +21,7 @@ import FilterPopup from '../../components/RoutesPanel/FilterPopup';
 import { MOCK_UNASSIGNED_ORDERS } from '../../data/mockUnassignedOrders';
 import { mockDrivers } from '../../data/mockDrivers';
 
-const generateRecommendations = (orderId) => {
-  const suffix = orderId.slice(-4);
-  return [
-    {
-      routeId: `CAZA${suffix}89654`,
-      driver: "Amy Doe",
-      distance: "12km",
-      statusColor: '#0B8A41'
-    },
-    {
-      routeId: `LJKC${suffix}347547`,
-      driver: "Avy KK",
-      distance: "8km",
-      statusColor: '#0B8A41'
-    },
-    {
-      routeId: `ABCA${suffix}005210`,
-      driver: "William AAA",
-      distance: "6km",
-      statusColor: '#B0B0B0'
-    }
-  ];
-};
+
 
 const UnassignedOrdersView = ({ activeView = 'orders', setActiveView, isCollapsed = true }) => {
   const [orders, setOrders] = useState(MOCK_UNASSIGNED_ORDERS);
@@ -63,9 +41,24 @@ const UnassignedOrdersView = ({ activeView = 'orders', setActiveView, isCollapse
   });
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Dynamic Recommendations using mockDrivers
   const currentRecommendations = useMemo(() => {
     if (!selectedOrder) return [];
-    return generateRecommendations(selectedOrder.id);
+
+    // Filter active drivers
+    const availableDrivers = mockDrivers.filter(d => d.status === 'active' || d.status === 'ongoing');
+    
+    // For demo, just take the first 3
+    const potentialDrivers = availableDrivers.slice(0, 3);
+
+    return potentialDrivers.map(driver => ({
+      routeId: driver.assignments[0]?.routeId || `ROUTE-${driver.id}`,
+      driverId: driver.id, // Keep reference
+      driver: driver.name,
+      distance: "12km", // Mock distance logic
+      statusColor: driver.status === 'active' ? '#0B8A41' : '#E8A72B', // Green for active, Orange for ongoing
+      fullDriverData: driver // Pass full object for preview construction
+    }));
   }, [selectedOrder]);
 
   const handleOrderClick = (order) => {
@@ -82,8 +75,56 @@ const UnassignedOrdersView = ({ activeView = 'orders', setActiveView, isCollapse
 
   // Called when "+" is clicked in Recommendation Popup
   const handleInitiateAssign = (routeId) => {
-    const route = currentRecommendations.find(r => r.routeId === routeId);
-    setConfirmingRoute(route);
+    const recommendation = currentRecommendations.find(r => r.routeId === routeId);
+    if (!recommendation) return;
+
+    // Construct Preview Route
+    const driver = recommendation.fullDriverData;
+    const existingStops = driver.stops || [];
+
+    // Insert new stops at the END of the route (User Requirement: "first complete all the order and after pick this unassigned")
+    // So we just append them to the end of existing stops
+    
+    // Create new stops
+    const pickupStop = {
+        id: `preview-pickup-${selectedOrder.id}`,
+        lat: selectedOrder.pickup.lat,
+        lng: selectedOrder.pickup.lng,
+        name: 'PICKUP',
+        address: selectedOrder.pickup.address,
+        status: 'pending', 
+        type: 'pickup',
+        isSelected: true, // Auto-highlight
+        parcels: selectedOrder.items
+    };
+
+    const deliveryStop = {
+        id: `preview-delivery-${selectedOrder.id}`,
+        lat: selectedOrder.delivery.lat,
+        lng: selectedOrder.delivery.lng,
+        name: 'DELIVERY',
+        address: selectedOrder.delivery.address,
+        status: 'pending',
+        type: 'delivery',
+        isSelected: true,
+        parcels: selectedOrder.items
+    };
+
+    // Construct new stops array: Existing Driver Stops + New Pickup + New Delivery
+    const newStops = [
+        ...existingStops,
+        pickupStop,
+        deliveryStop
+    ];
+
+    const previewRoute = {
+        ...driver, // Copy driver properties (color, etc)
+        stops: newStops,
+        color: driver.routeColor || '#3F8CFF',
+        isUnassignedPreview: true // Flag for MapLegend
+    };
+
+    setConfirmingRoute(previewRoute);
     setRecommendationOpen(false); // Close recommendation popup
   };
 
@@ -95,7 +136,7 @@ const UnassignedOrdersView = ({ activeView = 'orders', setActiveView, isCollapse
       // Show Toast
       setToast({
         message: "Order has been successfully added to route-",
-        routeId: confirmingRoute.routeId
+        routeId: confirmingRoute.assignments?.[0]?.routeId || confirmingRoute.id // Handle missing assignments
       });
 
       setSelectedOrder(null);
@@ -262,7 +303,7 @@ const UnassignedOrdersView = ({ activeView = 'orders', setActiveView, isCollapse
           <OrderMapLayer 
             orders={filteredOrders} 
             selectedOrder={selectedOrder} 
-            drivers={mockDrivers}
+            drivers={confirmingRoute ? [] : mockDrivers}
           />
 
           {/* Preview Layer: Show Route when confirming */}

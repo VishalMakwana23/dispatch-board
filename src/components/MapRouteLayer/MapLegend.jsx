@@ -24,7 +24,26 @@ const LegendItem = ({ color, label, icon, isOutline }) => (
   </Box>
 );
 
-const MapLegend = () => {
+const LegendPinItem = ({ color, label, letter }) => (
+  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5, gap: 1.5 }}>
+    <Box sx={{ 
+        width: 24, 
+        height: 24, 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center'
+    }}>
+        <svg width="20" height="24" viewBox="0 0 50 60" fill="none">
+            <path d="M25 0C11.1929 0 0 11.1929 0 25C0 42.5 25 60 25 60C25 60 50 42.5 50 25C50 11.1929 38.8071 0 25 0Z" fill={color}/>
+            <circle cx="25" cy="25" r="10" fill="white"/>
+            <text x="50%" y="45%" dominantBaseline="middle" textAnchor="middle" fontSize="20" fontWeight="bold" fill={color}>{letter}</text>
+        </svg>
+    </Box>
+    <Typography variant="body2" sx={{ fontSize: '12px', fontWeight: 500 }}>{label}</Typography>
+  </Box>
+);
+
+const MapLegend = ({ showPickupDelivery }) => {
   return (
     <Paper
       elevation={3}
@@ -44,7 +63,14 @@ const MapLegend = () => {
         <LegendItem icon={warehouseIcon} color="#1A3C34" label="Warehouse" />
         <LegendItem icon={nameIcon} color="#107C41" label="Completed Stop" />
         <LegendItem icon={truckIcon} color="#E8A72B" label="Current Stop (Driver Here)" />
-        <LegendItem icon={truckIcon} color="#AAAAAA" label="Upcoming Stop" isOutline /> 
+        <LegendItem icon={truckIcon} color="#AAAAAA" label="Upcoming Stop" isOutline />
+        
+        {showPickupDelivery && (
+          <>
+            <LegendPinItem color="#FF6300" label="Pickup Location" letter="P" />
+            <LegendPinItem color="#333333" label="Delivery Location" letter="D" />
+          </>
+        )}
       </Box>
     </Paper>
   );
