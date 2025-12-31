@@ -12,7 +12,7 @@ const RoutesPanel = ({ onRouteSelect, openRouteIds = [], isAdmin = false, active
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
   const filterOpen = Boolean(filterAnchorEl);
 
-  const filteredRoutes = killeenData.routes.filter(route => 
+  const filteredRoutes = killeenData.routes.filter(route =>
     route.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
     route.driver.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -41,14 +41,14 @@ const RoutesPanel = ({ onRouteSelect, openRouteIds = [], isAdmin = false, active
       <Box sx={{ p: 2, pb: 1, bgcolor: 'white', borderBottom: '1px solid #e0e0e0' }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-             {isAdmin ? (
-                <ViewSwitcher activeView={activeView} setActiveView={setActiveView} />
-             ) : (
-                <>
-                    <Typography variant="h6" sx={{ fontWeight: 700 }}>Routes</Typography>
-                    <Typography variant="caption" sx={{ color: 'text.secondary', bgcolor: '#e0e0e0', px: 0.8, py: 0.2, borderRadius: 1 }}>{filteredRoutes.length}</Typography>
-                </>
-             )}
+            {isAdmin ? (
+              <ViewSwitcher activeView={activeView} setActiveView={setActiveView} />
+            ) : (
+              <>
+                <Typography variant="h6" sx={{ fontWeight: 700 }}>Routes</Typography>
+                <Typography variant="caption" sx={{ color: 'text.secondary', bgcolor: '#e0e0e0', px: 0.8, py: 0.2, borderRadius: 1 }}>{filteredRoutes.length}</Typography>
+              </>
+            )}
           </Box>
           <IconButton size="small" onClick={(e) => setFilterAnchorEl(e.currentTarget)}>
             <FilterListIcon />
@@ -75,9 +75,9 @@ const RoutesPanel = ({ onRouteSelect, openRouteIds = [], isAdmin = false, active
 
       <Box sx={{ flexGrow: 1, overflowY: 'auto', p: 2, pb: 10, display: 'flex', flexDirection: 'column', gap: 2 }}>
         {filteredRoutes.map((route) => (
-          <RouteCard 
-            key={route.id} 
-            route={route} 
+          <RouteCard
+            key={route.id}
+            route={route}
             selected={openRouteIds.includes(route.id)}
             onClick={() => onRouteSelect && onRouteSelect(route)}
             isAdmin={isAdmin}
