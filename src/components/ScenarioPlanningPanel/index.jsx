@@ -5,7 +5,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import AddIcon from '@mui/icons-material/Add';
 import FilterPopup from '../RoutesPanel/FilterPopup'; // Reuse filter if needed or create new
 
-const ScenarioPlanningPanel = ({ isCollapsed = false }) => {
+const ScenarioPlanningPanel = ({ isCollapsed = false, onAdd }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterAnchorEl, setFilterAnchorEl] = useState(null);
     const filterOpen = Boolean(filterAnchorEl);
@@ -52,6 +52,7 @@ const ScenarioPlanningPanel = ({ isCollapsed = false }) => {
                     fullWidth
                     variant="outlined"
                     startIcon={<AddIcon />}
+                    onClick={onAdd}
                     sx={{
                         borderColor: '#1B3E38',
                         color: '#1B3E38',
