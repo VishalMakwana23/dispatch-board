@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, Typography, Paper, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Step1NetworkContext from './Steps/Step1NetworkContext';
+import Step2VehicleDriverContext from './Steps/Step2VehicleDriverContext';
 import PlaceholderStep from './Steps/PlaceholderStep';
 
 const STEPS = [
@@ -15,18 +16,37 @@ const STEPS = [
 const CreateOperatingWizard = ({ onBack }) => {
     const [currentStep, setCurrentStep] = useState(1);
     const [formData, setFormData] = useState({
+        // Step 1 Data
         markets: [],
         cities: [],
         depots: [],
         linhaulModel: 'exclusive',
-        startDate: '2023-12-03', // Mock default
+        startDate: '2023-12-03',
         endDate: '2023-12-12',
         weeklyHours: {
-            day_1: { start: '6:00am', end: '7:00am' }, // Mock M
-            day_2: { start: '8:00am', end: '9:00am' }, // Mock T
-            day_3: { start: '10:00am', end: '11:00am' }, // Mock W
-            day_4: { start: '12:00pm', end: '1:00pm' }, // Mock T
-            day_5: { start: '2:00pm', end: '3:00pm' }, // Mock F
+            day_1: { start: '6:00am', end: '7:00am' },
+            day_2: { start: '8:00am', end: '9:00am' },
+            day_3: { start: '10:00am', end: '11:00am' },
+            day_4: { start: '12:00pm', end: '1:00pm' },
+            day_5: { start: '2:00pm', end: '3:00pm' },
+        },
+        // Step 2 Data
+        selectedVehicles: {},
+        vehicleConsiderations: [],
+        driverSchedule: {
+            serviceHours: 5,
+            weeklyHours: {
+                day_1: { start: '6:00am', end: '7:00am' },
+                day_2: { start: '8:00am', end: '9:00am' },
+                day_3: { start: '10:00am', end: '11:00am' },
+                day_4: { start: '12:00pm', end: '1:00pm' },
+                day_5: { start: '2:00pm', end: '3:00pm' },
+            }
+        },
+        driverEligibility: [],
+        driverConsiderations: {
+            maxStops: 5,
+            maxDistance: 5
         }
     });
 
@@ -45,7 +65,7 @@ const CreateOperatingWizard = ({ onBack }) => {
             case 1:
                 return <Step1NetworkContext data={formData} updateData={updateFormData} />;
             case 2:
-                return <PlaceholderStep title="Vehicle & Driver Context" />;
+                return <Step2VehicleDriverContext data={formData} updateData={updateFormData} />;
             case 3:
                 return <PlaceholderStep title="Service Level Agreements" />;
             case 4:
