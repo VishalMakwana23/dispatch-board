@@ -4,6 +4,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Step1NetworkContext from './Steps/Step1NetworkContext';
 import Step2VehicleDriverContext from './Steps/Step2VehicleDriverContext';
 import Step3ServiceLevelAgreements from './Steps/Step3ServiceLevelAgreements';
+import Step4OptimizationObjectives from './Steps/Step4OptimizationObjectives';
 import PlaceholderStep from './Steps/PlaceholderStep';
 
 const STEPS = [
@@ -70,6 +71,14 @@ const CreateOperatingWizard = ({ onBack }) => {
                 day_5: { start: '2:00pm', end: '3:00pm' },
             },
             stopLevel: { start: '6:00am', end: '7:00am' }
+        },
+        // Step 4 Data
+        optimizationObjective: 'reduce_distance',
+        scenarioVariables: {
+            traffic: true,
+            weather: true,
+            roadRestrictions: true,
+            construction: true
         }
     });
 
@@ -92,7 +101,7 @@ const CreateOperatingWizard = ({ onBack }) => {
             case 3:
                 return <Step3ServiceLevelAgreements data={formData} updateData={updateFormData} />;
             case 4:
-                return <PlaceholderStep title="Optimization Objectives" />;
+                return <Step4OptimizationObjectives data={formData} updateData={updateFormData} />;
             case 5:
                 return <PlaceholderStep title="Upload Route Data" />;
             default:
