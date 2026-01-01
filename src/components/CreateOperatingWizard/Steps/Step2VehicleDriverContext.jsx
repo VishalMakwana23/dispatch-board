@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Box, Typography, Grid, Paper, Checkbox, FormControlLabel, Radio, TextField, Select, MenuItem, Chip, IconButton, InputAdornment } from '@mui/material';
+import { Box, Typography, Grid, Paper, Checkbox, FormControlLabel, Radio, TextField, Select, MenuItem, Chip, IconButton, InputAdornment, Divider } from '@mui/material';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import AirportShuttleIcon from '@mui/icons-material/AirportShuttle';
@@ -210,6 +210,8 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
                 </Box>
             </Box>
 
+            <Divider orientation="vertical" flexItem sx={{ borderColor: '#E0E0E0' }} />
+
             {/* Right Column: Driver Context */}
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <Typography variant="subtitle2" fontWeight="600" color="#1B3E38">Driver Context</Typography>
@@ -244,22 +246,24 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
                             const isActive = !!dayConfig.start;
 
                             return (
-                                <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1.5, width: '100%' }}>
                                     <Box sx={{
                                         width: 32, height: 32, borderRadius: '50%',
                                         bgcolor: isActive ? '#1B3E38' : '#F0F0F0',
                                         color: isActive ? 'white' : '#9E9E9E',
                                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        fontSize: 13, fontWeight: 600
+                                        fontSize: 13, fontWeight: 600,
+                                        flexShrink: 0
                                     }}>
                                         {day}
                                     </Box>
                                     <Select
                                         size="small"
+                                        fullWidth
                                         value={dayConfig.start}
                                         onChange={(e) => handleWeeklyHoursChange(dayKey, 'start', e.target.value)}
                                         sx={{
-                                            minWidth: 120, bgcolor: 'white',
+                                            flex: 1, bgcolor: 'white',
                                             borderRadius: 1,
                                             '& .MuiOutlinedInput-notchedOutline': { borderColor: isActive ? '#1B3E38' : '#E0E0E0' },
                                             '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#1B3E38' },
@@ -273,10 +277,11 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
                                     <Typography color="text.secondary">-</Typography>
                                     <Select
                                         size="small"
+                                        fullWidth
                                         value={dayConfig.end}
                                         onChange={(e) => handleWeeklyHoursChange(dayKey, 'end', e.target.value)}
                                         sx={{
-                                            minWidth: 120, bgcolor: 'white',
+                                            flex: 1, bgcolor: 'white',
                                             borderRadius: 1,
                                             '& .MuiOutlinedInput-notchedOutline': { borderColor: isActive ? '#1B3E38' : '#E0E0E0' },
                                             '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#1B3E38' },

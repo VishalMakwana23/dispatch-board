@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, RadioGroup, FormControlLabel, Radio, Switch } from '@mui/material';
+import { Box, Typography, RadioGroup, FormControlLabel, Radio, Switch, Divider } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 const OBJECTIVES = [
@@ -112,6 +112,8 @@ const Step4OptimizationObjectives = ({ data, updateData }) => {
                 </RadioGroup>
             </Box>
 
+            <Divider orientation="vertical" flexItem sx={{ borderColor: '#E0E0E0' }} />
+
             {/* Right Column: Real-World Conditions */}
             <Box sx={{ flex: 1 }}>
                 <Typography variant="subtitle2" fontWeight="600" color="#1B3E38" mb={2}>Real-World Conditions (Scenario Variables)</Typography>
@@ -137,7 +139,7 @@ const Step4OptimizationObjectives = ({ data, updateData }) => {
                 </Box>
             </Box>
 
-        </Box>
+        </Box >
     );
 };
 

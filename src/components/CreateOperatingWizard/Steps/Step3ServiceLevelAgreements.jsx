@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, TextField, MenuItem, Select, RadioGroup, FormControlLabel, Radio, InputAdornment } from '@mui/material';
+import { Box, Typography, TextField, MenuItem, Select, RadioGroup, FormControlLabel, Radio, InputAdornment, Divider } from '@mui/material';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -158,51 +158,56 @@ const Step3ServiceLevelAgreements = ({ data, updateData }) => {
                     <Box sx={{ border: '1px solid #E0E0E0', borderRadius: 2, p: 2 }}>
                         <Typography variant="caption" fontWeight="600" mb={2} display="block">Operational Constraints</Typography>
 
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid #E0E0E0', borderRadius: 1, p: 1 }}>
-                                <Typography variant="body2" sx={{ flex: 1, color: '#666' }}>Max dwell time at stops</Typography>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                            {/* Max dwell time */}
+                            <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid #E0E0E0', borderRadius: 3, p: 1.5 }}>
+                                <Typography variant="body2" sx={{ flex: 1, color: '#333', fontWeight: 500 }}>Max dwell time at stops</Typography>
                                 <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid #1B3E38', borderRadius: 1, px: 1, py: 0.5 }}>
                                     <TextField
                                         variant="standard"
                                         InputProps={{ disableUnderline: true }}
                                         value={data.operationalConstraints?.maxDwell ?? 5}
                                         onChange={(e) => handleConstraintChange('maxDwell', e.target.value)}
-                                        sx={{ width: 30, '& input': { textAlign: 'center', fontSize: '0.9rem', fontWeight: 600, p: 0 } }}
+                                        sx={{ width: 30, '& input': { textAlign: 'center', fontSize: '0.9rem', fontWeight: 600, p: 0, color: '#9E9E9E' } }}
                                     />
                                 </Box>
                                 <Typography variant="caption" color="text.secondary" ml={1}>Hours</Typography>
                             </Box>
 
-                            <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid #E0E0E0', borderRadius: 1, p: 1 }}>
-                                <Typography variant="body2" sx={{ flex: 1, color: '#666' }}>Max Stops</Typography>
+                            {/* Max Stops */}
+                            <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid #E0E0E0', borderRadius: 3, p: 1.5 }}>
+                                <Typography variant="body2" sx={{ flex: 1, color: '#333', fontWeight: 500 }}>Max Stops</Typography>
                                 <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid #1B3E38', borderRadius: 1, px: 1, py: 0.5 }}>
                                     <TextField
                                         variant="standard"
                                         InputProps={{ disableUnderline: true }}
                                         value={data.operationalConstraints?.maxStops ?? 5}
                                         onChange={(e) => handleConstraintChange('maxStops', e.target.value)}
-                                        sx={{ width: 30, '& input': { textAlign: 'center', fontSize: '0.9rem', fontWeight: 600, p: 0 } }}
+                                        sx={{ width: 30, '& input': { textAlign: 'center', fontSize: '0.9rem', fontWeight: 600, p: 0, color: '#9E9E9E' } }}
                                     />
                                 </Box>
                                 <Typography variant="caption" color="text.secondary" ml={1} lineHeight={1.2}>Count <br /> / Per Day</Typography>
                             </Box>
-                        </Box>
 
-                        <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid #E0E0E0', borderRadius: 1, p: 1 }}>
-                            <Typography variant="body2" sx={{ flex: 1, color: '#666' }}>Max Distance</Typography>
-                            <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid #1B3E38', borderRadius: 1, px: 1, py: 0.5 }}>
-                                <TextField
-                                    variant="standard"
-                                    InputProps={{ disableUnderline: true }}
-                                    value={data.operationalConstraints?.maxDistance ?? 5}
-                                    onChange={(e) => handleConstraintChange('maxDistance', e.target.value)}
-                                    sx={{ width: 30, '& input': { textAlign: 'center', fontSize: '0.9rem', fontWeight: 600, p: 0 } }}
-                                />
+                            {/* Max Distance */}
+                            <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid #E0E0E0', borderRadius: 3, p: 1.5 }}>
+                                <Typography variant="body2" sx={{ flex: 1, color: '#333', fontWeight: 500 }}>Max Distance</Typography>
+                                <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid #1B3E38', borderRadius: 1, px: 1, py: 0.5 }}>
+                                    <TextField
+                                        variant="standard"
+                                        InputProps={{ disableUnderline: true }}
+                                        value={data.operationalConstraints?.maxDistance ?? 5}
+                                        onChange={(e) => handleConstraintChange('maxDistance', e.target.value)}
+                                        sx={{ width: 30, '& input': { textAlign: 'center', fontSize: '0.9rem', fontWeight: 600, p: 0, color: '#9E9E9E' } }}
+                                    />
+                                </Box>
+                                <Typography variant="caption" color="text.secondary" ml={1} lineHeight={1.2}>KM <br /> / Per Day</Typography>
                             </Box>
-                            <Typography variant="caption" color="text.secondary" ml={1} lineHeight={1.2}>KM <br /> / Per Day</Typography>
                         </Box>
                     </Box>
                 </Box>
+
+                <Divider orientation="vertical" flexItem sx={{ borderColor: '#E0E0E0' }} />
 
                 {/* Right Column */}
                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -259,22 +264,24 @@ const Step3ServiceLevelAgreements = ({ data, updateData }) => {
                                 const isActive = !!dayConfig.start;
 
                                 return (
-                                    <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                    <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1.5, width: '100%' }}>
                                         <Box sx={{
                                             width: 32, height: 32, borderRadius: '50%',
                                             bgcolor: isActive ? '#1B3E38' : '#F0F0F0',
                                             color: isActive ? 'white' : '#9E9E9E',
                                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                            fontSize: 13, fontWeight: 600
+                                            fontSize: 13, fontWeight: 600,
+                                            flexShrink: 0
                                         }}>
                                             {day}
                                         </Box>
                                         <Select
                                             size="small"
+                                            fullWidth
                                             value={dayConfig.start}
                                             onChange={(e) => handleWeeklyHoursChange(dayKey, 'start', e.target.value)}
                                             sx={{
-                                                minWidth: 120, bgcolor: 'white',
+                                                flex: 1, bgcolor: 'white',
                                                 borderRadius: 1,
                                                 '& .MuiOutlinedInput-notchedOutline': { borderColor: isActive ? '#1B3E38' : '#E0E0E0' },
                                                 '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#1B3E38' },
@@ -288,10 +295,11 @@ const Step3ServiceLevelAgreements = ({ data, updateData }) => {
                                         <Typography color="text.secondary">-</Typography>
                                         <Select
                                             size="small"
+                                            fullWidth
                                             value={dayConfig.end}
                                             onChange={(e) => handleWeeklyHoursChange(dayKey, 'end', e.target.value)}
                                             sx={{
-                                                minWidth: 120, bgcolor: 'white',
+                                                flex: 1, bgcolor: 'white',
                                                 borderRadius: 1,
                                                 '& .MuiOutlinedInput-notchedOutline': { borderColor: isActive ? '#1B3E38' : '#E0E0E0' },
                                                 '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#1B3E38' },

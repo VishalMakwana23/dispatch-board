@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, TextField, MenuItem, FormControl, RadioGroup, FormControlLabel, Radio, Chip, IconButton, Select, InputLabel, InputAdornment } from '@mui/material';
+import { Box, Typography, TextField, MenuItem, FormControl, RadioGroup, FormControlLabel, Radio, Chip, IconButton, Select, InputLabel, InputAdornment, Divider } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -166,6 +166,8 @@ const Step1NetworkContext = ({ data, updateData }) => {
                     </Box>
                 </Box>
 
+                <Divider orientation="vertical" flexItem sx={{ borderColor: '#E0E0E0' }} />
+
                 {/* Right Column */}
                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <Typography variant="subtitle2" fontWeight="600" sx={{ fontSize: '0.85rem' }}>Linhaul Route Context</Typography>
@@ -284,25 +286,27 @@ const Step1NetworkContext = ({ data, updateData }) => {
                                 const isActive = !!dayConfig.start;
 
                                 return (
-                                    <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                    <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1.5, width: '100%' }}>
                                         <Box sx={{
                                             width: 32, height: 32, borderRadius: '50%',
                                             bgcolor: isActive ? '#1B3E38' : '#F0F0F0',
                                             color: isActive ? 'white' : '#9E9E9E',
                                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                            fontSize: 13, fontWeight: 600
+                                            fontSize: 13, fontWeight: 600,
+                                            flexShrink: 0
                                         }}>
                                             {day}
                                         </Box>
                                         <Select
                                             size="small"
+                                            fullWidth
                                             value={dayConfig.start}
                                             onChange={(e) => {
                                                 const newWeekly = { ...data.weeklyHours, [dayKey]: { ...dayConfig, start: e.target.value } };
                                                 updateData('weeklyHours', newWeekly);
                                             }}
                                             sx={{
-                                                minWidth: 120, bgcolor: 'white',
+                                                flex: 1, bgcolor: 'white',
                                                 borderRadius: 1,
                                                 '& .MuiOutlinedInput-notchedOutline': { borderColor: isActive ? '#1B3E38' : '#E0E0E0' },
                                                 '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: isActive ? '#1B3E38' : '#E0E0E0' },
@@ -317,13 +321,14 @@ const Step1NetworkContext = ({ data, updateData }) => {
                                         <Typography color="text.secondary">-</Typography>
                                         <Select
                                             size="small"
+                                            fullWidth
                                             value={dayConfig.end}
                                             onChange={(e) => {
                                                 const newWeekly = { ...data.weeklyHours, [dayKey]: { ...dayConfig, end: e.target.value } };
                                                 updateData('weeklyHours', newWeekly);
                                             }}
                                             sx={{
-                                                minWidth: 120, bgcolor: 'white',
+                                                flex: 1, bgcolor: 'white',
                                                 borderRadius: 1,
                                                 '& .MuiOutlinedInput-notchedOutline': { borderColor: isActive ? '#1B3E38' : '#E0E0E0' },
                                                 '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: isActive ? '#1B3E38' : '#E0E0E0' },
