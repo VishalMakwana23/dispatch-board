@@ -5,7 +5,7 @@ import Step1NetworkContext from './Steps/Step1NetworkContext';
 import Step2VehicleDriverContext from './Steps/Step2VehicleDriverContext';
 import Step3ServiceLevelAgreements from './Steps/Step3ServiceLevelAgreements';
 import Step4OptimizationObjectives from './Steps/Step4OptimizationObjectives';
-import PlaceholderStep from './Steps/PlaceholderStep';
+import Step5UploadRouteData from './Steps/Step5UploadRouteData';
 
 const STEPS = [
     { id: 1, title: 'Network & Market Context' },
@@ -79,7 +79,9 @@ const CreateOperatingWizard = ({ onBack }) => {
             weather: true,
             roadRestrictions: true,
             construction: true
-        }
+        },
+        // Step 5 Data
+        routeDataFile: null
     });
 
     const updateFormData = (field, value) => {
@@ -89,6 +91,9 @@ const CreateOperatingWizard = ({ onBack }) => {
     const handleNext = () => {
         if (currentStep < STEPS.length) {
             setCurrentStep(currentStep + 1);
+        } else {
+            console.log('Running Optimization with Data:', formData);
+            // Submit logic here
         }
     };
 
@@ -103,7 +108,7 @@ const CreateOperatingWizard = ({ onBack }) => {
             case 4:
                 return <Step4OptimizationObjectives data={formData} updateData={updateFormData} />;
             case 5:
-                return <PlaceholderStep title="Upload Route Data" />;
+                return <Step5UploadRouteData data={formData} updateData={updateFormData} />;
             default:
                 return null;
         }
@@ -115,7 +120,7 @@ const CreateOperatingWizard = ({ onBack }) => {
             // Ex: require at least one market
             return formData.markets.length > 0;
         }
-        return true; // For placeholders
+        return true;
     };
 
     return (
@@ -124,7 +129,7 @@ const CreateOperatingWizard = ({ onBack }) => {
             <Paper
                 elevation={0}
                 sx={{
-                    width: 280,
+                    width: 320,
                     borderRight: '1px solid #e0e0e0',
                     height: '100%',
                     bgcolor: 'white',
@@ -264,7 +269,7 @@ const CreateOperatingWizard = ({ onBack }) => {
                             })
                         }}
                     >
-                        Next
+                        {currentStep === 5 ? 'Run' : 'Next'}
                     </Button>
                 </Paper>
             </Box>
