@@ -3,6 +3,7 @@ import { Box, Button, Typography, Paper, List, ListItem, ListItemButton, ListIte
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Step1NetworkContext from './Steps/Step1NetworkContext';
 import Step2VehicleDriverContext from './Steps/Step2VehicleDriverContext';
+import Step3ServiceLevelAgreements from './Steps/Step3ServiceLevelAgreements';
 import PlaceholderStep from './Steps/PlaceholderStep';
 
 const STEPS = [
@@ -47,6 +48,28 @@ const CreateOperatingWizard = ({ onBack }) => {
         driverConsiderations: {
             maxStops: 5,
             maxDistance: 5
+        },
+        // Step 3 Data
+        midFinalMileModel: 'exclusive',
+        stopsPriority: 'preference_1',
+        dynamicOverflow: '20%',
+        preDepartureCutoff: '20%',
+        operationalConstraints: {
+            maxDwell: 5,
+            maxStops: 5,
+            maxDistance: 5
+        },
+        slaSchedule: {
+            startDate: null,
+            endDate: null,
+            weeklyHours: {
+                day_1: { start: '6:00am', end: '7:00am' },
+                day_2: { start: '8:00am', end: '9:00am' },
+                day_3: { start: '10:00am', end: '11:00am' },
+                day_4: { start: '12:00pm', end: '1:00pm' },
+                day_5: { start: '2:00pm', end: '3:00pm' },
+            },
+            stopLevel: { start: '6:00am', end: '7:00am' }
         }
     });
 
@@ -67,7 +90,7 @@ const CreateOperatingWizard = ({ onBack }) => {
             case 2:
                 return <Step2VehicleDriverContext data={formData} updateData={updateFormData} />;
             case 3:
-                return <PlaceholderStep title="Service Level Agreements" />;
+                return <Step3ServiceLevelAgreements data={formData} updateData={updateFormData} />;
             case 4:
                 return <PlaceholderStep title="Optimization Objectives" />;
             case 5:
