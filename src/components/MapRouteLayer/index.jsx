@@ -35,17 +35,17 @@ const createStopIcon = (stop, isLastStop) => {
   const color = getStopColor(stop.status);
   const isDriverHere = stop.isDriverHere;
   const isSelected = stop.isSelected;
-  
+
   let iconHtml = '';
   // Base size - Reduced as requested
   // Selected: 42, Driver/ABC/Warehouse: 32, Standard: 24 (Need slightly bigger than 14 to fit icon 14px)
   // User asked for "icons in every stop".
-  let size = isSelected ? 42 : 24; 
+  let size = isSelected ? 42 : 24;
   let iconSize = [size, size];
-  let iconAnchor = [size/2, size/2];
+  let iconAnchor = [size / 2, size / 2];
 
   // Helper for icon image
-  const getIconImg = (src, filterStyle = '') => 
+  const getIconImg = (src, filterStyle = '') =>
     `<img src="${src}" style="width: 14px; height: 14px; ${filterStyle} display: block;" />`;
 
   let innerContent = '';
@@ -57,45 +57,45 @@ const createStopIcon = (stop, isLastStop) => {
   const blackIconFilter = 'filter: brightness(0);'; // For white backgrounds
 
   if (stop.isWarehouse) {
-      bgColor = '#1A3C34';
-      innerContent = getIconImg(warehouseIcon, whiteIconFilter);
+    bgColor = '#1A3C34';
+    innerContent = getIconImg(warehouseIcon, whiteIconFilter);
   } else if (stop.status === 'last_location') {
-      bgColor = color;
-      innerContent = getIconImg(userIcon, whiteIconFilter);
+    bgColor = color;
+    innerContent = getIconImg(userIcon, whiteIconFilter);
   } else if (stop.status === 'completed') {
-      bgColor = '#107C41';
-      innerContent = getIconImg(nameIcon, whiteIconFilter); 
+    bgColor = '#107C41';
+    innerContent = getIconImg(nameIcon, whiteIconFilter);
   } else if (stop.status === 'ongoing') {
-      bgColor = '#E8A72B';
-      innerContent = getIconImg(truckIcon, whiteIconFilter);
+    bgColor = '#E8A72B';
+    innerContent = getIconImg(truckIcon, whiteIconFilter);
   } else if (stop.status === 'upcoming' || stop.status === 'pending') {
-       bgColor = 'white';
-       borderColor = color; // Colored border, white bg
-       invertIcon = false;
-       // Force icon to be black so it's visible on white bg
-       innerContent = getIconImg(truckIcon, blackIconFilter); 
+    bgColor = 'white';
+    borderColor = color; // Colored border, white bg
+    invertIcon = false;
+    // Force icon to be black so it's visible on white bg
+    innerContent = getIconImg(truckIcon, blackIconFilter);
   } else {
-       // Fallback
-       innerContent = getIconImg(truckIcon, whiteIconFilter);
+    // Fallback
+    innerContent = getIconImg(truckIcon, whiteIconFilter);
   }
 
   // Helper helper
   const hexToRgba = (hex, alpha) => {
     let c;
-    if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
-        c= hex.substring(1).split('');
-        if(c.length== 3){
-            c= [c[0], c[0], c[1], c[1], c[2], c[2]];
-        }
-        c= '0x'+c.join('');
-        return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+alpha+')';
+    if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+      c = hex.substring(1).split('');
+      if (c.length == 3) {
+        c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+      }
+      c = '0x' + c.join('');
+      return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',' + alpha + ')';
     }
     return `rgba(0,0,0,${alpha})`; // Fallback
   };
 
   // Pulse animation for selected stop
   const pulseColor = isDriverHere ? '#E8A72B' : (stop.status === 'completed' ? '#107C41' : (stop.status === 'ongoing' ? '#E8A72B' : '#AAAAAA'));
-  
+
   // Basic pulse ring (opacity fade)
   const pulseAnimation = isSelected ? `
         @keyframes pulse-ring {
@@ -116,11 +116,11 @@ const createStopIcon = (stop, isLastStop) => {
   `;
 
   if (isDriverHere) {
-       // Driver Icon (Yellow/Orange Truck) - animated
-       // If selected, we might want it to stay big or stick to the zoom. 
-       // User asked "make current stop little big and animated like little zom and out"
-       // We'll apply the zoom animation.
-        iconHtml = `
+    // Driver Icon (Yellow/Orange Truck) - animated
+    // If selected, we might want it to stay big or stick to the zoom. 
+    // User asked "make current stop little big and animated like little zom and out"
+    // We'll apply the zoom animation.
+    iconHtml = `
             <style>${zoomAnimation}</style>
             <div style="width: 100%; height: 100%; animation: zoom-in-out 2s infinite ease-in-out;">
                 <div style="background-color: #E8A72B; border-radius: 50%; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 4px 8px rgba(0,0,0,0.4);">
@@ -129,15 +129,15 @@ const createStopIcon = (stop, isLastStop) => {
                 ${isSelected ? `<div style="position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 2px solid ${pulseColor}; animation: pulse 1.5s infinite; left: -2px; top: -2px; z-index: -1;"></div>` : ''}
             </div>`;
   } else if (stop.isWarehouse) {
-     iconSize = [32, 32];
-     iconAnchor = [16, 16];
-     iconHtml = `<div style="background-color: #1A3C34; border-radius: 50%; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3); transform: ${isSelected ? 'scale(1.2)' : 'scale(1)'}; transition: transform 0.3s ease;">
+    iconSize = [32, 32];
+    iconAnchor = [16, 16];
+    iconHtml = `<div style="background-color: #1A3C34; border-radius: 50%; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3); transform: ${isSelected ? 'scale(1.2)' : 'scale(1)'}; transition: transform 0.3s ease;">
                   <img src="${warehouseIcon}" alt="Warehouse" style="width: 16px; height: 16px; filter: brightness(0) invert(1);" />
                 </div>`;
   } else {
-     // Intermediate stops
-     
-     iconHtml = `<div style="
+    // Intermediate stops
+
+    iconHtml = `<div style="
             background-color: ${bgColor}; 
             border-radius: 50%; 
             width: 100%; 
@@ -175,44 +175,44 @@ const StopMarker = ({ stop, index, isDriverHere, isSelected, isLast, dispatch })
 
   return (
     <Marker
-        key={stop.id}
-        position={[stop.lat, stop.lng]}
-        ref={markerRef}
-        icon={createStopIcon({ 
-            ...stop, 
-            isWarehouse: stop.type === 'warehouse',
-            isDriverHere,
-            isSelected
-        }, isLast)} 
-        eventHandlers={{
-            click: () => {
-                dispatch(selectStop(stop.id));
-            },
-            popupclose: () => {
-                dispatch(clearSelectedStop(stop.id)); // Potential conflict with sidebar selection
-            }
-        }}
-        zIndexOffset={isSelected ? 1000 : (isDriverHere ? 900 : 0)}
+      key={stop.id}
+      position={[stop.lat, stop.lng]}
+      ref={markerRef}
+      icon={createStopIcon({
+        ...stop,
+        isWarehouse: stop.type === 'warehouse',
+        isDriverHere,
+        isSelected
+      }, isLast)}
+      eventHandlers={{
+        click: () => {
+          dispatch(selectStop(stop.id));
+        },
+        popupclose: () => {
+          dispatch(clearSelectedStop(stop.id)); // Potential conflict with sidebar selection
+        }
+      }}
+      zIndexOffset={isSelected ? 1000 : (isDriverHere ? 900 : 0)}
     >
-        <Popup offset={[0, -10]}>
-            <Box sx={{ minWidth: '200px' }}>
-                <Typography variant="subtitle2" fontWeight="bold">{stop.name}</Typography>
-                <Typography variant="body2" color="text.secondary">{stop.address}</Typography>
-                <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
-                    <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                        📦 {stop.parcels || 0} items
-                    </Typography>
-                    <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                            🕒 {stop.etaWindow || '-'}
-                    </Typography>
-                </Box>
-                    {isDriverHere && (
-                    <Box sx={{ mt: 1, p: 0.5, bgcolor: '#FFF3E0', color: '#E65100', borderRadius: 1, fontSize: '11px', textAlign: 'center' }}>
-                        DRIVER IS HERE
-                    </Box>
-                )}
+      <Popup offset={[0, -10]}>
+        <Box sx={{ minWidth: '200px' }}>
+          <Typography variant="subtitle2" fontWeight="bold">{stop.name}</Typography>
+          <Typography variant="body2" color="text.secondary">{stop.address}</Typography>
+          <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
+            <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              📦 {stop.parcels || 0} items
+            </Typography>
+            <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              🕒 {stop.etaWindow || '-'}
+            </Typography>
+          </Box>
+          {isDriverHere && (
+            <Box sx={{ mt: 1, p: 0.5, bgcolor: '#FFF3E0', color: '#E65100', borderRadius: 1, fontSize: '11px', textAlign: 'center' }}>
+              DRIVER IS HERE
             </Box>
-        </Popup>
+          )}
+        </Box>
+      </Popup>
     </Marker>
   );
 };
@@ -221,16 +221,19 @@ const MapRouteLayer = ({ route }) => {
   const map = useMap();
   const dispatch = useDispatch();
   const selectedStopId = useSelector(state => state.ui.selectedStopId);
-  
-  // Use route.stops directly from the new data structure
-  const stops = route?.stops || [];
+
+  // Use route.stops directly from the new data structure, filtering invalid coords
+  const stops = (route?.stops || []).filter(s =>
+    s.lat !== undefined && s.lat !== null && !isNaN(s.lat) &&
+    s.lng !== undefined && s.lng !== null && !isNaN(s.lng)
+  );
 
   useEffect(() => {
     if (stops && stops.length > 0) {
       if (selectedStopId) {
         const stop = stops.find(s => s.id === selectedStopId);
         if (stop) {
-            map.flyTo([stop.lat, stop.lng], 16, { animate: true, duration: 1.5 });
+          map.flyTo([stop.lat, stop.lng], 16, { animate: true, duration: 1.5 });
         }
       } else {
         // Only fit bounds initially or if no stop selected
@@ -252,32 +255,32 @@ const MapRouteLayer = ({ route }) => {
   const completedPath = allPositions.slice(0, driverStopIndex + 1);
 
   // Segment 2: Ongoing (Yellow) - From Driver/Ongoing to Next Stop
-  const ongoingPath = driverStopIndex < stops.length - 1 ? 
-      allPositions.slice(driverStopIndex, driverStopIndex + 2) : [];
+  const ongoingPath = driverStopIndex < stops.length - 1 ?
+    allPositions.slice(driverStopIndex, driverStopIndex + 2) : [];
 
   // Segment 3: Remaining (Gray) - From Next Stop to End
-  const remainingPath = driverStopIndex < stops.length - 1 ? 
-      allPositions.slice(driverStopIndex + 1) : [];
+  const remainingPath = driverStopIndex < stops.length - 1 ?
+    allPositions.slice(driverStopIndex + 1) : [];
 
   // Segment 4: Highlighted (Match Underlying Color) - From Prev Stop to Selected Stop
   let highlightedPath = [];
-  let highlightColor = route.color || '#3F8CFF'; 
+  let highlightColor = route.color || '#3F8CFF';
 
   if (selectedStopId) {
-      const selectedIndex = stops.findIndex(s => s.id === selectedStopId);
-      
-      if (selectedIndex > 0) { // Can't highlight segment to first stop (no prev stop)
-          highlightedPath = allPositions.slice(selectedIndex - 1, selectedIndex + 1);
-          
-          // Determine color based on segment status
-          if (selectedIndex <= driverStopIndex) {
-              highlightColor = '#107C41'; // Green (Completed)
-          } else if (selectedIndex === driverStopIndex + 1) {
-              highlightColor = '#E8A72B'; // Yellow (Ongoing)
-          } else {
-              highlightColor = '#AAAAAA'; // Grey (Pending)
-          }
+    const selectedIndex = stops.findIndex(s => s.id === selectedStopId);
+
+    if (selectedIndex > 0) { // Can't highlight segment to first stop (no prev stop)
+      highlightedPath = allPositions.slice(selectedIndex - 1, selectedIndex + 1);
+
+      // Determine color based on segment status
+      if (selectedIndex <= driverStopIndex) {
+        highlightColor = '#107C41'; // Green (Completed)
+      } else if (selectedIndex === driverStopIndex + 1) {
+        highlightColor = '#E8A72B'; // Yellow (Ongoing)
+      } else {
+        highlightColor = '#AAAAAA'; // Grey (Pending)
       }
+    }
   }
 
   return (
@@ -288,7 +291,7 @@ const MapRouteLayer = ({ route }) => {
       <Polyline positions={remainingPath} pathOptions={{ color: '#AAAAAA', weight: 6, dashArray: '5, 10' }} />
       {/* Highlighted Segment Overlay */}
       {highlightedPath.length > 0 && (
-          <Polyline positions={highlightedPath} pathOptions={{ color: highlightColor, weight: 10, opacity: 0.8 }} />
+        <Polyline positions={highlightedPath} pathOptions={{ color: highlightColor, weight: 10, opacity: 0.8 }} />
       )}
 
       {stops.map((stop, index) => {
@@ -296,15 +299,15 @@ const MapRouteLayer = ({ route }) => {
         const isDriverHere = stop.status === 'ongoing';
 
         return (
-            <StopMarker 
-                key={stop.id}
-                stop={stop}
-                index={index}
-                isDriverHere={isDriverHere}
-                isSelected={isSelected}
-                isLast={index === stops.length - 1}
-                dispatch={dispatch}
-            />
+          <StopMarker
+            key={stop.id}
+            stop={stop}
+            index={index}
+            isDriverHere={isDriverHere}
+            isSelected={isSelected}
+            isLast={index === stops.length - 1}
+            dispatch={dispatch}
+          />
         );
       })}
 

@@ -4,8 +4,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import AddIcon from '@mui/icons-material/Add';
 import FilterPopup from '../RoutesPanel/FilterPopup'; // Reuse filter if needed or create new
+import RouteCard from '../RouteResults/RouteCard';
 
-const ScenarioPlanningPanel = ({ isCollapsed = false, onAdd }) => {
+const ScenarioPlanningPanel = ({ isCollapsed = false, onAdd, results }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterAnchorEl, setFilterAnchorEl] = useState(null);
     const filterOpen = Boolean(filterAnchorEl);
@@ -69,11 +70,19 @@ const ScenarioPlanningPanel = ({ isCollapsed = false, onAdd }) => {
                 </Button>
             </Box>
 
-            {/* Empty State */}
-            <Box sx={{ flexGrow: 1, p: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.6 }}>
-                <Typography variant="body1" align="center" sx={{ color: '#666' }}>
-                    Hey, You don't have any planned routes yet!
-                </Typography>
+            {/* Content Area: Empty State OR Results List */}
+            <Box sx={{ flexGrow: 1, overflowY: 'auto', p: 2 }}>
+                {results && results.length > 0 ? (
+                    results.map((route) => (
+                        <RouteCard key={route.id} route={route} />
+                    ))
+                ) : (
+                    <Box sx={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.6 }}>
+                        <Typography variant="body1" align="center" sx={{ color: '#666' }}>
+                            Hey, You don't have any planned routes yet!
+                        </Typography>
+                    </Box>
+                )}
             </Box>
 
             {/* Reusing FilterPopup from RoutesPanel or we could stub it */}

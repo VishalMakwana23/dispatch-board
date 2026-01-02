@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Box, Button, Typography, Paper, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateDraftData, setStep, generateResults } from '../../redux/slices/scenarioSlice';
 import Step1NetworkContext from './Steps/Step1NetworkContext';
 import Step2VehicleDriverContext from './Steps/Step2VehicleDriverContext';
 import Step3ServiceLevelAgreements from './Steps/Step3ServiceLevelAgreements';
@@ -16,99 +18,34 @@ const STEPS = [
 ];
 
 const CreateOperatingWizard = ({ onBack }) => {
-    const [currentStep, setCurrentStep] = useState(1);
-    const [formData, setFormData] = useState({
-        // Step 1 Data
-        markets: [],
-        cities: [],
-        depots: [],
-        linhaulModel: 'exclusive',
-        startDate: '2023-12-03',
-        endDate: '2023-12-12',
-        weeklyHours: {
-            day_1: { start: '6:00am', end: '7:00am' },
-            day_2: { start: '8:00am', end: '9:00am' },
-            day_3: { start: '10:00am', end: '11:00am' },
-            day_4: { start: '12:00pm', end: '1:00pm' },
-            day_5: { start: '2:00pm', end: '3:00pm' },
-        },
-        // Step 2 Data
-        selectedVehicles: {},
-        vehicleConsiderations: [],
-        driverSchedule: {
-            serviceHours: 5,
-            weeklyHours: {
-                day_1: { start: '6:00am', end: '7:00am' },
-                day_2: { start: '8:00am', end: '9:00am' },
-                day_3: { start: '10:00am', end: '11:00am' },
-                day_4: { start: '12:00pm', end: '1:00pm' },
-                day_5: { start: '2:00pm', end: '3:00pm' },
-            }
-        },
-        driverEligibility: [],
-        driverConsiderations: {
-            maxStops: 5,
-            maxDistance: 5
-        },
-        // Step 3 Data
-        midFinalMileModel: 'exclusive',
-        stopsPriority: 'preference_1',
-        dynamicOverflow: '20%',
-        preDepartureCutoff: '20%',
-        operationalConstraints: {
-            maxDwell: 5,
-            maxStops: 5,
-            maxDistance: 5
-        },
-        slaSchedule: {
-            startDate: null,
-            endDate: null,
-            weeklyHours: {
-                day_1: { start: '6:00am', end: '7:00am' },
-                day_2: { start: '8:00am', end: '9:00am' },
-                day_3: { start: '10:00am', end: '11:00am' },
-                day_4: { start: '12:00pm', end: '1:00pm' },
-                day_5: { start: '2:00pm', end: '3:00pm' },
-            },
-            stopLevel: { start: '6:00am', end: '7:00am' }
-        },
-        // Step 4 Data
-        optimizationObjective: 'reduce_distance',
-        scenarioVariables: {
-            traffic: true,
-            weather: true,
-            roadRestrictions: true,
-            construction: true
-        },
-        // Step 5 Data
-        routeDataFile: null
-    });
+    const dispatch = useDispatch();
+    const { currentStep, draft } = useSelector((state) => state.scenario);
 
     const updateFormData = (field, value) => {
-        setFormData(prev => ({ ...prev, [field]: value }));
+        dispatch(updateDraftData({ field, value }));
     };
 
     const handleNext = () => {
         if (currentStep < STEPS.length) {
-            setCurrentStep(currentStep + 1);
+            dispatch(setStep(currentStep + 1));
         } else {
-            console.log('Running Optimization with Data:', formData);
-            // Submit logic here
+            console.log('Running Optimization with Data:', draft);
+            dispatch(generateResults());
         }
     };
 
     const renderStepContent = () => {
         switch (currentStep) {
             case 1:
-                return <Step1NetworkContext data={formData} updateData={updateFormData} />;
+                return <Step1NetworkContext data={draft} updateData={updateFormData} />;
             case 2:
-                return <Step2VehicleDriverContext data={formData} updateData={updateFormData} />;
+                return <Step2VehicleDriverContext data={draft} updateData={updateFormData} />;
             case 3:
-                return <Step3ServiceLevelAgreements data={formData} updateData={updateFormData} />;
+                return <Step3ServiceLevelAgreements data={draft} updateData={updateFormData} />;
             case 4:
-                return <Step4OptimizationObjectives data={formData} updateData={updateFormData} />;
+                return <Step4OptimizationObjectives data={draft} updateData={updateFormData} />;
             case 5:
-                return <Step5UploadRouteData data={formData} updateData={updateFormData} />;
+                return <Step5UploadRouteData data={draft} updateData={updateFormData} />;
             default:
                 return null;
         }
@@ -118,7 +55,7 @@ const CreateOperatingWizard = ({ onBack }) => {
     const isStepValid = () => {
         if (currentStep === 1) {
             // Ex: require at least one market
-            return formData.markets.length > 0;
+            return draft.markets.length > 0;
         }
         return true;
     };
@@ -165,7 +102,7 @@ const CreateOperatingWizard = ({ onBack }) => {
                         <ListItem key={step.id} disablePadding sx={{ mb: 1 }}>
                             <ListItemButton
                                 selected={currentStep === step.id}
-                                onClick={() => setCurrentStep(step.id)}
+                                onClick={() => dispatch(setStep(step.id))}
                                 sx={{
                                     borderRadius: 1,
                                     bgcolor: currentStep === step.id ? '#0B4E3E !important' : 'transparent',
