@@ -6,7 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import FilterPopup from '../RoutesPanel/FilterPopup'; // Reuse filter if needed or create new
 import RouteCard from '../RouteResults/RouteCard';
 
-const ScenarioPlanningPanel = ({ isCollapsed = false, onAdd, results }) => {
+const ScenarioPlanningPanel = ({ isCollapsed = false, onAdd, results, onRouteSelect, openRouteIds = [] }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterAnchorEl, setFilterAnchorEl] = useState(null);
     const filterOpen = Boolean(filterAnchorEl);
@@ -74,7 +74,12 @@ const ScenarioPlanningPanel = ({ isCollapsed = false, onAdd, results }) => {
             <Box sx={{ flexGrow: 1, overflowY: 'auto', p: 2 }}>
                 {results && results.length > 0 ? (
                     results.map((route) => (
-                        <RouteCard key={route.id} route={route} />
+                        <RouteCard
+                            key={route.id}
+                            route={route}
+                            selected={openRouteIds.includes(route.id)}
+                            onClick={() => onRouteSelect && onRouteSelect(route)}
+                        />
                     ))
                 ) : (
                     <Box sx={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.6 }}>

@@ -6,7 +6,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import mckLogo from '../../assets/mck.png';
 import ronaLogo from '../../assets/rona.png';
 
-const RouteCard = ({ route }) => {
+const RouteCard = ({ route, onClick, selected }) => {
     // Parse endTime for display if available, else fallback
     const endDate = route.endTime ? route.endTime.split(' ')[0] : '12/04/2026';
     const endTime = route.endTime ? route.endTime.split(' ').slice(1).join(' ') : '08:00 PM';
@@ -14,19 +14,22 @@ const RouteCard = ({ route }) => {
     return (
         <Paper
             elevation={0}
+            onClick={onClick}
             sx={{
                 p: 2, // Reduced padding for compactness
                 mb: 2,
-                border: '1px solid #E0E0E0',
+                border: selected ? `2px solid ${route.color || '#107C41'}` : '1px solid #E0E0E0',
                 borderRadius: 2, // Reduced from 4 to match consistent design
                 position: 'relative',
                 overflow: 'hidden',
+                cursor: 'pointer',
                 transition: 'all 0.2s',
                 '&:hover': {
                     boxShadow: '0 8px 16px rgba(0,0,0,0.08)',
-                    borderColor: '#B0BEC5'
+                    borderColor: selected ? (route.color || '#107C41') : '#B0BEC5'
                 },
-                bgcolor: 'white'
+                bgcolor: 'white',
+                boxShadow: selected ? `0 4px 12px ${route.color ? route.color + '26' : 'rgba(16, 124, 65, 0.15)'}` : 'none',
             }}
         >
             {/* Header Badges - Single line forced */}

@@ -179,7 +179,8 @@ const scenarioSlice = createSlice({
                                 vehicleNames[vehicleId] || 'Vehicle',
                                 'Pharma Products'
                             ],
-                            image: vehicleImages[vehicleId] || transportImg
+                            image: vehicleImages[vehicleId] || transportImg,
+                            color: ['#1976D2', '#2E7D32', '#ED6C02', '#9C27B0'][Math.floor(Math.random() * 4)] // Blue, Green, Orange, Purple
                         });
 
                         routeIndex++;
@@ -199,7 +200,8 @@ const scenarioSlice = createSlice({
                     startTime: '08:00 AM',
                     endTime: `${formattedDate} 06:00 PM`,
                     badges: ['Standard', 'Sedan'],
-                    image: sedanImg
+                    image: sedanImg,
+                    color: '#2E7D32'
                 });
             }
 
