@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Box, Typography, Grid, Paper, Checkbox, FormControlLabel, Radio, TextField, Select, MenuItem, Chip, IconButton, InputAdornment, Divider } from '@mui/material';
+import { Box, Typography, Grid, Paper, Checkbox, FormControlLabel, Radio, TextField, Select, MenuItem, Chip, IconButton, InputAdornment, Divider, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import AirportShuttleIcon from '@mui/icons-material/AirportShuttle';
@@ -80,6 +80,18 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
         updateData(section, { ...data[section], [field]: value });
     };
 
+    const handleMarketVehicleCountChange = (marketName, vehicleId, value) => {
+        let cleanValue = value;
+        if (cleanValue.length > 1 && cleanValue.startsWith('0')) {
+            cleanValue = cleanValue.substring(1);
+        }
+
+        const currentCounts = { ...(data.marketVehicleCounts || {}) };
+        currentCounts[marketName] = { ...(currentCounts[marketName] || {}) };
+        currentCounts[marketName][vehicleId] = cleanValue;
+        updateData('marketVehicleCounts', currentCounts);
+    };
+
     return (
         <Box sx={{ display: 'flex', gap: 3, height: '100%', overflowY: 'auto', p: 1 }}>
 
@@ -100,7 +112,7 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
                                         onClick={() => handleVehicleToggle(vehicle.id)}
                                         sx={{
                                             border: isSelected ? '2px solid #1B3E38' : '1px solid #E0E0E0',
-                                            borderRadius: 2, p: 1, height: 85, // Slightly increased height for better image fit
+                                            borderRadius: 2, p: 1, height: 85,
                                             display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
                                             cursor: 'pointer', position: 'relative',
                                             bgcolor: isSelected ? '#F2F7F6' : 'white',
@@ -109,7 +121,7 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
                                         }}
                                     >
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                                            <Radio
+                                            <Checkbox
                                                 checked={isSelected}
                                                 size="small"
                                                 sx={{ p: 0, color: '#1B3E38', '&.Mui-checked': { color: '#1B3E38' }, position: 'absolute', top: 8, left: 8 }}
@@ -140,46 +152,56 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
                         })}
                     </Grid>
 
-                    {/* Quantity Selector for Selected Vehicles */}
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1, px: 2 }}>
-                        <Typography variant="caption" color="text.secondary">Selected Vehicles</Typography>
-                        <Typography variant="caption" color="text.secondary">Max Quantities</Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                        {Object.keys(data.selectedVehicles || {}).map(vehId => {
-                            const details = VEHICLE_TYPES.find(v => v.id === vehId);
-                            const qty = data.selectedVehicles[vehId].quantity;
-                            return (
-                                <Box key={vehId} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                    <Chip
-                                        label={details?.name}
-                                        onDelete={() => handleVehicleToggle(vehId)}
-                                        deleteIcon={<Box component="span" sx={{ fontSize: 16, display: 'flex' }}>✕</Box>}
-                                        sx={{
-                                            borderRadius: 1, bgcolor: '#EFF1F1',
-                                            width: 120, justifyContent: 'space-between',
-                                            fontWeight: 600, fontSize: '0.8rem'
-                                        }}
-                                    />
-                                    <Box sx={{
-                                        flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                                        border: '1px solid #C4D3D0', borderRadius: 1, px: 1, py: 0.5
-                                    }}>
-                                        <Typography variant="body2" fontWeight="600">{qty}</Typography>
-                                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                            <AddIcon
-                                                fontSize="small" sx={{ fontSize: 14, cursor: 'pointer', color: '#1B3E38' }}
-                                                onClick={() => handleVehicleQuantityChange(vehId, 1)}
-                                            />
-                                            <RemoveIcon
-                                                fontSize="small" sx={{ fontSize: 14, cursor: 'pointer', color: '#1B3E38' }}
-                                                onClick={() => handleVehicleQuantityChange(vehId, -1)}
-                                            />
-                                        </Box>
-                                    </Box>
-                                </Box>
-                            );
-                        })}
+                    {/* Market x Vehicle Matrix Table */}
+                    <Box sx={{ mb: 1, overflowX: 'auto', mt: 2 }}>
+                        <TableContainer component={Paper} elevation={0} sx={{ border: 'none' }}>
+                            <Table size="small">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell sx={{ fontWeight: 600, fontSize: '0.75rem', color: '#666', borderBottom: '1px solid #E0E0E0', minWidth: 120 }}>
+                                            Ziing Markets
+                                        </TableCell>
+                                        {Object.keys(data.selectedVehicles || {}).map(vehId => {
+                                            const details = VEHICLE_TYPES.find(v => v.id === vehId);
+                                            return (
+                                                <TableCell key={vehId} sx={{ fontWeight: 600, fontSize: '0.75rem', color: '#666', borderBottom: '1px solid #E0E0E0', minWidth: 140 }}>
+                                                    Available {details?.name} Count
+                                                </TableCell>
+                                            );
+                                        })}
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {(data.markets || []).map((market) => (
+                                        <TableRow key={market.name}>
+                                            <TableCell sx={{ fontSize: '0.85rem', fontWeight: 500, borderBottom: '1px solid #F0F0F0', py: 1.5 }}>
+                                                {market.name}
+                                            </TableCell>
+                                            {Object.keys(data.selectedVehicles || {}).map(vehId => {
+                                                const val = data.marketVehicleCounts?.[market.name]?.[vehId] ?? 0;
+                                                return (
+                                                    <TableCell key={vehId} sx={{ borderBottom: '1px solid #F0F0F0', py: 1 }}>
+                                                        <TextField
+                                                            variant="standard"
+                                                            size="small"
+                                                            fullWidth
+                                                            InputProps={{ disableUnderline: false }}
+                                                            placeholder="-"
+                                                            value={val}
+                                                            onChange={(e) => handleMarketVehicleCountChange(market.name, vehId, e.target.value)}
+                                                            sx={{
+                                                                '& input': { textAlign: 'center', fontSize: '0.9rem' },
+                                                                maxWidth: 100
+                                                            }}
+                                                        />
+                                                    </TableCell>
+                                                );
+                                            })}
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                     </Box>
                 </Box>
 
