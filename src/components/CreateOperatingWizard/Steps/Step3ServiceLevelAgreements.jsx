@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, TextField, MenuItem, Select, RadioGroup, FormControlLabel, Radio, InputAdornment, Divider } from '@mui/material';
+import { Box, Typography, TextField, MenuItem, Select, RadioGroup, FormControlLabel, Radio, InputAdornment, Divider, Checkbox } from '@mui/material';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -56,99 +56,105 @@ const Step3ServiceLevelAgreements = ({ data, updateData }) => {
         });
     };
 
+    const handlePreDepartureToggle = (value) => {
+        const currentList = Array.isArray(data.preDepartureCutoff) ? data.preDepartureCutoff : [];
+        if (currentList.includes(value)) {
+            updateData('preDepartureCutoff', currentList.filter(item => item !== value));
+        } else {
+            updateData('preDepartureCutoff', [...currentList, value]);
+        }
+    };
+
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Box sx={{ display: 'flex', gap: 3, height: '100%', overflowY: 'auto', p: 1 }}>
 
                 {/* Left Column */}
-                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
 
                     {/* Mid/Final Mile Route Model */}
-                    <Box sx={{ border: '1px solid #E0E0E0', borderRadius: 2, p: 2 }}>
-                        <Typography variant="caption" fontWeight="600" mb={1} display="block">Mid/Final Mile Route Model</Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Typography variant="body2" sx={{ minWidth: 240, fontWeight: 700, fontSize: '0.9rem', color: '#1a1a1a' }}>Final Mile Route Model</Typography>
                         <RadioGroup
+                            row
                             value={data.midFinalMileModel}
                             onChange={(e) => updateData('midFinalMileModel', e.target.value)}
-                            sx={{ gap: 1 }}
+                            sx={{ gap: 3 }}
                         >
-                            {['Exclusive', 'Co-load', 'Fraction'].map((option) => (
-                                <Box
+                            {['Exclusive', 'Co-load', 'Fractional'].map((option) => (
+                                <FormControlLabel
                                     key={option}
-                                    sx={{
-                                        border: '1px solid #E0E0E0',
-                                        borderRadius: 1,
-                                        p: 1, pl: 2,
-                                        display: 'flex', alignItems: 'center',
-                                        '&:hover': { bgcolor: '#F9F9F9' }
-                                    }}
-                                >
-                                    <FormControlLabel
-                                        value={option.toLowerCase()}
-                                        control={<Radio sx={{ color: '#1B3E38', '&.Mui-checked': { color: '#1B3E38' }, p: 0.5 }} size="small" />}
-                                        label={<Typography variant="body2" fontWeight="500" fontSize="0.85rem">{option}</Typography>}
-                                        sx={{ width: '100%', m: 0 }}
-                                    />
-                                </Box>
+                                    value={option.toLowerCase()}
+                                    control={<Radio sx={{ color: '#1B3E38', '&.Mui-checked': { color: '#1B3E38' }, p: 0.5 }} size="small" />}
+                                    label={<Typography variant="body2">{option}</Typography>}
+                                />
                             ))}
                         </RadioGroup>
                     </Box>
 
                     {/* Stops Priority Preference */}
-                    <Box sx={{ border: '1px solid #E0E0E0', borderRadius: 2, p: 2 }}>
-                        <Typography variant="caption" fontWeight="600" mb={1} display="block">Stops Priority Preference</Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Typography variant="body2" sx={{ minWidth: 240, fontWeight: 700, fontSize: '0.9rem', color: '#1a1a1a' }}>Stops Priority Preference</Typography>
                         <RadioGroup
+                            row
                             value={data.stopsPriority}
                             onChange={(e) => updateData('stopsPriority', e.target.value)}
-                            sx={{ gap: 1 }}
+                            sx={{ gap: 3 }}
                         >
-                            <Box sx={{ border: '1px solid #E0E0E0', borderRadius: 1, p: 1, pl: 2, display: 'flex', alignItems: 'center' }}>
-                                <FormControlLabel
-                                    value="preference_1"
-                                    control={<Radio sx={{ color: '#1B3E38', '&.Mui-checked': { color: '#1B3E38' }, p: 0.5 }} size="small" />}
-                                    label={<Typography variant="body2" fontWeight="500" fontSize="0.85rem">Preference 1 - e.g. Pharma Products</Typography>}
-                                    sx={{ width: '100%', m: 0 }}
-                                />
-                            </Box>
-                            <Box sx={{ border: '1px solid #E0E0E0', borderRadius: 1, p: 1, pl: 2, display: 'flex', alignItems: 'center' }}>
-                                <FormControlLabel
-                                    value="preference_2"
-                                    control={<Radio sx={{ color: '#1B3E38', '&.Mui-checked': { color: '#1B3E38' }, p: 0.5 }} size="small" />}
-                                    label={<Typography variant="body2" fontWeight="500" fontSize="0.85rem">Preference 2 - e.g. Front Shop</Typography>}
-                                    sx={{ width: '100%', m: 0 }}
-                                />
-                            </Box>
+                            <FormControlLabel
+                                value="preference_1"
+                                control={<Radio sx={{ color: '#1B3E38', '&.Mui-checked': { color: '#1B3E38' }, p: 0.5 }} size="small" />}
+                                label={<Typography variant="body2">Preference 1 - e.g. Pharma Products</Typography>}
+                            />
+                            <FormControlLabel
+                                value="preference_2"
+                                control={<Radio sx={{ color: '#1B3E38', '&.Mui-checked': { color: '#1B3E38' }, p: 0.5 }} size="small" />}
+                                label={<Typography variant="body2">Preference 2 - e.g. Front Shop</Typography>}
+                            />
                         </RadioGroup>
                     </Box>
 
-                    {/* Dynamic Overflow & Pre-departure */}
-                    <Box sx={{ display: 'flex', gap: 2 }}>
-                        <Box sx={{ flex: 1, border: '1px solid #E0E0E0', borderRadius: 2, p: 2 }}>
-                            <Typography variant="caption" fontWeight="600" mb={1} display="block">Dynamic Overflow Handling</Typography>
-                            <Select
-                                fullWidth
-                                size="small"
-                                value={data.dynamicOverflow || '20%'}
-                                onChange={(e) => updateData('dynamicOverflow', e.target.value)}
-                                sx={{ bgcolor: 'white', '& .MuiSelect-select': { fontSize: '0.85rem' } }}
-                            >
-                                <MenuItem value="10%">10%</MenuItem>
-                                <MenuItem value="20%">20%</MenuItem>
-                                <MenuItem value="30%">30%</MenuItem>
-                            </Select>
-                        </Box>
-                        <Box sx={{ flex: 1, border: '1px solid #E0E0E0', borderRadius: 2, p: 2 }}>
-                            <Typography variant="caption" fontWeight="600" mb={1} display="block">Pre-departure cutoff constraints</Typography>
-                            <Select
-                                fullWidth
-                                size="small"
-                                value={data.preDepartureCutoff || '20%'}
-                                onChange={(e) => updateData('preDepartureCutoff', e.target.value)}
-                                sx={{ bgcolor: 'white', '& .MuiSelect-select': { fontSize: '0.85rem' } }}
-                            >
-                                <MenuItem value="10%">10%</MenuItem>
-                                <MenuItem value="20%">20%</MenuItem>
-                                <MenuItem value="30%">30%</MenuItem>
-                            </Select>
+                    {/* Dynamic Overflow Handling */}
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Typography variant="body2" sx={{ minWidth: 240, fontWeight: 700, fontSize: '0.9rem', color: '#1a1a1a', whiteSpace: 'nowrap' }}>Dynamic Overflow Handling</Typography>
+                        <Select
+                            size="small"
+                            value={data.dynamicOverflow || '20%'}
+                            onChange={(e) => updateData('dynamicOverflow', e.target.value)}
+                            sx={{ width: 200, bgcolor: 'white', '& .MuiSelect-select': { fontSize: '0.85rem', py: 1 } }}
+                        >
+                            {/* Generate 0% to 100% in increments of 10 */}
+                            {[...Array(11)].map((_, i) => {
+                                const val = `${i * 10}%`;
+                                return <MenuItem key={val} value={val}>{val}</MenuItem>;
+                            })}
+                        </Select>
+                    </Box>
+
+                    {/* Pre-departure cutoff constraints */}
+                    <Box>
+                        <Typography variant="body2" sx={{ fontWeight: 700, fontSize: '0.9rem', color: '#1a1a1a', mb: 1.5 }}>Pre-departure cutoff constraints</Typography>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, pl: 2 }}>
+                            {[
+                                'Time-Based Cutoff',
+                                'Status-Based Cutoff',
+                                'Capacity-Based Cutoff',
+                                'Regulatory / Compliance Cutoff',
+                                'Network / Linehaul Cutoff'
+                            ].map(option => (
+                                <FormControlLabel
+                                    key={option}
+                                    control={
+                                        <Checkbox
+                                            checked={(Array.isArray(data.preDepartureCutoff) ? data.preDepartureCutoff : []).includes(option)}
+                                            onChange={() => handlePreDepartureToggle(option)}
+                                            size="small"
+                                            sx={{ color: '#1B3E38', '&.Mui-checked': { color: '#1B3E38' }, p: 0.5 }}
+                                        />
+                                    }
+                                    label={<Typography variant="body2">{option}</Typography>}
+                                />
+                            ))}
                         </Box>
                     </Box>
 

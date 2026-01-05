@@ -258,7 +258,7 @@ const Step1NetworkContext = ({ data, updateData }) => {
                             onChange={(e) => updateData('linhaulModel', e.target.value)}
                             sx={{ gap: 0.5 }}
                         >
-                            {['Exclusive', 'Co-load', 'Fraction'].map((option) => (
+                            {['Exclusive', 'Co-load', 'Fractional'].map((option) => (
                                 <Box
                                     key={option}
                                     sx={{
