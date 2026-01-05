@@ -146,7 +146,7 @@ const CreateOperatingWizard = ({ onBack }) => {
                 {/* Page Header */}
                 <Box sx={{ px: 3, pt: 2, pb: 1 }}> {/* Reduced padding */}
                     <Typography variant="h6" fontWeight="700" color="#1B3E38">
-                        Network & Market Context
+                        {STEPS.find(s => s.id === currentStep)?.title}
                     </Typography>
                 </Box>
 

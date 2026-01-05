@@ -63,8 +63,6 @@ const Step3ServiceLevelAgreements = ({ data, updateData }) => {
                 {/* Left Column */}
                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
 
-                    <Typography variant="subtitle2" fontWeight="600" color="#1B3E38">Service Level Agreements</Typography>
-
                     {/* Mid/Final Mile Route Model */}
                     <Box sx={{ border: '1px solid #E0E0E0', borderRadius: 2, p: 2 }}>
                         <Typography variant="caption" fontWeight="600" mb={1} display="block">Mid/Final Mile Route Model</Typography>

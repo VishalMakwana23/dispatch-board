@@ -85,7 +85,6 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
 
             {/* Left Column: Vehicle Context */}
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <Typography variant="subtitle2" fontWeight="600" color="#1B3E38">Vehicle Context</Typography>
 
                 {/* Vehicles Grid */}
                 <Box sx={{ border: '1px solid #E0E0E0', borderRadius: 2, p: 2 }}>
@@ -214,7 +213,6 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
 
             {/* Right Column: Driver Context */}
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <Typography variant="subtitle2" fontWeight="600" color="#1B3E38">Driver Context</Typography>
 
                 {/* Drivers Schedule */}
                 <Box sx={{ border: '1px solid #E0E0E0', borderRadius: 2, p: 2 }}>

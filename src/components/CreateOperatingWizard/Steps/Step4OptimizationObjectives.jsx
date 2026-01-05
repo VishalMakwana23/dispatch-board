@@ -83,7 +83,6 @@ const Step4OptimizationObjectives = ({ data, updateData }) => {
 
             {/* Left Column: Optimization Objectives */}
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <Typography variant="subtitle2" fontWeight="600" color="#1B3E38">Optimization Objectives</Typography>
 
                 <RadioGroup
                     value={data.optimizationObjective || 'reduce_distance'}
