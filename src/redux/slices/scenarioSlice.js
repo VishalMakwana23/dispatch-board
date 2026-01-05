@@ -12,7 +12,6 @@ const initialDraftState = {
     // Step 1 Data
     markets: [],
     cities: [],
-    depots: [],
     linhaulModel: 'exclusive',
     startDate: '2023-12-03',
     endDate: '2023-12-12',
