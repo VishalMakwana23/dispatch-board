@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, TextField, MenuItem, FormControl, RadioGroup, FormControlLabel, Radio, Chip, IconButton, Select, InputLabel, InputAdornment, Divider } from '@mui/material';
+import { Box, Typography, TextField, MenuItem, FormControl, RadioGroup, FormControlLabel, Radio, Chip, IconButton, Select, InputLabel, InputAdornment, Divider, Autocomplete } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -146,17 +146,25 @@ const Step1NetworkContext = ({ data, updateData }) => {
                     <Box>
                         {/* <Typography variant="subtitle2" fontWeight="600" mb={0.5} sx={{ fontSize: '0.85rem' }}>Network&Market Context</Typography> */}
                         <Typography variant="caption" fontWeight="600" mb={0.5} display="block">Markets</Typography>
-                        <Select
-                            fullWidth
+                        <Autocomplete
+                            id="market-select"
+                            options={Object.keys(MARKET_DATA).filter(m => !data.markets.some(selected => selected.name === m))} // Filter out already selected
+                            onChange={(event, newValue) => {
+                                if (newValue) {
+                                    handleMarketAdd(newValue);
+                                }
+                            }}
                             size="small"
-                            displayEmpty
-                            value=""
-                            onChange={(e) => handleMarketAdd(e.target.value)}
-                            sx={{ mb: 1, bgcolor: 'white', '& .MuiSelect-select': { py: 0.75, fontSize: '0.85rem' } }}
-                            renderValue={() => <Typography variant="body2" color="text.secondary" fontSize="0.85rem">Type to select markets</Typography>}
-                        >
-                            {Object.keys(MARKET_DATA).map(m => <MenuItem key={m} value={m}>{m}</MenuItem>)}
-                        </Select>
+                            fullWidth
+                            sx={{ mb: 1, bgcolor: 'white' }}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    placeholder="Type to select markets"
+                                    sx={{ '& .MuiInputBase-root': { fontSize: '0.85rem' } }}
+                                />
+                            )}
+                        />
 
                         {data.markets.length > 0 && (
                             <Box sx={{ display: 'grid', gridTemplateColumns: 'minmax(100px, 1fr) 1.8fr 1fr 1fr 0.8fr', gap: 1, mb: 0.5, px: 0.5 }}>
@@ -225,17 +233,25 @@ const Step1NetworkContext = ({ data, updateData }) => {
                     {/* Cities */}
                     <Box>
                         <Typography variant="caption" fontWeight="600" mb={0.5} display="block">Cities</Typography>
-                        <Select
-                            fullWidth
+                        <Autocomplete
+                            id="city-select"
+                            options={availableCities.filter(c => !data.cities.includes(c))} // Filter out selected
+                            onChange={(event, newValue) => {
+                                if (newValue) {
+                                    handleCityToggle(newValue);
+                                }
+                            }}
                             size="small"
-                            displayEmpty
-                            value=""
-                            onChange={(e) => handleCityToggle(e.target.value)}
-                            sx={{ mb: 1, bgcolor: 'white', '& .MuiSelect-select': { py: 0.75, fontSize: '0.85rem' } }}
-                            renderValue={() => <Typography variant="body2" color="text.secondary" fontSize="0.85rem">Type to select cities</Typography>}
-                        >
-                            {availableCities.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
-                        </Select>
+                            fullWidth
+                            sx={{ mb: 1, bgcolor: 'white' }}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    placeholder="Type to select cities"
+                                    sx={{ '& .MuiInputBase-root': { fontSize: '0.85rem' } }}
+                                />
+                            )}
+                        />
                         <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
                             {data.cities.map(city => (
                                 <Chip key={city} label={city} onDelete={() => handleCityToggle(city)} size="small" sx={{ borderRadius: 1, bgcolor: '#E0E7E5', fontSize: '0.75rem', height: 24 }} />
