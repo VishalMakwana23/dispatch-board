@@ -8,6 +8,8 @@ import { login } from '../services/authService'; // We might need a checkAuth fu
 // Since we don't have a global auth context in this snippet, we'll rely on the fact that the user landed here.
 // In a real app, we'd check context.
 
+import ScenarioPlanningView from './admin/ScenarioPlanningView';
+
 const AdminDashboard = () => {
   const [activeView, setActiveView] = useState('routes');
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -21,7 +23,7 @@ const AdminDashboard = () => {
       // For now, commenting out to allow testing without full login flow if needed, 
       // but per requirements: "If user role = 'admin' 👉 redirect to /admin"
       // This component is rendered at /admin, so we should check if they are allowed.
-      
+
       // navigate('/login'); // Uncomment to enforce
     }
   }, [navigate]);
@@ -30,6 +32,8 @@ const AdminDashboard = () => {
     switch (activeView) {
       case 'routes':
         return <RoutesView activeView={activeView} setActiveView={setActiveView} isCollapsed={isCollapsed} />;
+      case 'scenario_planning':
+        return <ScenarioPlanningView activeView={activeView} setActiveView={setActiveView} isCollapsed={isCollapsed} />;
       case 'drivers':
         return <DriversView activeView={activeView} setActiveView={setActiveView} isCollapsed={isCollapsed} />;
       case 'orders':
@@ -40,8 +44,8 @@ const AdminDashboard = () => {
   };
 
   return (
-    <AdminLayout 
-      activeView={activeView} 
+    <AdminLayout
+      activeView={activeView}
       setActiveView={setActiveView}
       isCollapsed={isCollapsed}
       setIsCollapsed={setIsCollapsed}
