@@ -57,6 +57,9 @@ const CreateOperatingWizard = ({ onBack }) => {
             // Ex: require at least one market
             return draft.markets.length > 0;
         }
+        if (currentStep === 5) {
+            return false;
+        }
         return true;
     };
 
