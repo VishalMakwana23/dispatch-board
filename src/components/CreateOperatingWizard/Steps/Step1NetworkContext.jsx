@@ -92,17 +92,6 @@ const Step1NetworkContext = ({ data, updateData }) => {
     const handleMarketRemove = (name) => {
         const updatedMarkets = data.markets.filter(m => m.name !== name);
         updateData('markets', updatedMarkets);
-
-        // Recalculate valid cities based on remaining markets
-        const validCities = new Set();
-        updatedMarkets.forEach(market => {
-            const marketCities = MARKET_DATA[market.name] || [];
-            marketCities.forEach(city => validCities.add(city));
-        });
-
-        // Filter currently selected cities to keep only valid ones
-        const updatedCities = data.cities.filter(city => validCities.has(city));
-        updateData('cities', updatedCities);
     };
 
     const handleMarketChange = (name, field, value) => {
@@ -110,13 +99,7 @@ const Step1NetworkContext = ({ data, updateData }) => {
         updateData('markets', updated);
     };
 
-    const handleCityToggle = (city) => {
-        if (data.cities.includes(city)) {
-            updateData('cities', data.cities.filter(c => c !== city));
-        } else {
-            updateData('cities', [...data.cities, city]);
-        }
-    };
+
 
     const handleDateChange = (field, date) => {
         if (date) {
@@ -126,15 +109,7 @@ const Step1NetworkContext = ({ data, updateData }) => {
         }
     };
 
-    // Calculate available cities based on selected markets
-    const availableCities = React.useMemo(() => {
-        const cities = new Set();
-        data.markets.forEach(market => {
-            const marketCities = MARKET_DATA[market.name] || [];
-            marketCities.forEach(city => cities.add(city));
-        });
-        return Array.from(cities).sort();
-    }, [data.markets]);
+
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -230,45 +205,18 @@ const Step1NetworkContext = ({ data, updateData }) => {
                         ))}
                     </Box>
 
-                    {/* Cities */}
-                    <Box>
-                        <Typography variant="caption" fontWeight="600" mb={0.5} display="block">Cities</Typography>
-                        <Autocomplete
-                            id="city-select"
-                            options={availableCities.filter(c => !data.cities.includes(c))} // Filter out selected
-                            onChange={(event, newValue) => {
-                                if (newValue) {
-                                    handleCityToggle(newValue);
-                                }
-                            }}
-                            size="small"
-                            fullWidth
-                            sx={{ mb: 1, bgcolor: 'white' }}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    placeholder="Type to select cities"
-                                    sx={{ '& .MuiInputBase-root': { fontSize: '0.85rem' } }}
-                                />
-                            )}
-                        />
-                        <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
-                            {data.cities.map(city => (
-                                <Chip key={city} label={city} onDelete={() => handleCityToggle(city)} size="small" sx={{ borderRadius: 1, bgcolor: '#E0E7E5', fontSize: '0.75rem', height: 24 }} />
-                            ))}
-                        </Box>
-                    </Box>
+
                 </Box>
 
                 <Divider orientation="vertical" flexItem sx={{ borderColor: '#E0E0E0' }} />
 
                 {/* Right Column */}
                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <Typography variant="subtitle2" fontWeight="600" sx={{ fontSize: '0.85rem' }}>Linhaul Route Context</Typography>
+                    <Typography variant="subtitle2" fontWeight="600" sx={{ fontSize: '0.85rem' }}>Final Mile Route Context</Typography>
 
                     {/* Linhaul Model */}
                     <Box sx={{ border: '1px solid #E0E0E0', borderRadius: 2, p: 1.5 }}>
-                        <Typography variant="caption" fontWeight="600" mb={1} display="block">Linhaul Route Model</Typography>
+                        <Typography variant="caption" fontWeight="600" mb={1} display="block">Final Mile Route Model</Typography>
                         <RadioGroup
                             value={data.linhaulModel}
                             onChange={(e) => updateData('linhaulModel', e.target.value)}

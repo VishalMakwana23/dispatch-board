@@ -80,7 +80,7 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
         updateData(section, { ...data[section], [field]: value });
     };
 
-    const handleMarketVehicleCountChange = (marketName, vehicleId, value) => {
+    const handleMarketVehicleCountChange = (marketName, vehicleId, field, value) => {
         let cleanValue = value;
         if (cleanValue.length > 1 && cleanValue.startsWith('0')) {
             cleanValue = cleanValue.substring(1);
@@ -88,7 +88,17 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
 
         const currentCounts = { ...(data.marketVehicleCounts || {}) };
         currentCounts[marketName] = { ...(currentCounts[marketName] || {}) };
-        currentCounts[marketName][vehicleId] = cleanValue;
+
+        // Initialize if it doesn't exist or is not an object (migration from old single value)
+        if (typeof currentCounts[marketName][vehicleId] !== 'object' || currentCounts[marketName][vehicleId] === null) {
+            currentCounts[marketName][vehicleId] = { count: 0, capacity: 0 };
+        }
+
+        currentCounts[marketName][vehicleId] = {
+            ...currentCounts[marketName][vehicleId],
+            [field]: cleanValue
+        };
+
         updateData('marketVehicleCounts', currentCounts);
     };
 
@@ -165,7 +175,7 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
                                             const details = VEHICLE_TYPES.find(v => v.id === vehId);
                                             return (
                                                 <TableCell key={vehId} sx={{ fontWeight: 600, fontSize: '0.75rem', color: '#666', borderBottom: '1px solid #E0E0E0', minWidth: 140 }}>
-                                                    Available {details?.name} Count
+                                                    {details?.name}
                                                 </TableCell>
                                             );
                                         })}
@@ -178,22 +188,49 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
                                                 {market.name}
                                             </TableCell>
                                             {Object.keys(data.selectedVehicles || {}).map(vehId => {
-                                                const val = data.marketVehicleCounts?.[market.name]?.[vehId] ?? 0;
+                                                const record = data.marketVehicleCounts?.[market.name]?.[vehId];
+                                                // Handle legacy simple number vs new object structure
+                                                const countVal = (typeof record === 'object' ? record?.count : record) ?? 0;
+                                                const capacityVal = (typeof record === 'object' ? record?.capacity : 0) ?? 0;
+
                                                 return (
                                                     <TableCell key={vehId} sx={{ borderBottom: '1px solid #F0F0F0', py: 1 }}>
-                                                        <TextField
-                                                            variant="standard"
-                                                            size="small"
-                                                            fullWidth
-                                                            InputProps={{ disableUnderline: false }}
-                                                            placeholder="-"
-                                                            value={val}
-                                                            onChange={(e) => handleMarketVehicleCountChange(market.name, vehId, e.target.value)}
-                                                            sx={{
-                                                                '& input': { textAlign: 'center', fontSize: '0.9rem' },
-                                                                maxWidth: 100
-                                                            }}
-                                                        />
+                                                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
+                                                            {/* Count Input */}
+                                                            <Box>
+                                                                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem', display: 'block', mb: 0.5 }}>Count</Typography>
+                                                                <TextField
+                                                                    variant="standard"
+                                                                    size="small"
+                                                                    fullWidth
+                                                                    InputProps={{ disableUnderline: false }}
+                                                                    placeholder="-"
+                                                                    value={countVal}
+                                                                    onChange={(e) => handleMarketVehicleCountChange(market.name, vehId, 'count', e.target.value)}
+                                                                    sx={{
+                                                                        '& input': { textAlign: 'center', fontSize: '0.9rem' },
+                                                                        maxWidth: 60
+                                                                    }}
+                                                                />
+                                                            </Box>
+                                                            {/* Capacity Input */}
+                                                            <Box>
+                                                                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem', display: 'block', mb: 0.5 }}>Capacity</Typography>
+                                                                <TextField
+                                                                    variant="standard"
+                                                                    size="small"
+                                                                    fullWidth
+                                                                    InputProps={{ disableUnderline: false }}
+                                                                    placeholder="-"
+                                                                    value={capacityVal}
+                                                                    onChange={(e) => handleMarketVehicleCountChange(market.name, vehId, 'capacity', e.target.value)}
+                                                                    sx={{
+                                                                        '& input': { textAlign: 'center', fontSize: '0.9rem' },
+                                                                        maxWidth: 60
+                                                                    }}
+                                                                />
+                                                            </Box>
+                                                        </Box>
                                                     </TableCell>
                                                 );
                                             })}
@@ -257,7 +294,7 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
                         </Box>
                     </Box>
 
-                    <Typography variant="caption" color="text.secondary" mb={1} display="block">Weekly Hours</Typography>
+                    <Typography variant="caption" color="text.secondary" mb={1} display="block">Fixed Weekly schedules</Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                         {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => {
                             const dayKey = `day_${index}`;
@@ -280,7 +317,7 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
                                     <Select
                                         size="small"
                                         fullWidth
-                                        value={dayConfig.start}
+                                        value={dayConfig.start || ''}
                                         onChange={(e) => handleWeeklyHoursChange(dayKey, 'start', e.target.value)}
                                         sx={{
                                             flex: 1, bgcolor: 'white',
@@ -298,7 +335,7 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
                                     <Select
                                         size="small"
                                         fullWidth
-                                        value={dayConfig.end}
+                                        value={dayConfig.end || ''}
                                         onChange={(e) => handleWeeklyHoursChange(dayKey, 'end', e.target.value)}
                                         sx={{
                                             flex: 1, bgcolor: 'white',
@@ -310,6 +347,47 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
                                         displayEmpty
                                     >
                                         <MenuItem value=""><Typography variant="caption" color="text.secondary">End Time</Typography></MenuItem>
+                                        {TIME_OPTIONS.map(t => <MenuItem key={t} value={t}>{t}</MenuItem>)}
+                                    </Select>
+
+                                    <Typography color="text.secondary" sx={{ mx: 0.5 }}>|</Typography>
+
+                                    {/* Break Start */}
+                                    <Select
+                                        size="small"
+                                        fullWidth
+                                        value={dayConfig.breakStart || ''}
+                                        onChange={(e) => handleWeeklyHoursChange(dayKey, 'breakStart', e.target.value)}
+                                        sx={{
+                                            flex: 1, bgcolor: 'white',
+                                            borderRadius: 1,
+                                            '& .MuiOutlinedInput-notchedOutline': { borderColor: isActive ? '#1B3E38' : '#E0E0E0' },
+                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#1B3E38' },
+                                            '& .MuiSelect-select': { py: 1, fontSize: '0.85rem', color: isActive ? '#1B3E38' : '#9E9E9E' }
+                                        }}
+                                        displayEmpty
+                                    >
+                                        <MenuItem value=""><Typography variant="caption" color="text.secondary">Break Start</Typography></MenuItem>
+                                        {TIME_OPTIONS.map(t => <MenuItem key={t} value={t}>{t}</MenuItem>)}
+                                    </Select>
+                                    <Typography color="text.secondary">-</Typography>
+
+                                    {/* Break End */}
+                                    <Select
+                                        size="small"
+                                        fullWidth
+                                        value={dayConfig.breakEnd || ''}
+                                        onChange={(e) => handleWeeklyHoursChange(dayKey, 'breakEnd', e.target.value)}
+                                        sx={{
+                                            flex: 1, bgcolor: 'white',
+                                            borderRadius: 1,
+                                            '& .MuiOutlinedInput-notchedOutline': { borderColor: isActive ? '#1B3E38' : '#E0E0E0' },
+                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#1B3E38' },
+                                            '& .MuiSelect-select': { py: 1, fontSize: '0.85rem', color: isActive ? '#1B3E38' : '#9E9E9E' }
+                                        }}
+                                        displayEmpty
+                                    >
+                                        <MenuItem value=""><Typography variant="caption" color="text.secondary">Break End</Typography></MenuItem>
                                         {TIME_OPTIONS.map(t => <MenuItem key={t} value={t}>{t}</MenuItem>)}
                                     </Select>
                                 </Box>

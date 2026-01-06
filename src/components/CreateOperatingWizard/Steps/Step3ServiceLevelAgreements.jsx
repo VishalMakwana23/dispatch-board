@@ -11,6 +11,41 @@ const TIME_OPTIONS = [
     '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm'
 ];
 
+const CUTOFF_CONFIG = [
+    {
+        id: 'Time-Based Cutoff',
+        options: ['0 min', '15 min', '30 min', '45 min', '60 min']
+    },
+    {
+        id: 'Status-Based Cutoff',
+        options: [
+            'Order must be in “Picked” or “Ready to Load” status',
+            'If still “Allocated”, it is excluded'
+        ]
+    },
+    {
+        id: 'Capacity-Based Cutoff',
+        options: [
+            'Weight, cube, or stop count reached',
+            'No additional stops can be added even if time remains'
+        ]
+    },
+    {
+        id: 'Regulatory / Compliance Cutoff',
+        options: [
+            'Controlled substances require sealing or documentation prior to departure',
+            'Missing documentation = cannot load'
+        ]
+    },
+    {
+        id: 'Network / Linehaul Cutoff',
+        options: [
+            'Linehaul leaves DC at 7:00 AM to meet cross-dock arrival windows',
+            'Missed cutoff cascades into downstream SLA breaches'
+        ]
+    }
+];
+
 const Step3ServiceLevelAgreements = ({ data, updateData }) => {
 
     // Helper to update specific fields in nested objects if needed, 
@@ -60,9 +95,20 @@ const Step3ServiceLevelAgreements = ({ data, updateData }) => {
         const currentList = Array.isArray(data.preDepartureCutoff) ? data.preDepartureCutoff : [];
         if (currentList.includes(value)) {
             updateData('preDepartureCutoff', currentList.filter(item => item !== value));
+            // Optional: Clean up details when unchecked
+            const currentDetails = { ...data.cutoffDetails };
+            delete currentDetails[value];
+            updateData('cutoffDetails', currentDetails);
         } else {
             updateData('preDepartureCutoff', [...currentList, value]);
         }
+    };
+
+    const handleCutoffDetailChange = (id, value) => {
+        updateData('cutoffDetails', {
+            ...(data.cutoffDetails || {}),
+            [id]: value
+        });
     };
 
     return (
@@ -72,25 +118,7 @@ const Step3ServiceLevelAgreements = ({ data, updateData }) => {
                 {/* Left Column */}
                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
 
-                    {/* Mid/Final Mile Route Model */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Typography variant="body2" sx={{ minWidth: 240, fontWeight: 700, fontSize: '0.9rem', color: '#1a1a1a' }}>Final Mile Route Model</Typography>
-                        <RadioGroup
-                            row
-                            value={data.midFinalMileModel}
-                            onChange={(e) => updateData('midFinalMileModel', e.target.value)}
-                            sx={{ gap: 3 }}
-                        >
-                            {['Exclusive', 'Co-load', 'Fractional'].map((option) => (
-                                <FormControlLabel
-                                    key={option}
-                                    value={option.toLowerCase()}
-                                    control={<Radio sx={{ color: '#1B3E38', '&.Mui-checked': { color: '#1B3E38' }, p: 0.5 }} size="small" />}
-                                    label={<Typography variant="body2">{option}</Typography>}
-                                />
-                            ))}
-                        </RadioGroup>
-                    </Box>
+
 
                     {/* Stops Priority Preference */}
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -135,220 +163,51 @@ const Step3ServiceLevelAgreements = ({ data, updateData }) => {
                     <Box>
                         <Typography variant="body2" sx={{ fontWeight: 700, fontSize: '0.9rem', color: '#1a1a1a', mb: 1.5 }}>Pre-departure cutoff constraints</Typography>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, pl: 2 }}>
-                            {[
-                                'Time-Based Cutoff',
-                                'Status-Based Cutoff',
-                                'Capacity-Based Cutoff',
-                                'Regulatory / Compliance Cutoff',
-                                'Network / Linehaul Cutoff'
-                            ].map(option => (
-                                <FormControlLabel
-                                    key={option}
-                                    control={
-                                        <Checkbox
-                                            checked={(Array.isArray(data.preDepartureCutoff) ? data.preDepartureCutoff : []).includes(option)}
-                                            onChange={() => handlePreDepartureToggle(option)}
-                                            size="small"
-                                            sx={{ color: '#1B3E38', '&.Mui-checked': { color: '#1B3E38' }, p: 0.5 }}
-                                        />
-                                    }
-                                    label={<Typography variant="body2">{option}</Typography>}
-                                />
-                            ))}
-                        </Box>
-                    </Box>
-
-                    {/* Operational Constraints */}
-                    <Box sx={{ border: '1px solid #E0E0E0', borderRadius: 2, p: 2 }}>
-                        <Typography variant="caption" fontWeight="600" mb={2} display="block">Operational Constraints</Typography>
-
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                            {/* Max dwell time */}
-                            <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid #E0E0E0', borderRadius: 3, p: 1.5 }}>
-                                <Typography variant="body2" sx={{ flex: 1, color: '#333', fontWeight: 500 }}>Max dwell time at stops</Typography>
-                                <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid #1B3E38', borderRadius: 1, px: 1, py: 0.5 }}>
-                                    <TextField
-                                        variant="standard"
-                                        InputProps={{ disableUnderline: true }}
-                                        value={data.operationalConstraints?.maxDwell ?? 5}
-                                        onChange={(e) => handleConstraintChange('maxDwell', e.target.value)}
-                                        sx={{ width: 30, '& input': { textAlign: 'center', fontSize: '0.9rem', fontWeight: 600, p: 0, color: '#9E9E9E' } }}
-                                    />
-                                </Box>
-                                <Typography variant="caption" color="text.secondary" ml={1}>Hours</Typography>
-                            </Box>
-
-                            {/* Max Stops */}
-                            <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid #E0E0E0', borderRadius: 3, p: 1.5 }}>
-                                <Typography variant="body2" sx={{ flex: 1, color: '#333', fontWeight: 500 }}>Max Stops</Typography>
-                                <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid #1B3E38', borderRadius: 1, px: 1, py: 0.5 }}>
-                                    <TextField
-                                        variant="standard"
-                                        InputProps={{ disableUnderline: true }}
-                                        value={data.operationalConstraints?.maxStops ?? 5}
-                                        onChange={(e) => handleConstraintChange('maxStops', e.target.value)}
-                                        sx={{ width: 30, '& input': { textAlign: 'center', fontSize: '0.9rem', fontWeight: 600, p: 0, color: '#9E9E9E' } }}
-                                    />
-                                </Box>
-                                <Typography variant="caption" color="text.secondary" ml={1} lineHeight={1.2}>Count <br /> / Per Day</Typography>
-                            </Box>
-
-                            {/* Max Distance */}
-                            <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid #E0E0E0', borderRadius: 3, p: 1.5 }}>
-                                <Typography variant="body2" sx={{ flex: 1, color: '#333', fontWeight: 500 }}>Max Distance</Typography>
-                                <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid #1B3E38', borderRadius: 1, px: 1, py: 0.5 }}>
-                                    <TextField
-                                        variant="standard"
-                                        InputProps={{ disableUnderline: true }}
-                                        value={data.operationalConstraints?.maxDistance ?? 5}
-                                        onChange={(e) => handleConstraintChange('maxDistance', e.target.value)}
-                                        sx={{ width: 30, '& input': { textAlign: 'center', fontSize: '0.9rem', fontWeight: 600, p: 0, color: '#9E9E9E' } }}
-                                    />
-                                </Box>
-                                <Typography variant="caption" color="text.secondary" ml={1} lineHeight={1.2}>KM <br /> / Per Day</Typography>
-                            </Box>
-                        </Box>
-                    </Box>
-                </Box>
-
-                <Divider orientation="vertical" flexItem sx={{ borderColor: '#E0E0E0' }} />
-
-                {/* Right Column */}
-                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <Typography variant="subtitle2" fontWeight="600" color="#1B3E38">Completion windows</Typography>
-
-                    <Box sx={{ border: '1px solid #E0E0E0', borderRadius: 2, p: 2 }}>
-
-                        {/* Route-level completion windows */}
-                        <Typography variant="caption" fontWeight="600" mb={1} display="block">Route-level completion windows</Typography>
-                        <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
-                            <Box sx={{ flex: 1 }}>
-                                <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>Start Date</Typography>
-                                <DatePicker
-                                    value={data.slaSchedule?.startDate ? parseISO(data.slaSchedule.startDate) : null}
-                                    onChange={(newValue) => handleDateChange('slaSchedule', 'startDate', newValue)}
-                                    format="MM/dd/yyyy"
-                                    slots={{ openPickerIcon: CalendarTodayIcon }}
-                                    slotProps={{
-                                        textField: {
-                                            size: 'small', fullWidth: true,
-                                            sx: { '& .MuiOutlinedInput-root.Mui-focused fieldset': { borderColor: '#1B3E38' } }
-                                        },
-                                        openPickerButton: { sx: { color: '#1B3E38' } },
-                                        layout: { sx: { '& .MuiPickersDay-root.Mui-selected': { bgcolor: '#1B3E38' } } }
-                                    }}
-                                />
-                            </Box>
-                            <Box sx={{ flex: 1 }}>
-                                <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>End Date</Typography>
-                                <DatePicker
-                                    value={data.slaSchedule?.endDate ? parseISO(data.slaSchedule.endDate) : null}
-                                    onChange={(newValue) => handleDateChange('slaSchedule', 'endDate', newValue)}
-                                    format="MM/dd/yyyy"
-                                    slots={{ openPickerIcon: CalendarTodayIcon }}
-                                    slotProps={{
-                                        textField: {
-                                            size: 'small', fullWidth: true,
-                                            sx: { '& .MuiOutlinedInput-root.Mui-focused fieldset': { borderColor: '#1B3E38' } }
-                                        },
-                                        openPickerButton: { sx: { color: '#1B3E38' } },
-                                        layout: { sx: { '& .MuiPickersDay-root.Mui-selected': { bgcolor: '#1B3E38' } } }
-                                    }}
-                                />
-                            </Box>
-                        </Box>
-
-                        {/* Weekly Hours */}
-                        <Typography variant="caption" color="text.secondary" mb={1.5} display="block">Weekly Hours</Typography>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mb: 3 }}>
-                            {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => {
-                                const dayKey = `day_${index}`;
-                                const weeklyHours = data.slaSchedule?.weeklyHours || {};
-                                const dayConfig = weeklyHours[dayKey] || { start: '', end: '' };
-                                const isActive = !!dayConfig.start;
-
+                            {CUTOFF_CONFIG.map((config) => {
+                                const isChecked = (Array.isArray(data.preDepartureCutoff) ? data.preDepartureCutoff : []).includes(config.id);
                                 return (
-                                    <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1.5, width: '100%' }}>
-                                        <Box sx={{
-                                            width: 32, height: 32, borderRadius: '50%',
-                                            bgcolor: isActive ? '#1B3E38' : '#F0F0F0',
-                                            color: isActive ? 'white' : '#9E9E9E',
-                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                            fontSize: 13, fontWeight: 600,
-                                            flexShrink: 0
-                                        }}>
-                                            {day}
-                                        </Box>
-                                        <Select
-                                            size="small"
-                                            fullWidth
-                                            value={dayConfig.start}
-                                            onChange={(e) => handleWeeklyHoursChange(dayKey, 'start', e.target.value)}
-                                            sx={{
-                                                flex: 1, bgcolor: 'white',
-                                                borderRadius: 1,
-                                                '& .MuiOutlinedInput-notchedOutline': { borderColor: isActive ? '#1B3E38' : '#E0E0E0' },
-                                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#1B3E38' },
-                                                '& .MuiSelect-select': { py: 1, fontSize: '0.85rem', color: isActive ? '#1B3E38' : '#9E9E9E' }
-                                            }}
-                                            displayEmpty
-                                        >
-                                            <MenuItem value=""><Typography variant="caption" color="text.secondary">Start Time</Typography></MenuItem>
-                                            {TIME_OPTIONS.map(t => <MenuItem key={t} value={t}>{t}</MenuItem>)}
-                                        </Select>
-                                        <Typography color="text.secondary">-</Typography>
-                                        <Select
-                                            size="small"
-                                            fullWidth
-                                            value={dayConfig.end}
-                                            onChange={(e) => handleWeeklyHoursChange(dayKey, 'end', e.target.value)}
-                                            sx={{
-                                                flex: 1, bgcolor: 'white',
-                                                borderRadius: 1,
-                                                '& .MuiOutlinedInput-notchedOutline': { borderColor: isActive ? '#1B3E38' : '#E0E0E0' },
-                                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#1B3E38' },
-                                                '& .MuiSelect-select': { py: 1, fontSize: '0.85rem', color: isActive ? '#1B3E38' : '#9E9E9E' }
-                                            }}
-                                            displayEmpty
-                                        >
-                                            <MenuItem value=""><Typography variant="caption" color="text.secondary">End Time</Typography></MenuItem>
-                                            {TIME_OPTIONS.map(t => <MenuItem key={t} value={t}>{t}</MenuItem>)}
-                                        </Select>
+                                    <Box key={config.id} sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, mb: 0.5 }}>
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={isChecked}
+                                                    onChange={() => handlePreDepartureToggle(config.id)}
+                                                    size="small"
+                                                    sx={{ color: '#1B3E38', '&.Mui-checked': { color: '#1B3E38' }, p: 0.5 }}
+                                                />
+                                            }
+                                            label={<Typography variant="body2">{config.id}</Typography>}
+                                        />
+                                        {isChecked && (
+                                            <Select
+                                                size="small"
+                                                value={data.cutoffDetails?.[config.id] || ''}
+                                                onChange={(e) => handleCutoffDetailChange(config.id, e.target.value)}
+                                                displayEmpty
+                                                sx={{
+                                                    ml: 3.5,
+                                                    width: '90%',
+                                                    maxWidth: 400,
+                                                    bgcolor: 'white',
+                                                    '& .MuiSelect-select': { fontSize: '0.85rem', py: 1 }
+                                                }}
+                                            >
+                                                <MenuItem value="" disabled><Typography variant="caption" color="text.secondary">Select Option</Typography></MenuItem>
+                                                {config.options.map(opt => (
+                                                    <MenuItem key={opt} value={opt} sx={{ fontSize: '0.85rem' }}>{opt}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        )}
                                     </Box>
                                 );
                             })}
                         </Box>
-
-                        {/* Stop-level time windows */}
-                        <Box sx={{ border: '1px solid #E0E0E0', borderRadius: 2, p: 2 }}>
-                            <Typography variant="caption" fontWeight="600" mb={2} display="block">Stop-level time windows</Typography>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                                <Select
-                                    size="small"
-                                    value={data.slaSchedule?.stopLevel?.start || ''}
-                                    onChange={(e) => handleStopLevelTimeChange('start', e.target.value)}
-                                    sx={{ flex: 1, bgcolor: 'white', '& .MuiSelect-select': { fontSize: '0.85rem' } }}
-                                    displayEmpty
-                                >
-                                    <MenuItem value=""><Typography variant="caption" color="text.secondary">Start Time</Typography></MenuItem>
-                                    {TIME_OPTIONS.map(t => <MenuItem key={t} value={t}>{t}</MenuItem>)}
-                                </Select>
-                                <Typography color="text.secondary">-</Typography>
-                                <Select
-                                    size="small"
-                                    value={data.slaSchedule?.stopLevel?.end || ''}
-                                    onChange={(e) => handleStopLevelTimeChange('end', e.target.value)}
-                                    sx={{ flex: 1, bgcolor: 'white', '& .MuiSelect-select': { fontSize: '0.85rem' } }}
-                                    displayEmpty
-                                >
-                                    <MenuItem value=""><Typography variant="caption" color="text.secondary">End Time</Typography></MenuItem>
-                                    {TIME_OPTIONS.map(t => <MenuItem key={t} value={t}>{t}</MenuItem>)}
-                                </Select>
-                            </Box>
-                        </Box>
-
                     </Box>
+
+
                 </Box>
+
+
             </Box >
         </LocalizationProvider >
     );

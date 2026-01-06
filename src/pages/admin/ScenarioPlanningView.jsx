@@ -6,6 +6,7 @@ import ScenarioPlanningPanel from '../../components/ScenarioPlanningPanel';
 import RightPanelContainer from '../../components/RightPanelContainer';
 import MapView from '../../components/MapView';
 import CreateOperatingWizard from '../../components/CreateOperatingWizard';
+import ScenarioStatsFooter from '../../components/ScenarioStatsFooter';
 import { startScenarioCreation, cancelCreation } from '../../redux/slices/scenarioSlice';
 
 const ScenarioPlanningView = ({ activeView, setActiveView, isCollapsed }) => {
@@ -73,6 +74,9 @@ const ScenarioPlanningView = ({ activeView, setActiveView, isCollapsed }) => {
                     onTrafficToggle={() => setTrafficMode(!trafficMode)}
                 />
             </Box>
+
+            {/* Dashboard Footer */}
+            <ScenarioStatsFooter results={enhancedResults} />
         </>
     );
 };
