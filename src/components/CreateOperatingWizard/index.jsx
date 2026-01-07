@@ -58,7 +58,7 @@ const CreateOperatingWizard = ({ onBack }) => {
             return draft.markets.length > 0;
         }
         if (currentStep === 5) {
-            return false;
+            return !!draft.routeDataFile;
         }
         return true;
     };

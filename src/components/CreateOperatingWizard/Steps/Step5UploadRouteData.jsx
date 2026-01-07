@@ -68,18 +68,9 @@ const Step5UploadRouteData = ({ data, updateData }) => {
     };
 
     return (
-        <Box sx={{ p: 4, height: '100%', display: 'flex', flexDirection: 'column', gap: 3 }}>
+        <Box sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
 
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <Box>
-                    <Typography variant="h6" fontWeight="600" color="#1B3E38" gutterBottom>
-                        Upload Route Data
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Upload your CSV file to view and edit route details below.
-                    </Typography>
-                </Box>
-            </Box>
+
 
             {/* Compact Upload Area - Top Left */}
             <Box

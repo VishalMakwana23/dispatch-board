@@ -407,7 +407,7 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
                 <Box sx={{ border: '1px solid #E0E0E0', borderRadius: 2, p: 2 }}>
                     <Typography variant="caption" fontWeight="600" mb={1} display="block">Drivers Eligibility</Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                        {['Transportation of Dangerous Goods card(TDG)', "Workers' Compensation Coverage(WCB)", 'Electronic Logbook (ELD)'].map(option => (
+                        {['Transportation of Dangerous Goods card(TDG)', "Workers' Compensation Coverage(WCB)", 'Electronic Logbook (ELD) - (conditional based on regulated threshold and market)'].map(option => (
                             <Box
                                 key={option}
                                 onClick={() => handleConsiderationToggle('driverEligibility', option)}

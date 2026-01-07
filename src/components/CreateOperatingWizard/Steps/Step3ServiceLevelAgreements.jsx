@@ -40,7 +40,7 @@ const CUTOFF_CONFIG = [
     {
         id: 'Network / Linehaul Cutoff',
         options: [
-            'Linehaul leaves DC at 7:00 AM to meet cross-dock arrival windows',
+            'Linehaul arrival at DC cutoff 7:00 AM to meet cross-dock arrival windows',
             'Missed cutoff cascades into downstream SLA breaches'
         ]
     }
@@ -120,6 +120,37 @@ const Step3ServiceLevelAgreements = ({ data, updateData }) => {
 
 
 
+                    {/* Stop-time profiles by stop category */}
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Typography variant="body2" sx={{ minWidth: 240, fontWeight: 700, fontSize: '0.9rem', color: '#1a1a1a' }}>Stop-time profiles by stop category</Typography>
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+                            {['Pharmacy', 'Walmart', 'Residential', 'Business', 'Apartment'].map((category) => {
+                                const isChecked = (Array.isArray(data.stopTimeProfiles) ? data.stopTimeProfiles : []).includes(category);
+                                return (
+                                    <FormControlLabel
+                                        key={category}
+                                        control={
+                                            <Checkbox
+                                                checked={isChecked}
+                                                onChange={() => {
+                                                    const current = Array.isArray(data.stopTimeProfiles) ? data.stopTimeProfiles : [];
+                                                    if (isChecked) {
+                                                        updateData('stopTimeProfiles', current.filter(c => c !== category));
+                                                    } else {
+                                                        updateData('stopTimeProfiles', [...current, category]);
+                                                    }
+                                                }}
+                                                size="small"
+                                                sx={{ color: '#1B3E38', '&.Mui-checked': { color: '#1B3E38' }, p: 0.5 }}
+                                            />
+                                        }
+                                        label={<Typography variant="body2">{category}</Typography>}
+                                    />
+                                );
+                            })}
+                        </Box>
+                    </Box>
+
                     {/* Stops Priority Preference */}
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Typography variant="body2" sx={{ minWidth: 240, fontWeight: 700, fontSize: '0.9rem', color: '#1a1a1a' }}>Stops Priority Preference</Typography>
@@ -147,13 +178,14 @@ const Step3ServiceLevelAgreements = ({ data, updateData }) => {
                         <Typography variant="body2" sx={{ minWidth: 240, fontWeight: 700, fontSize: '0.9rem', color: '#1a1a1a', whiteSpace: 'nowrap' }}>Dynamic Overflow Handling</Typography>
                         <Select
                             size="small"
-                            value={data.dynamicOverflow || '20%'}
+                            value={data.dynamicOverflow || '1 min'}
                             onChange={(e) => updateData('dynamicOverflow', e.target.value)}
                             sx={{ width: 200, bgcolor: 'white', '& .MuiSelect-select': { fontSize: '0.85rem', py: 1 } }}
+                            MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
                         >
-                            {/* Generate 0% to 100% in increments of 10 */}
-                            {[...Array(11)].map((_, i) => {
-                                const val = `${i * 10}%`;
+                            {/* Generate 1 min to 15 min */}
+                            {[...Array(15)].map((_, i) => {
+                                const val = `${i + 1} min`;
                                 return <MenuItem key={val} value={val}>{val}</MenuItem>;
                             })}
                         </Select>
