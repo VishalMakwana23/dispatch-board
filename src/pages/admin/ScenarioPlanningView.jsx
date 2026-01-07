@@ -54,6 +54,7 @@ const ScenarioPlanningView = ({ activeView, setActiveView, isCollapsed }) => {
                 results={mapRoutes}
                 onRouteSelect={handleRouteSelect}
                 openRouteIds={panels?.map(p => p.routeId) || []}
+                isAdmin={true}
             />
 
             <RightPanelContainer
@@ -61,6 +62,7 @@ const ScenarioPlanningView = ({ activeView, setActiveView, isCollapsed }) => {
                 onToggle={togglePanelExpand}
                 onClose={closePanel}
                 isCollapsed={isCollapsed}
+                isAdmin={true}
             />
 
             {/* Map Area */}
@@ -72,6 +74,7 @@ const ScenarioPlanningView = ({ activeView, setActiveView, isCollapsed }) => {
                     onMarketToggle={() => setMarketMode(!marketMode)}
                     trafficMode={trafficMode}
                     onTrafficToggle={() => setTrafficMode(!trafficMode)}
+                    isAdmin={true}
                 />
             </Box>
 

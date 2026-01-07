@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectStop } from '../../redux/slices/uiSlice';
 import RouteStopItem from '../RouteDetailsDrawer/RouteStopItem'; // Reusing existing component for now
 
-const RouteTimeline = ({ stops }) => {
+const RouteTimeline = ({ stops, isAdmin = false }) => {
   const dispatch = useDispatch();
   const selectedStopId = useSelector((state) => state.ui.selectedStopId);
 
@@ -18,6 +18,7 @@ const RouteTimeline = ({ stops }) => {
           isLast={index === stops.length - 1}
           isSelected={selectedStopId === stop.id}
           onSelect={() => dispatch(selectStop(stop.id))}
+          isAdmin={isAdmin}
         />
       ))}
     </Box>

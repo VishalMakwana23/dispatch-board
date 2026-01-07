@@ -6,7 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import FilterPopup from '../RoutesPanel/FilterPopup'; // Reuse filter if needed or create new
 import RouteCard from '../RouteResults/RouteCard';
 
-const ScenarioPlanningPanel = ({ isCollapsed = false, onAdd, results, onRouteSelect, openRouteIds = [] }) => {
+const ScenarioPlanningPanel = ({ isCollapsed = false, onAdd, results, onRouteSelect, openRouteIds = [], isAdmin = false }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterAnchorEl, setFilterAnchorEl] = useState(null);
     const filterOpen = Boolean(filterAnchorEl);
@@ -79,6 +79,7 @@ const ScenarioPlanningPanel = ({ isCollapsed = false, onAdd, results, onRouteSel
                             route={route}
                             selected={openRouteIds.includes(route.id)}
                             onClick={() => onRouteSelect && onRouteSelect(route)}
+                            isAdmin={isAdmin}
                         />
                     ))
                 ) : (

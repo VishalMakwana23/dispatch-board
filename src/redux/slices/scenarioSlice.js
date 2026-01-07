@@ -26,7 +26,7 @@ const initialDraftState = {
     selectedVehicles: {}, // { 'sedan': { quantity: 1 } }
     vehicleConsiderations: [],
     driverSchedule: {
-        serviceHours: 5,
+        serviceHours: 10,
         weeklyHours: {
             day_1: { start: '6:00am', end: '7:00am' },
             day_2: { start: '8:00am', end: '9:00am' },
@@ -42,6 +42,7 @@ const initialDraftState = {
     },
     // Step 3 Data
     midFinalMileModel: 'exclusive',
+    stopTimeProfiles: [],
     stopsPriority: 'preference_1',
     dynamicOverflow: '20%',
     preDepartureCutoff: '20%',

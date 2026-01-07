@@ -70,8 +70,9 @@ const MARKET_DATA = {
 };
 
 const TIME_OPTIONS = [
-    '6:00am', '7:00am', '8:00am', '9:00am', '10:00am', '11:00am', '12:00pm',
-    '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm', '6:00pm', '7:00pm', '8:00pm', '9:00pm'
+    '6:00am', '6:30am', '7:00am', '7:30am', '8:00am', '8:30am', '9:00am', '9:30am', '10:00am', '10:30am', '11:00am', '11:30am',
+    '12:00pm', '12:30pm', '1:00pm', '1:30pm', '2:00pm', '2:30pm', '3:00pm', '3:30pm', '4:00pm', '4:30pm', '5:00pm', '5:30pm',
+    '6:00pm', '6:30pm', '7:00pm', '7:30pm', '8:00pm', '8:30pm', '9:00pm'
 ];
 
 const Step1NetworkContext = ({ data, updateData }) => {
@@ -113,7 +114,7 @@ const Step1NetworkContext = ({ data, updateData }) => {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <Box sx={{ display: 'flex', gap: 3, height: '100%', overflowY: 'auto', p: 1 }}>
+            <Box sx={{ display: 'flex', gap: 3, height: '100%', overflow: 'hidden', p: 1 }}>
                 {/* Left Column */}
                 <Box sx={{ flex: 1.5, display: 'flex', flexDirection: 'column', gap: 2 }}>
 
@@ -173,22 +174,46 @@ const Step1NetworkContext = ({ data, updateData }) => {
 
                                 {/* Operating Hours */}
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                                    <Select size="small" value={market.open} onChange={(e) => handleMarketChange(market.name, 'open', e.target.value)} sx={{ minWidth: 0, flex: 1, bgcolor: 'white', '& .MuiSelect-select': { py: 0.5, px: 1, fontSize: '0.8rem' } }}>
+                                    <Select
+                                        size="small"
+                                        value={market.open}
+                                        onChange={(e) => handleMarketChange(market.name, 'open', e.target.value)}
+                                        sx={{ minWidth: 0, flex: 1, bgcolor: 'white', '& .MuiSelect-select': { py: 0.5, px: 1, fontSize: '0.8rem' } }}
+                                        MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
+                                    >
                                         {TIME_OPTIONS.map(t => <MenuItem key={t} value={t}>{t}</MenuItem>)}
                                     </Select>
                                     <Typography variant="caption">-</Typography>
-                                    <Select size="small" value={market.close} onChange={(e) => handleMarketChange(market.name, 'close', e.target.value)} sx={{ minWidth: 0, flex: 1, bgcolor: 'white', '& .MuiSelect-select': { py: 0.5, px: 1, fontSize: '0.8rem' } }}>
+                                    <Select
+                                        size="small"
+                                        value={market.close}
+                                        onChange={(e) => handleMarketChange(market.name, 'close', e.target.value)}
+                                        sx={{ minWidth: 0, flex: 1, bgcolor: 'white', '& .MuiSelect-select': { py: 0.5, px: 1, fontSize: '0.8rem' } }}
+                                        MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
+                                    >
                                         {TIME_OPTIONS.map(t => <MenuItem key={t} value={t}>{t}</MenuItem>)}
                                     </Select>
                                 </Box>
 
                                 {/* Loading Time */}
-                                <Select size="small" value={market.loading || '6:00am'} onChange={(e) => handleMarketChange(market.name, 'loading', e.target.value)} sx={{ bgcolor: 'white', '& .MuiSelect-select': { py: 0.5, fontSize: '0.8rem' } }}>
+                                <Select
+                                    size="small"
+                                    value={market.loading || '6:00am'}
+                                    onChange={(e) => handleMarketChange(market.name, 'loading', e.target.value)}
+                                    sx={{ bgcolor: 'white', '& .MuiSelect-select': { py: 0.5, fontSize: '0.8rem' } }}
+                                    MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
+                                >
                                     {TIME_OPTIONS.map(t => <MenuItem key={t} value={t}>{t}</MenuItem>)}
                                 </Select>
 
                                 {/* Unloading Time */}
-                                <Select size="small" value={market.unloading || '7:00pm'} onChange={(e) => handleMarketChange(market.name, 'unloading', e.target.value)} sx={{ bgcolor: 'white', '& .MuiSelect-select': { py: 0.5, fontSize: '0.8rem' } }}>
+                                <Select
+                                    size="small"
+                                    value={market.unloading || '7:00pm'}
+                                    onChange={(e) => handleMarketChange(market.name, 'unloading', e.target.value)}
+                                    sx={{ bgcolor: 'white', '& .MuiSelect-select': { py: 0.5, fontSize: '0.8rem' } }}
+                                    MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
+                                >
                                     {TIME_OPTIONS.map(t => <MenuItem key={t} value={t}>{t}</MenuItem>)}
                                 </Select>
 
@@ -211,7 +236,7 @@ const Step1NetworkContext = ({ data, updateData }) => {
                 <Divider orientation="vertical" flexItem sx={{ borderColor: '#E0E0E0' }} />
 
                 {/* Right Column */}
-                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, overflowY: 'auto', pr: 1 }}>
                     <Typography variant="subtitle2" fontWeight="600" sx={{ fontSize: '0.85rem' }}>Final Mile Route Context</Typography>
 
                     {/* Linhaul Model */}
@@ -356,6 +381,7 @@ const Step1NetworkContext = ({ data, updateData }) => {
                                                 '& .MuiSelect-select': { py: 1, fontSize: '0.85rem', color: isActive ? '#1B3E38' : '#9E9E9E' }
                                             }}
                                             displayEmpty
+                                            MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
                                         >
                                             <MenuItem value=""><Typography variant="caption" color="text.secondary">Start Time</Typography></MenuItem>
                                             {TIME_OPTIONS.map(t => <MenuItem key={t} value={t}>{t}</MenuItem>)}
@@ -378,6 +404,7 @@ const Step1NetworkContext = ({ data, updateData }) => {
                                                 '& .MuiSelect-select': { py: 1, fontSize: '0.85rem', color: isActive ? '#1B3E38' : '#9E9E9E' }
                                             }}
                                             displayEmpty
+                                            MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
                                         >
                                             <MenuItem value=""><Typography variant="caption" color="text.secondary">End Time</Typography></MenuItem>
                                             {TIME_OPTIONS.map(t => <MenuItem key={t} value={t}>{t}</MenuItem>)}
@@ -385,6 +412,71 @@ const Step1NetworkContext = ({ data, updateData }) => {
                                     </Box>
                                 );
                             })}
+                        </Box>
+                    </Box>
+
+                    {/* Planning Horizon */}
+                    <Box sx={{ border: '1px solid #E0E0E0', borderRadius: 2, p: 2 }}>
+                        <Typography variant="subtitle2" fontWeight="600" mb={2}>Planning horizon</Typography>
+
+                        <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 2, mb: 1 }}>
+                            <Typography variant="caption" fontWeight="600">Session</Typography>
+                            <Typography variant="caption" fontWeight="600">Start Date</Typography>
+                            <Typography variant="caption" fontWeight="600">End Date</Typography>
+                        </Box>
+
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                            {['Base', 'High', 'Low'].map((session) => (
+                                <Box key={session} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 2, alignItems: 'center' }}>
+                                    <Typography variant="body2" fontWeight="500" sx={{ fontSize: '0.9rem', pl: 0.5 }}>{session}</Typography>
+
+                                    {/* Start Date */}
+                                    <DatePicker
+                                        value={data.planningHorizon?.[session.toLowerCase()]?.start ? parseISO(data.planningHorizon[session.toLowerCase()].start) : null}
+                                        onChange={(newValue) => {
+                                            const currentSession = data.planningHorizon?.[session.toLowerCase()] || {};
+                                            const updatedHorizon = {
+                                                ...(data.planningHorizon || {}),
+                                                [session.toLowerCase()]: { ...currentSession, start: newValue ? format(newValue, 'yyyy-MM-dd') : '' }
+                                            };
+                                            updateData('planningHorizon', updatedHorizon);
+                                        }}
+                                        format="MM-dd-yyyy"
+                                        slots={{ openPickerIcon: CalendarTodayIcon }}
+                                        slotProps={{
+                                            textField: {
+                                                size: 'small',
+                                                fullWidth: true,
+                                                sx: { bgcolor: 'white', '& .MuiOutlinedInput-root': { borderRadius: 1 }, '& .MuiInputBase-input': { fontSize: '0.8rem', py: 0.5 } }
+                                            },
+                                            openPickerButton: { sx: { color: '#1B3E38', p: 0.5 } }
+                                        }}
+                                    />
+
+                                    {/* End Date */}
+                                    <DatePicker
+                                        value={data.planningHorizon?.[session.toLowerCase()]?.end ? parseISO(data.planningHorizon[session.toLowerCase()].end) : null}
+                                        onChange={(newValue) => {
+                                            const currentSession = data.planningHorizon?.[session.toLowerCase()] || {};
+                                            const updatedHorizon = {
+                                                ...(data.planningHorizon || {}),
+                                                [session.toLowerCase()]: { ...currentSession, end: newValue ? format(newValue, 'yyyy-MM-dd') : '' }
+                                            };
+                                            updateData('planningHorizon', updatedHorizon);
+                                        }}
+                                        format="MM-dd-yyyy"
+                                        slots={{ openPickerIcon: CalendarTodayIcon }}
+                                        slotProps={{
+                                            textField: {
+                                                size: 'small',
+                                                fullWidth: true,
+                                                sx: { bgcolor: 'white', '& .MuiOutlinedInput-root': { borderRadius: 1 }, '& .MuiInputBase-input': { fontSize: '0.8rem', py: 0.5 } }
+                                            },
+                                            openPickerButton: { sx: { color: '#1B3E38', p: 0.5 } }
+                                        }}
+                                    />
+                                </Box>
+                            ))}
                         </Box>
                     </Box>
                 </Box>

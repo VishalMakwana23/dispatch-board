@@ -95,7 +95,7 @@ const ZoomControl = () => {
   );
 };
 
-const MapView = ({ panels, selectedRoutes, marketMode, onMarketToggle, trafficMode, onTrafficToggle }) => {
+const MapView = ({ panels, selectedRoutes, marketMode, onMarketToggle, trafficMode, onTrafficToggle, isAdmin = false }) => {
   // Local state for marketMode removed - lifted to parent
 
   // Dynamically calculate market data based on killeenData routes
@@ -216,12 +216,12 @@ const MapView = ({ panels, selectedRoutes, marketMode, onMarketToggle, trafficMo
 
         {/* Render Selected Routes */}
         {selectedRoutes && selectedRoutes.map(route => (
-          <MapRouteLayer key={route.id} route={route} />
+          <MapRouteLayer key={route.id} route={route} isAdmin={isAdmin} />
         ))}
 
         {/* Legacy panels support if needed, but we are moving to selectedRoutes */}
         {panels && panels.map(panel => (
-          <MapRouteLayer key={panel.routeId} route={panel.data} />
+          <MapRouteLayer key={panel.routeId} route={panel.data} isAdmin={isAdmin} />
         ))}
       </MapContainer>
 
@@ -243,7 +243,9 @@ const MapView = ({ panels, selectedRoutes, marketMode, onMarketToggle, trafficMo
         >
           <CalendarTodayIcon sx={{ mr: 1.5, fontSize: 24 }} />
           <Box>
-            <Typography variant="body1" sx={{ fontWeight: 600, lineHeight: 1.2 }}>Nov 18, 2025</Typography>
+            <Typography variant="body1" sx={{ fontWeight: 600, lineHeight: 1.2 }}>
+              {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+            </Typography>
             <Typography variant="caption" sx={{ display: 'block', color: 'rgba(255,255,255,0.7)', lineHeight: 1.2 }}>12 AM - 11:59 PM</Typography>
           </Box>
         </Paper>

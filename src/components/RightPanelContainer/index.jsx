@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Box } from '@mui/material';
 import RoutePanel from '../RoutePanel';
 
-const RightPanelContainer = ({ panels, onToggle, onClose, isCollapsed = true }) => {
+const RightPanelContainer = ({ panels, onToggle, onClose, isCollapsed = true, isAdmin = false }) => {
   const containerRef = useRef(null);
 
   // Auto-scroll to the right when a new panel is added
@@ -21,20 +21,20 @@ const RightPanelContainer = ({ panels, onToggle, onClose, isCollapsed = true }) 
         position: 'fixed',
         left: `${(isCollapsed ? 65 : 240) + 350}px`, // Dynamic left: Sidebar + RoutesPanel
         right: 0,      // Extend to the right edge
-        top: 80, 
+        top: 80,
         bottom: 0,
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'flex-start', 
+        alignItems: 'flex-start',
         justifyContent: 'flex-start', // Stack from left
         gap: 2,
         padding: 2,
         zIndex: 1200,
-        overflowX: 'auto', 
-        pointerEvents: 'none', 
+        overflowX: 'auto',
+        pointerEvents: 'none',
         transition: 'left 0.3s ease', // Smooth transition
         '& > *': {
-          pointerEvents: 'auto', 
+          pointerEvents: 'auto',
         },
         '&::-webkit-scrollbar': {
           height: '8px',
@@ -56,6 +56,7 @@ const RightPanelContainer = ({ panels, onToggle, onClose, isCollapsed = true }) 
           expanded={panel.expanded}
           onToggle={() => onToggle(panel.routeId)}
           onClose={() => onClose(panel.routeId)}
+          isAdmin={isAdmin}
         />
       ))}
     </Box>

@@ -58,7 +58,7 @@ const CreateOperatingWizard = ({ onBack }) => {
             return draft.markets.length > 0;
         }
         if (currentStep === 5) {
-            return false;
+            return !!draft.routeDataFile;
         }
         return true;
     };
@@ -70,6 +70,7 @@ const CreateOperatingWizard = ({ onBack }) => {
                 elevation={0}
                 sx={{
                     width: 320,
+                    flexShrink: 0,
                     borderRight: '1px solid #e0e0e0',
                     height: '100%',
                     bgcolor: 'white',
