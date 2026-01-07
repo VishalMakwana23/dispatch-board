@@ -9,13 +9,13 @@ import RouteTimeline from '../RouteTimeline';
 import { useDispatch } from 'react-redux';
 import { clearSelectedStop } from '../../redux/slices/uiSlice';
 
-const RoutePanel = ({ route, expanded, onToggle, onClose }) => {
+const RoutePanel = ({ route, expanded, onToggle, onClose, isAdmin = false }) => {
   const dispatch = useDispatch();
   // Use route data directly
   const stops = route?.stops ? route.stops.map(stop => ({
     ...stop,
     isWarehouse: stop.type === 'warehouse',
-    timeWindow: stop.window 
+    timeWindow: stop.window
   })) : [];
 
   const details = route ? { ...route, stops } : null;
@@ -55,93 +55,93 @@ const RoutePanel = ({ route, expanded, onToggle, onClose }) => {
         flexDirection: 'column',
         overflow: 'hidden',
         transition: 'height 0.3s ease-in-out', // Animate height
-        flexShrink: 0, 
+        flexShrink: 0,
         position: 'relative',
-        ml: 0, 
+        ml: 0,
       }}
     >
       {/* Header */}
-      <Box 
-        sx={{ 
-            p: 2, 
-            pb: 1, 
-            cursor: 'pointer',
-            borderBottom: expanded ? '1px solid #e0e0e0' : 'none',
-            height: expanded ? 'auto' : '100%',
-            display: 'flex',
-            alignItems: 'center', // Center vertically when collapsed
+      <Box
+        sx={{
+          p: 2,
+          pb: 1,
+          cursor: 'pointer',
+          borderBottom: expanded ? '1px solid #e0e0e0' : 'none',
+          height: expanded ? 'auto' : '100%',
+          display: 'flex',
+          alignItems: 'center', // Center vertically when collapsed
         }}
         onClick={onToggle}
       >
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%' }}>
-          
+
           {/* Title / ID Area */}
-          <Box sx={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              alignItems: 'flex-start',
-              width: 'auto',
-              gap: 0,
-              mt: 0
+          <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            width: 'auto',
+            gap: 0,
+            mt: 0
           }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: expanded ? 0.5 : 0, flexDirection: 'row' }}>
-                  <CircleIcon sx={{ color: headerColor, fontSize: 12 }} />
-                  <Typography variant="h6" sx={{ fontWeight: 600, fontSize: '18px' }}>
-                      {details.id}
-                  </Typography>
-              </Box>
-              
-              {/* Show "Current Routes Page" link ONLY when expanded */}
-              {expanded && (
-                  <Typography 
-                      variant="caption" 
-                      sx={{ 
-                          color: 'text.secondary', 
-                          display: 'flex', 
-                          alignItems: 'center', 
-                          gap: 0.5, 
-                          cursor: 'pointer',
-                          '&:hover': { textDecoration: 'underline' }
-                      }}
-                      onClick={(e) => e.stopPropagation()} 
-                  >
-                      Current Routes Page <OpenInNewIcon sx={{ fontSize: 12 }} />
-                  </Typography>
-              )}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: expanded ? 0.5 : 0, flexDirection: 'row' }}>
+              <CircleIcon sx={{ color: headerColor, fontSize: 12 }} />
+              <Typography variant="h6" sx={{ fontWeight: 600, fontSize: '18px' }}>
+                {details.id}
+              </Typography>
+            </Box>
+
+            {/* Show "Current Routes Page" link ONLY when expanded */}
+            {expanded && (
+              <Typography
+                variant="caption"
+                sx={{
+                  color: 'text.secondary',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 0.5,
+                  cursor: 'pointer',
+                  '&:hover': { textDecoration: 'underline' }
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                Current Routes Page <OpenInNewIcon sx={{ fontSize: 12 }} />
+              </Typography>
+            )}
           </Box>
 
           {/* Actions */}
           <Box sx={{ display: 'flex', flexDirection: expanded ? 'row' : 'column', gap: 1, alignItems: 'center' }}>
-             <IconButton 
-                onClick={(e) => { e.stopPropagation(); onToggle(); }} 
-                size="small"
-                sx={{ transform: expanded ? 'rotate(0deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}
-             >
-               {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />} 
-             </IconButton>
-             
-             {/* Show Close Icon ONLY when expanded */}
-             {expanded && (
-                 <IconButton onClick={handleClose} size="small">
-                   <CloseIcon />
-                 </IconButton>
-             )}
+            <IconButton
+              onClick={(e) => { e.stopPropagation(); onToggle(); }}
+              size="small"
+              sx={{ transform: expanded ? 'rotate(0deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}
+            >
+              {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+
+            {/* Show Close Icon ONLY when expanded */}
+            {expanded && (
+              <IconButton onClick={handleClose} size="small">
+                <CloseIcon />
+              </IconButton>
+            )}
           </Box>
         </Box>
       </Box>
 
       {/* Content - Only visible when expanded */}
-      <Box 
-        sx={{ 
-            flexGrow: 1, 
-            overflowY: 'auto', 
-            opacity: expanded ? 1 : 0,
-            transition: 'opacity 0.2s ease-in-out',
-            pointerEvents: expanded ? 'auto' : 'none',
-            display: expanded ? 'block' : 'none' 
+      <Box
+        sx={{
+          flexGrow: 1,
+          overflowY: 'auto',
+          opacity: expanded ? 1 : 0,
+          transition: 'opacity 0.2s ease-in-out',
+          pointerEvents: expanded ? 'auto' : 'none',
+          display: expanded ? 'block' : 'none'
         }}
       >
-         <RouteTimeline stops={details.stops} />
+        <RouteTimeline stops={details.stops} isAdmin={isAdmin} />
       </Box>
     </Paper>
   );

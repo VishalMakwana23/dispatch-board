@@ -95,7 +95,7 @@ const ZoomControl = () => {
   );
 };
 
-const MapView = ({ panels, selectedRoutes, marketMode, onMarketToggle, trafficMode, onTrafficToggle }) => {
+const MapView = ({ panels, selectedRoutes, marketMode, onMarketToggle, trafficMode, onTrafficToggle, isAdmin = false }) => {
   // Local state for marketMode removed - lifted to parent
 
   // Dynamically calculate market data based on killeenData routes
@@ -216,12 +216,12 @@ const MapView = ({ panels, selectedRoutes, marketMode, onMarketToggle, trafficMo
 
         {/* Render Selected Routes */}
         {selectedRoutes && selectedRoutes.map(route => (
-          <MapRouteLayer key={route.id} route={route} />
+          <MapRouteLayer key={route.id} route={route} isAdmin={isAdmin} />
         ))}
 
         {/* Legacy panels support if needed, but we are moving to selectedRoutes */}
         {panels && panels.map(panel => (
-          <MapRouteLayer key={panel.routeId} route={panel.data} />
+          <MapRouteLayer key={panel.routeId} route={panel.data} isAdmin={isAdmin} />
         ))}
       </MapContainer>
 

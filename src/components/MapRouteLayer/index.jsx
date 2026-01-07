@@ -164,7 +164,7 @@ const createStopIcon = (stop, isLastStop) => {
   });
 };
 
-const StopMarker = ({ stop, index, isDriverHere, isSelected, isLast, dispatch }) => {
+const StopMarker = ({ stop, index, isDriverHere, isSelected, isLast, dispatch, isAdmin }) => {
   const markerRef = React.useRef(null);
 
   useEffect(() => {
@@ -199,12 +199,16 @@ const StopMarker = ({ stop, index, isDriverHere, isSelected, isLast, dispatch })
           <Typography variant="subtitle2" fontWeight="bold">{stop.name}</Typography>
           <Typography variant="body2" color="text.secondary">{stop.address}</Typography>
           <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
-            <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              📦 {stop.parcels || 0} items
-            </Typography>
-            <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              🕒 {stop.etaWindow || '-'}
-            </Typography>
+            {!isAdmin && (
+              <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                📦 {stop.parcels || 0} items
+              </Typography>
+            )}
+            {!isAdmin && (
+              <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                🕒 {stop.etaWindow || '-'}
+              </Typography>
+            )}
           </Box>
           {isDriverHere && (
             <Box sx={{ mt: 1, p: 0.5, bgcolor: '#FFF3E0', color: '#E65100', borderRadius: 1, fontSize: '11px', textAlign: 'center' }}>
@@ -217,7 +221,7 @@ const StopMarker = ({ stop, index, isDriverHere, isSelected, isLast, dispatch })
   );
 };
 
-const MapRouteLayer = ({ route }) => {
+const MapRouteLayer = ({ route, isAdmin = false }) => {
   const map = useMap();
   const dispatch = useDispatch();
   const selectedStopId = useSelector(state => state.ui.selectedStopId);
@@ -307,6 +311,7 @@ const MapRouteLayer = ({ route }) => {
             isSelected={isSelected}
             isLast={index === stops.length - 1}
             dispatch={dispatch}
+            isAdmin={isAdmin}
           />
         );
       })}
