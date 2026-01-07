@@ -243,7 +243,9 @@ const MapView = ({ panels, selectedRoutes, marketMode, onMarketToggle, trafficMo
         >
           <CalendarTodayIcon sx={{ mr: 1.5, fontSize: 24 }} />
           <Box>
-            <Typography variant="body1" sx={{ fontWeight: 600, lineHeight: 1.2 }}>Nov 18, 2025</Typography>
+            <Typography variant="body1" sx={{ fontWeight: 600, lineHeight: 1.2 }}>
+              {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+            </Typography>
             <Typography variant="caption" sx={{ display: 'block', color: 'rgba(255,255,255,0.7)', lineHeight: 1.2 }}>12 AM - 11:59 PM</Typography>
           </Box>
         </Paper>

@@ -127,10 +127,12 @@ const RouteCard = ({ route, onClick, selected, isAdmin = false }) => {
               <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: '0.7rem' }}>Stops</Typography>
               <Typography variant="body2" fontWeight="700" sx={{ textDecoration: 'underline', cursor: 'pointer', fontSize: '0.95rem' }}>{route.stats?.stops || 0}</Typography>
             </Box>
-            <Box>
-              <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: '0.7rem' }}>Orders</Typography>
-              <Typography variant="body2" fontWeight="700" sx={{ fontSize: '0.95rem' }}>{route.stats?.orders || 0}</Typography>
-            </Box>
+            {!isAdmin && (
+              <Box>
+                <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: '0.7rem' }}>Orders</Typography>
+                <Typography variant="body2" fontWeight="700" sx={{ fontSize: '0.95rem' }}>{route.stats?.orders || 0}</Typography>
+              </Box>
+            )}
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifySelf: 'end' }}>
               {/* Remaining Badge */}
               <Box sx={{

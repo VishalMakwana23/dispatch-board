@@ -122,7 +122,7 @@ const Step3ServiceLevelAgreements = ({ data, updateData }) => {
 
                     {/* Stop-time profiles by stop category */}
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Typography variant="body2" sx={{ minWidth: 240, fontWeight: 700, fontSize: '0.9rem', color: '#1a1a1a' }}>Stop-time profiles by stop category</Typography>
+                        <Typography variant="body2" sx={{ minWidth: 240, fontWeight: 700, fontSize: '0.9rem', color: '#1a1a1a' }}>Stops Priority Preference</Typography>
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
                             {['Pharmacy', 'Walmart', 'Residential', 'Business', 'Apartment'].map((category) => {
                                 const isChecked = (Array.isArray(data.stopTimeProfiles) ? data.stopTimeProfiles : []).includes(category);
@@ -152,7 +152,7 @@ const Step3ServiceLevelAgreements = ({ data, updateData }) => {
                     </Box>
 
                     {/* Stops Priority Preference */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    {/* <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Typography variant="body2" sx={{ minWidth: 240, fontWeight: 700, fontSize: '0.9rem', color: '#1a1a1a' }}>Stops Priority Preference</Typography>
                         <RadioGroup
                             row
@@ -171,7 +171,7 @@ const Step3ServiceLevelAgreements = ({ data, updateData }) => {
                                 label={<Typography variant="body2">Preference 2 - e.g. Front Shop</Typography>}
                             />
                         </RadioGroup>
-                    </Box>
+                    </Box> */}
 
                     {/* Dynamic Overflow Handling */}
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>

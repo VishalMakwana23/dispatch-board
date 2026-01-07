@@ -648,7 +648,7 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
                                 <TextField
                                     variant="standard"
                                     InputProps={{ disableUnderline: true }}
-                                    value={data.driverConsiderations?.maxDistance ?? 5}
+                                    value={data.driverConsiderations?.maxDistance ?? 150}
                                     onChange={(e) => handleConfigChange('driverConsiderations', 'maxDistance', e.target.value)}
                                     sx={{ width: 30, '& input': { textAlign: 'center', fontSize: '0.9rem', fontWeight: 600, p: 0 } }}
                                 />

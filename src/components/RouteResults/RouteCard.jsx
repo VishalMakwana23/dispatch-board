@@ -6,7 +6,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import mckLogo from '../../assets/mck.png';
 import ronaLogo from '../../assets/rona.png';
 
-const RouteCard = ({ route, onClick, selected }) => {
+const RouteCard = ({ route, onClick, selected, isAdmin = false }) => {
     // Parse endTime for display if available, else fallback
     const endDate = route.endTime ? route.endTime.split(' ')[0] : '12/04/2026';
     const endTime = route.endTime ? route.endTime.split(' ').slice(1).join(' ') : '08:00 PM';
@@ -112,10 +112,12 @@ const RouteCard = ({ route, onClick, selected }) => {
                     <Typography variant="caption" color="text.secondary" display="block" fontSize="0.7rem" mb={0.2}>Stops</Typography>
                     <Typography variant="subtitle2" fontWeight="700" fontSize="0.85rem" sx={{ textDecoration: 'underline' }}>{Array.isArray(route.stops) ? route.stops.length : route.stops}</Typography>
                 </Box>
-                <Box>
-                    <Typography variant="caption" color="text.secondary" display="block" fontSize="0.7rem" mb={0.2}>Orders</Typography>
-                    <Typography variant="subtitle2" fontWeight="700" fontSize="0.85rem">{route.orders}</Typography>
-                </Box>
+                {!isAdmin && (
+                    <Box>
+                        <Typography variant="caption" color="text.secondary" display="block" fontSize="0.7rem" mb={0.2}>Orders</Typography>
+                        <Typography variant="subtitle2" fontWeight="700" fontSize="0.85rem">{route.orders}</Typography>
+                    </Box>
+                )}
                 <Box>
                     <Typography variant="caption" color="text.secondary" display="block" fontSize="0.7rem" mb={0.2}>Distance</Typography>
                     <Typography variant="subtitle2" fontWeight="700" fontSize="0.85rem">{route.distance}</Typography>
