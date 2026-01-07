@@ -40,6 +40,16 @@ const TIME_OPTIONS = [
     '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm'
 ];
 
+const VEHICLE_CAPACITIES = {
+    'sedan': 69120,
+    'minivan': 207360,
+    'cargovan': 700000,
+    'sprinter': 864000,
+    '1ton': 1382400,
+    '5ton': 2592000,
+    'transport': 6912000
+};
+
 const Step2VehicleDriverContext = ({ data, updateData }) => {
     // Handlers
     const handleVehicleToggle = (id) => {
@@ -198,7 +208,8 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
                                                 const record = data.marketVehicleCounts?.[market.name]?.[vehId];
                                                 // Handle legacy simple number vs new object structure
                                                 const countVal = (typeof record === 'object' ? record?.count : record) ?? 0;
-                                                const capacityVal = (typeof record === 'object' ? record?.capacity : 0) ?? 0;
+                                                // Use fixed capacity
+                                                const capacityVal = VEHICLE_CAPACITIES[vehId] || 0;
 
                                                 return (
                                                     <TableCell key={vehId} sx={{ borderBottom: '1px solid #F0F0F0', py: 1 }}>
@@ -222,17 +233,21 @@ const Step2VehicleDriverContext = ({ data, updateData }) => {
                                                             </Box>
                                                             {/* Capacity Input */}
                                                             <Box>
-                                                                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem', display: 'block', mb: 0.5 }}>Capacity</Typography>
+                                                                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem', display: 'block', mb: 0.5 }}>Capacity (Volume)</Typography>
                                                                 <TextField
                                                                     variant="standard"
                                                                     size="small"
                                                                     fullWidth
-                                                                    InputProps={{ disableUnderline: false }}
+                                                                    // Read-only and styled
+                                                                    InputProps={{
+                                                                        disableUnderline: true,
+                                                                        readOnly: true
+                                                                    }}
                                                                     placeholder="-"
-                                                                    value={capacityVal}
-                                                                    onChange={(e) => handleMarketVehicleCountChange(market.name, vehId, 'capacity', e.target.value)}
+                                                                    value={capacityVal.toLocaleString()}
+                                                                    // No onChange
                                                                     sx={{
-                                                                        '& input': { textAlign: 'center', fontSize: '0.9rem' },
+                                                                        '& input': { textAlign: 'center', fontSize: '0.9rem', color: '#1B3E38', fontWeight: 600, bgcolor: 'transparent' },
                                                                         maxWidth: 60
                                                                     }}
                                                                 />

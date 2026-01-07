@@ -4,7 +4,7 @@ import MapIcon from '@mui/icons-material/Map';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import mckLogo from '../../assets/mck.png';
-import ronaLogo from '../../assets/rona.png';
+
 
 const RouteCard = ({ route, onClick, selected, isAdmin = false }) => {
     // Parse endTime for display if available, else fallback
@@ -169,7 +169,7 @@ const RouteCard = ({ route, onClick, selected, isAdmin = false }) => {
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', pt: 0 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     <Box component="img" src={mckLogo} sx={{ height: 12, objectFit: 'contain' }} />
-                    <Box component="img" src={ronaLogo} sx={{ height: 16, objectFit: 'contain' }} />
+
                 </Box>
 
                 <Box sx={{ display: 'flex', gap: 1 }}>

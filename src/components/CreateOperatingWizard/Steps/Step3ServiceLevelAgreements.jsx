@@ -111,6 +111,12 @@ const Step3ServiceLevelAgreements = ({ data, updateData }) => {
         });
     };
 
+    const handlePriorityDurationChange = (category, value) => {
+        const currentDurations = { ...(data.stopPriorityDurations || {}) };
+        currentDurations[category] = value;
+        updateData('stopPriorityDurations', currentDurations);
+    };
+
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Box sx={{ display: 'flex', gap: 3, height: '100%', overflowY: 'auto', p: 1 }}>
@@ -122,37 +128,59 @@ const Step3ServiceLevelAgreements = ({ data, updateData }) => {
 
                     {/* Stop-time profiles by stop category */}
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Typography variant="body2" sx={{ minWidth: 240, fontWeight: 700, fontSize: '0.9rem', color: '#1a1a1a' }}>Stops Priority Preference</Typography>
+                        <Typography variant="body2" sx={{ minWidth: 240, fontWeight: 700, fontSize: '0.9rem', color: '#1a1a1a' }}>Stop-time profile by stop category</Typography>
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
                             {['Pharmacy', 'Walmart', 'Residential', 'Business', 'Apartment'].map((category) => {
                                 const isChecked = (Array.isArray(data.stopTimeProfiles) ? data.stopTimeProfiles : []).includes(category);
                                 return (
-                                    <FormControlLabel
-                                        key={category}
-                                        control={
-                                            <Checkbox
-                                                checked={isChecked}
-                                                onChange={() => {
-                                                    const current = Array.isArray(data.stopTimeProfiles) ? data.stopTimeProfiles : [];
-                                                    if (isChecked) {
-                                                        updateData('stopTimeProfiles', current.filter(c => c !== category));
-                                                    } else {
-                                                        updateData('stopTimeProfiles', [...current, category]);
-                                                    }
-                                                }}
+                                    <Box key={category} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={isChecked}
+                                                    onChange={() => {
+                                                        const current = Array.isArray(data.stopTimeProfiles) ? data.stopTimeProfiles : [];
+                                                        if (isChecked) {
+                                                            updateData('stopTimeProfiles', current.filter(c => c !== category));
+                                                        } else {
+                                                            updateData('stopTimeProfiles', [...current, category]);
+                                                            // Default to 1 min when checking if not present
+                                                            if (!data.stopPriorityDurations?.[category]) {
+                                                                handlePriorityDurationChange(category, '1 min');
+                                                            }
+                                                        }
+                                                    }}
+                                                    size="small"
+                                                    sx={{ color: '#1B3E38', '&.Mui-checked': { color: '#1B3E38' }, p: 0.5 }}
+                                                />
+                                            }
+                                            label={<Typography variant="body2">{category}</Typography>}
+                                        />
+                                        {isChecked && (
+                                            <Select
                                                 size="small"
-                                                sx={{ color: '#1B3E38', '&.Mui-checked': { color: '#1B3E38' }, p: 0.5 }}
-                                            />
-                                        }
-                                        label={<Typography variant="body2">{category}</Typography>}
-                                    />
+                                                value={data.stopPriorityDurations?.[category] || '1 min'}
+                                                onChange={(e) => handlePriorityDurationChange(category, e.target.value)}
+                                                sx={{
+                                                    width: 90,
+                                                    bgcolor: 'white',
+                                                    '& .MuiSelect-select': { fontSize: '0.8rem', py: 0.5, px: 2 },
+                                                    ml: 0.5
+                                                }}
+                                            >
+                                                {[...Array(15)].map((_, i) => (
+                                                    <MenuItem key={i} value={`${i + 1} min`} sx={{ fontSize: '0.8rem' }}>{i + 1} min</MenuItem>
+                                                ))}
+                                            </Select>
+                                        )}
+                                    </Box>
                                 );
                             })}
                         </Box>
                     </Box>
 
                     {/* Stops Priority Preference */}
-                    {/* <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Typography variant="body2" sx={{ minWidth: 240, fontWeight: 700, fontSize: '0.9rem', color: '#1a1a1a' }}>Stops Priority Preference</Typography>
                         <RadioGroup
                             row
@@ -171,21 +199,21 @@ const Step3ServiceLevelAgreements = ({ data, updateData }) => {
                                 label={<Typography variant="body2">Preference 2 - e.g. Front Shop</Typography>}
                             />
                         </RadioGroup>
-                    </Box> */}
+                    </Box>
 
                     {/* Dynamic Overflow Handling */}
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Typography variant="body2" sx={{ minWidth: 240, fontWeight: 700, fontSize: '0.9rem', color: '#1a1a1a', whiteSpace: 'nowrap' }}>Dynamic Overflow Handling</Typography>
                         <Select
                             size="small"
-                            value={data.dynamicOverflow || '1 min'}
+                            value={data.dynamicOverflow || '0%'}
                             onChange={(e) => updateData('dynamicOverflow', e.target.value)}
                             sx={{ width: 200, bgcolor: 'white', '& .MuiSelect-select': { fontSize: '0.85rem', py: 1 } }}
                             MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
                         >
-                            {/* Generate 1 min to 15 min */}
-                            {[...Array(15)].map((_, i) => {
-                                const val = `${i + 1} min`;
+                            {/* Generate 0% to 100% with 10% increment */}
+                            {[...Array(11)].map((_, i) => {
+                                const val = `${i * 10}%`;
                                 return <MenuItem key={val} value={val}>{val}</MenuItem>;
                             })}
                         </Select>
